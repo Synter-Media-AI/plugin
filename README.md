@@ -13,7 +13,7 @@ One interface. Every ad platform. Ship faster.
 In Claude Code:
 
 ```text
-/plugin marketplace add jshorwitz/synter-media-ai
+/plugin marketplace add Synter-Media-AI/plugin
 /plugin install synter@synter
 ```
 
@@ -42,6 +42,14 @@ This plugin packages **agents, skills, an MCP server, a hook, and an output styl
 | `/synter:report` | Cross-channel performance report and exec summary. |
 | `/synter:help` | What Synter can do, and where to get support. |
 
+### Craft skills
+
+Bundled alongside the workflows is Synter's advertising-craft library — the same methodology the platform's agents use, as knowledge skills Claude pulls in automatically when the task fits:
+
+`ad-copy-generation` · `ad-policy-compliance` · `anomaly-detector` · `bid-optimization` · `campaign-preflight` · `campaign-structure-auditor` · `competitor-analysis` · `creative-fatigue-detector` · `executive-reporting` · `kill-scale-rules` · `landing-page-creation` · `mmm-budget-planner` · `platform-cost-benchmarks` · `roas-calculator` · `utm-builder`
+
+(Internal runbooks that execute against Synter's own infrastructure are intentionally not shipped — this plugin acts through the Synter MCP, not bundled scripts.)
+
 ### Agents — `/agents`
 
 `campaign-strategist` · `media-buyer` · `audience-builder` · `creative-director` · `budget-optimizer` · `performance-analyst`
@@ -57,7 +65,7 @@ The Synter Advertising Platform MCP (`https://mcp.syntermedia.ai`) — cross-pla
 ## Structure
 
 ```text
-synter-media-ai/
+plugin/
 ├── .claude-plugin/
 │   ├── plugin.json          # manifest + userConfig (API key)
 │   └── marketplace.json     # one-plugin marketplace
@@ -121,8 +129,9 @@ Your agent can create campaigns, change budgets, and pause spend. The plugin def
 ## Develop
 
 ```bash
-claude plugin validate ./synter-media-ai --strict   # check the manifest + frontmatter
-claude --plugin-dir ./synter-media-ai               # load locally without a marketplace
+git clone https://github.com/Synter-Media-AI/plugin synter-plugin && cd synter-plugin
+claude plugin validate . --strict   # check the manifest + frontmatter
+claude --plugin-dir .               # load locally without a marketplace
 ```
 
 After editing `hooks/`, `.mcp.json`, or `agents/`, run `/reload-plugins`.
