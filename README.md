@@ -44,11 +44,11 @@ This plugin packages **agents, skills, an MCP server, a hook, and an output styl
 
 ### Craft skills
 
-Bundled alongside the workflows is Synter's advertising-craft library — the same methodology the platform's agents use, as knowledge skills Claude pulls in automatically when the task fits:
+Bundled alongside the workflows is a library of advertising-craft knowledge skills Claude pulls in automatically when the task fits:
 
-`ad-copy-generation` · `ad-policy-compliance` · `anomaly-detector` · `bid-optimization` · `campaign-preflight` · `campaign-structure-auditor` · `competitor-analysis` · `creative-fatigue-detector` · `executive-reporting` · `kill-scale-rules` · `landing-page-creation` · `mmm-budget-planner` · `platform-cost-benchmarks` · `roas-calculator` · `utm-builder`
+`ad-policy-compliance` · `anomaly-detector` · `campaign-preflight` · `campaign-structure-auditor` · `creative-fatigue-detector` · `executive-reporting` · `landing-page-creation` · `mmm-budget-planner` · `roas-calculator`
 
-(Internal runbooks that execute against Synter's own infrastructure are intentionally not shipped — this plugin acts through the Synter MCP, not bundled scripts.)
+(Internal runbooks, Synter's proprietary operating playbooks, and anything that names internal infrastructure are intentionally not shipped — this plugin acts through the Synter MCP, not bundled scripts.)
 
 ### Agents — `/agents`
 

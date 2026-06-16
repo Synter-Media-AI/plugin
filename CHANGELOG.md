@@ -9,7 +9,7 @@ Initial release. The AI Agent Operator for Ads, packaged for Claude Code / Claud
 ### Added
 - **MCP server** — Synter Advertising Platform (`https://mcp.syntermedia.ai`), cross-platform ad read/write. Free GA4 + onboarding tools work without a key.
 - **Workflow skills** (`/synter:*`) — quickstart, connect, audience, creative, launch, optimize, report, help.
-- **Craft skills** — 15 advertising-methodology skills bundled from Synter's library: ad-copy-generation, ad-policy-compliance, anomaly-detector, bid-optimization, campaign-preflight, campaign-structure-auditor, competitor-analysis, creative-fatigue-detector, executive-reporting, kill-scale-rules, landing-page-creation, mmm-budget-planner, platform-cost-benchmarks, roas-calculator, utm-builder. Internal-execution runbooks (Doppler/DB-coupled) deliberately excluded.
+- **Craft skills** — 9 generic advertising-methodology skills: ad-policy-compliance, anomaly-detector, campaign-preflight, campaign-structure-auditor, creative-fatigue-detector, executive-reporting, landing-page-creation, mmm-budget-planner, roas-calculator. Deliberately excluded from the public package: internal-execution runbooks (Doppler/DB-coupled), Synter's proprietary operating playbooks (kill/scale thresholds, cost-benchmark + budget-split logic), and skills referencing internal infrastructure (pixel pipeline, table names, non-public tools).
 - **Agents** — campaign-strategist, media-buyer, audience-builder, creative-director, budget-optimizer, performance-analyst.
 - **Hook** — SessionStart primer enforcing the money-safety rules and brand voice.
 - **Output style** — `synter` agent voice.

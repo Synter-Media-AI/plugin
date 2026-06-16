@@ -40,7 +40,7 @@ Uses Google's open-source Meridian framework to build Marketing Mix Models from 
 ```
 
 Requirements:
-- Minimum 52 weeks of ad_metrics data (104+ recommended)
+- Minimum 52 weeks of ad performance data (104+ recommended)
 - At least 1 connected platform with historical data
 - Training takes ~30 min on CPU
 
