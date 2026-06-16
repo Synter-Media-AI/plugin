@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "synter": {
+      "type": "http",
+      "url": "https://mcp.syntermedia.ai",
+      "headers": {
+        "X-Synter-Key": "${user_config.synter_api_key}"
+      },
+      "description": "Synter Advertising Platform MCP — cross-channel ad management for AI agents. Free GA4 + onboarding tools work without a key; campaign read/write needs a Synter API key (set it when enabling the plugin, or run /synter:quickstart to get one)."
+    }
+  }
+}

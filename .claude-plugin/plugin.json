@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "synter",
+  "displayName": "Synter",
+  "description": "The AI Agent Operator for Ads. Connect every ad platform, build audiences from signals and first-party data, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — all in one conversation. You direct, the agents execute. Nothing ships without your approval.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Synter",
+    "url": "https://syntermedia.ai"
+  },
+  "homepage": "https://syntermedia.ai",
+  "repository": "https://github.com/jshorwitz/synter-media-ai",
+  "keywords": [
+    "ads",
+    "advertising",
+    "campaigns",
+    "audiences",
+    "media-buying",
+    "creative",
+    "roas",
+    "google-ads",
+    "meta-ads",
+    "linkedin-ads",
+    "mcp",
+    "synter"
+  ],
+  "userConfig": {
+    "synter_api_key": {
+      "type": "string",
+      "title": "Synter API key",
+      "description": "Your Synter API key (syn_...). Create one at syntermedia.ai/developer. Leave blank to onboard with /synter:quickstart, then re-enable with your key.",
+      "sensitive": true,
+      "required": false
+    }
+  }
+}

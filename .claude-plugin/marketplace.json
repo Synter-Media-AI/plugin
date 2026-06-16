@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "synter",
+  "owner": {
+    "name": "Synter",
+    "url": "https://syntermedia.ai"
+  },
+  "description": "Synter's official plugin marketplace. The AI Agent Operator for Ads.",
+  "plugins": [
+    {
+      "name": "synter",
+      "source": "./",
+      "description": "Connect every ad platform, build audiences from signals, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute."
+    }
+  ]
+}

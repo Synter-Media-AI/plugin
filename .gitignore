@@ -1,0 +1,12 @@
+# Local env / secrets — never commit API keys
+.env
+.env.*
+*.local
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Node (if scripts add deps later)
+node_modules/
