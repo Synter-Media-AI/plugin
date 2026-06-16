@@ -15,3 +15,4 @@ Initial release. The AI Agent Operator for Ads, packaged for Claude Code / Claud
 - **Output style** — `synter` agent voice.
 - **Context** — bundled brand-voice and safety rules referenced by skills and agents.
 - `userConfig.synter_api_key` for turnkey, secure key entry at enable time.
+- **SDK runner** (`sdk/synter-agent.mjs`) — headless [`@anthropic-ai/claude-agent-sdk`](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk) harness that loads the plugin and runs the operator unattended. Read-only by default (spend/mutation auto-denied via `canUseTool`); `--allow-writes` to lift. Verified: SDK loads all 23 skills + 6 agents.

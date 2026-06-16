@@ -76,21 +76,37 @@ plugin/
 ├── scripts/session-context.sh
 ├── context/brand-and-safety.md
 ├── output-styles/synter.md
+├── sdk/                     # headless Claude Agent SDK runner
+│   ├── synter-agent.mjs
+│   └── README.md
 ├── CHANGELOG.md
 └── LICENSE                  # MIT
 ```
 
 ---
 
-## Use it from the Claude Agent SDK
+## Run it headlessly — Claude Agent SDK
 
-For frameworks without native plugin support, point the SDK at this directory as a local plugin, or wire the Synter MCP directly:
+A ready-to-run agent harness lives in [`sdk/`](./sdk). It loads this plugin with the SDK and runs the Synter operator unattended — **read-only by default** (spend/mutation is auto-denied with no human to approve). Good for cron digests, pipelines, or embedding.
 
 ```bash
-npm install @anthropic-ai/claude-agent-sdk   # or: pip install claude-agent-sdk
+cd sdk && npm install
+SYNTER_API_KEY=syn_... node synter-agent.mjs "/synter:report last 7 days"
 ```
 
-Load this repo as a plugin directory, or add the MCP server straight to your client config:
+See [`sdk/README.md`](./sdk/README.md) for the safety model, `--allow-writes`, and the Python equivalent.
+
+Under the hood it's just:
+
+```ts
+import { query } from "@anthropic-ai/claude-agent-sdk";
+for await (const m of query({
+  prompt: "/synter:report last 7 days",
+  options: { plugins: [{ type: "local", path: "/path/to/plugin" }] },
+})) { /* skills, agents, hooks, MCP all loaded */ }
+```
+
+### Or wire the MCP straight into any client
 
 **HTTP (recommended)**
 ```json

@@ -1,0 +1,20 @@
+{
+  "name": "@synter/agent-runner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Headless Claude Agent SDK runner that loads the Synter plugin and runs the operator unattended (read-only by default).",
+  "type": "module",
+  "bin": {
+    "synter-agent": "./synter-agent.mjs"
+  },
+  "scripts": {
+    "start": "node synter-agent.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.0"
+  },
+  "license": "MIT"
+}
