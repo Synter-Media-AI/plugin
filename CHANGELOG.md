@@ -2,6 +2,16 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## 0.1.1 — 2026-07-20
+
+### Fixed
+- **API key is now required at plugin enable time.** The previous config invited users to
+  "leave blank to onboard," but the hosted Synter MCP server (mcp.syntermedia.ai) rejects
+  unauthenticated connections with a 401 — so a blank key meant the MCP server silently
+  failed to load and Claude had skill files but zero Synter tools. Requiring the key up
+  front prevents the broken skills-without-tools state. Get a key at syntermedia.ai/developer.
+
+
 ## [0.1.0] — 2026-06-16
 
 Initial release. The AI Agent Operator for Ads, packaged for Claude Code / Claude Desktop.
