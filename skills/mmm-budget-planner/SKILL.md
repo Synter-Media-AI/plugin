@@ -1,103 +1,39 @@
 ---
 name: mmm-budget-planner
-description: MMM (Google Meridian) — budget optimization, revenue projections, channel ROI, scenario planning.
+description: Plan and reallocate budget across platforms by ROI, with revenue projections and shift scenarios. Use when a user asks where to put budget across channels, the true ROI of each channel, what happens if they move spend from one platform to another, or how campaigns are pacing.
 ---
 
-# MMM Budget Planner (Meridian)
+# Budget Planner
 
-## Overview
+Decide where the next dollar goes across platforms, grounded in real performance rather than gut feel. Reads are free; changing budgets is a change and waits for explicit approval.
 
-Uses Google's open-source Meridian framework to build Marketing Mix Models from Synter's cross-platform ad data. Provides causal ROI estimates, budget optimization, and forward-looking projections.
+Confirm the account and what is connected: `list_connected_accounts`.
 
-## When to Use
+## 1. Read cross-platform performance
 
-- "What's the true ROI of each channel?"
-- "How should I allocate my budget across platforms?"
-- "What happens if I shift $5K from Meta to Google?"
-- "Train an MMM model on my data"
-- "Run a budget scenario"
-- "How are my campaigns pacing?"
+Pull recent performance per platform so the plan sits on real numbers:
 
-## Available Scripts
+- `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, and the other `pull_<platform>_ads_performance` tools for spend, conversions, and CPA per channel.
+- `get_attribution` to see how conversions credit across touchpoints, not just last click.
+- `measure_incrementality` where a holdout exists, to separate true lift from spend that would have converted anyway. This is the honest answer to "what is this channel really worth."
 
-| Script | Purpose | Credits |
-|--------|---------|---------|
-| `mmm_prepare_data` | Prepare and validate data for MMM | 0 (internal) |
-| `mmm_train_model` | Train Meridian model on historical data | 50 |
-| `mmm_optimize_budget` | Run budget optimization scenario | 10 |
-| `mmm_get_projections` | Get forward-looking projections | 5 |
+## 2. Reallocate by ROI
 
-## Workflow
+`optimize_budget` reallocates spend across platforms toward the channels returning the most per dollar, within the total you set. Feed it the budget and any per-channel floors or caps, and it returns a proposed split.
 
-### 1. Train a Model (First Time)
+Read the output as a plan, not a command:
 
-```json
-{
-  "script_name": "mmm_train_model",
-  "platform": "GOOGLE",
-  "args": ["--kpi-type", "conversions"]
-}
-```
+- Every channel has diminishing returns. Pouring the whole budget into the current best performer stops working once it saturates. Keep a spread.
+- Compare the proposed allocation to the current one and show the delta and the expected improvement.
+- Model shifts explicitly: "move X from platform A to platform B" and what the projected CPA/return does. Keep the math visible.
 
-Requirements:
-- Minimum 52 weeks of ad performance data (104+ recommended)
-- At least 1 connected platform with historical data
-- Training takes ~30 min on CPU
+## 3. Project and pace
 
-### 2. Run Budget Optimization
+- Use recent trend plus the proposed allocation to project the next few weeks of spend and conversions, with a clear range rather than a false-precision single number.
+- Flag channels pacing over or under budget so nothing quietly runs away or underspends.
 
-```json
-{
-  "script_name": "mmm_optimize_budget",
-  "args": [
-    "--budget", "10000",
-    "--period", "monthly",
-    "--constraint-type", "fixed",
-    "--channel-min", "google_ads=0.2",
-    "--channel-max", "linkedin_ads=0.3"
-  ]
-}
-```
+## 4. Ship on approval
 
-### 3. Get Projections
+Show the current split, the proposed split, the projected outcome, and the rationale. Change budgets only on the user's clear go, with `update_campaign_budget` (or by executing an approved plan). Guard against fat-finger amounts. Then confirm the new budgets with a fresh `pull_<platform>_ads_performance` read.
 
-```json
-{
-  "script_name": "mmm_get_projections",
-  "args": ["--weeks", "4"]
-}
-```
-
-## Data Requirements
-
-| Requirement | Minimum | Recommended |
-|-------------|---------|-------------|
-| Historical data | 52 weeks | 104+ weeks |
-| Channels | 1 | 2+ |
-| KPI data | Non-zero conversions | Revenue data |
-| Time granularity | Weekly (auto-aggregated) | Weekly |
-
-## Key Concepts
-
-- **ROI**: Causal return on investment per channel (not just correlation)
-- **Response Curves**: How conversions change as you increase/decrease spend (shows diminishing returns)
-- **Adstock**: Lagged effect of advertising (this week's ads affect next week's sales)
-- **Hill Saturation**: Diminishing returns at higher spend levels
-
-## Interpreting Results
-
-### ROI Summary
-```json
-{
-  "google_ads": {"median": 3.2, "ci_lower": 2.1, "ci_upper": 4.8}
-}
-```
-- Median 3.2 = every $1 spent returns $3.20 in KPI value
-- CI = 90% credible interval (Bayesian uncertainty)
-
-### Budget Optimization
-Shows optimal spend per channel to maximize total KPI within budget constraint.
-Compare with current allocation to see improvement %.
-
-### Projections
-Forward-looking forecast with confidence bands. Use to catch underperforming campaigns before they waste budget.
+For single-account bid and pacing tuning rather than cross-platform allocation, use the **optimize** and **bid-optimization** skills. For pure ROAS and CPA math, use the **roas-calculator** skill.

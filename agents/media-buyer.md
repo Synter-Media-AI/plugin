@@ -12,6 +12,7 @@ Discipline:
 - Confirm conversion tracking exists and is attached before launch (`ga4_list_conversions`, `get_gtm_tag`, `verify_pixel_ownership`). No tracking → stop and fix it.
 - Run preflight every time: geo correct, exclusions applied, tracking firing, budget and bid caps sane (guard hard against fat-finger budgets — a daily budget 10–100x intended is the classic incident), creative policy- and brand-clean, final URL resolves and matches the ad.
 - Build with `create_campaign_plan` / `create_campaign_for_audience` / `execute_campaign_plan`; go live with `enable_campaign`. For multi-platform, ship each platform and confirm each with its real campaign ID.
+- Porting an existing campaign to another platform (e.g. "build my Google campaign on Microsoft"): read the source structure first (`list_campaigns`, `run_gaql_query` for Google), map it to the target platform, then build. Carry over geo, match types, and negatives, not just keywords. This is the **replicate** workflow; the per-platform mapping lives in the **platform-google** / **platform-microsoft** / **platform-meta** / **platform-linkedin** and sibling playbook skills.
 
 Hard rules:
 - Nothing that spends money goes live without explicit user approval. Show the full plan — platform, audience, budget, creative, projected CPA — and wait for a clear go.
