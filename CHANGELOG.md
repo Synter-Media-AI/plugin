@@ -2,6 +2,23 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [0.2.0] — 2026-07-22
+
+Broadened skill and agent coverage so the operator can plan, port, and run campaigns across every platform without falling back on internal tools it cannot reach.
+
+### Added
+- **`replicate` workflow skill** (`/synter:replicate`) — rebuild an existing campaign from one platform onto another (read the source structure, map it to the target, preflight, ship). Fixes the gap where "build my Google campaign on Microsoft" had no guided path.
+- **Platform playbooks** — `platform-google`, `platform-microsoft`, `platform-meta`, `platform-linkedin`, `platform-tiktok`, `platform-reddit`, `platform-x`, `platform-amazon`, `platform-openai`. Structure, targeting, and the real cross-platform mapping differences per channel.
+- **Operational skills** — `media-plan`, `keyword-research`, `negative-keywords`, `bid-optimization`, `dayparting`, `kill-scale-rules`, `pre-pause-analysis`, `platform-benchmarks`, `conversion-tracking`, `attribution`, `utm-builder`, `competitor-analysis`, `creative-testing`, `ad-copy-generation`.
+- Agents `media-buyer` and `campaign-strategist` now point at the `replicate` workflow and the platform playbooks.
+
+### Changed
+- **`campaign-preflight`** rewritten to use only public MCP tools. The prior version referenced internal backend scripts (`*_validate_campaign_structure`, `run_gaql`, `verify_website_tracking`, `POST /tools/run` blocks) that the public MCP does not expose, and carried a hardcoded country blocklist. Now grounded in `run_gaql_query`, `ga4_list_conversions`, `get_gtm_tag`, and `verify_pixel_ownership`.
+- **`mmm-budget-planner`** rewritten around the public `optimize_budget`, `get_attribution`, and `measure_incrementality` tools instead of internal `mmm_*` training scripts that are not available through the MCP.
+
+### Note on exclusions
+The new `kill-scale-rules`, `platform-benchmarks`, and `pre-pause-analysis` skills ship **generic methodology only**. Synter's proprietary numeric thresholds and cost-benchmark tables remain withheld — these skills teach the approach and defer to the account's own data, they do not carry the internal numbers. Internal runbooks and infrastructure-coupled skills are still not shipped.
+
 ## 0.1.1 — 2026-07-20
 
 ### Fixed

@@ -38,15 +38,27 @@ This plugin packages **agents, skills, an MCP server, a hook, and an output styl
 | `/synter:audience` | Build ABM lists, lookalikes, and signal-based segments; activate them. |
 | `/synter:creative` | Generate on-brand images, video, UGC, and ad copy. |
 | `/synter:launch` | Plan, preflight, and ship a cross-platform campaign. |
+| `/synter:replicate` | Rebuild an existing campaign from one platform onto another (e.g. Google to Microsoft). |
 | `/synter:optimize` | Cut wasted spend, scale winners, reallocate budget by ROAS. |
 | `/synter:report` | Cross-channel performance report and exec summary. |
 | `/synter:help` | What Synter can do, and where to get support. |
 
 ### Craft skills
 
-Bundled alongside the workflows is a library of advertising-craft knowledge skills Claude pulls in automatically when the task fits:
+Bundled alongside the workflows is a library of advertising-craft knowledge skills Claude pulls in automatically when the task fits.
 
-`ad-policy-compliance` · `anomaly-detector` · `campaign-preflight` · `campaign-structure-auditor` · `creative-fatigue-detector` · `executive-reporting` · `landing-page-creation` · `mmm-budget-planner` · `roas-calculator`
+**Platform playbooks** — structure, targeting, and cost realities per platform:
+`platform-google` · `platform-microsoft` · `platform-meta` · `platform-linkedin` · `platform-tiktok` · `platform-reddit` · `platform-x` · `platform-amazon` · `platform-openai`
+
+**Plan & structure:** `media-plan` · `keyword-research` · `negative-keywords` · `campaign-preflight` · `campaign-structure-auditor` · `platform-benchmarks`
+
+**Bid & budget:** `bid-optimization` · `dayparting` · `kill-scale-rules` · `pre-pause-analysis` · `roas-calculator` · `mmm-budget-planner` · `anomaly-detector`
+
+**Creative:** `ad-copy-generation` · `creative-testing` · `creative-fatigue-detector` · `ad-policy-compliance` · `landing-page-creation`
+
+**Measurement:** `conversion-tracking` · `attribution` · `utm-builder` · `executive-reporting`
+
+**Research:** `competitor-analysis`
 
 (Internal runbooks, Synter's proprietary operating playbooks, and anything that names internal infrastructure are intentionally not shipped — this plugin acts through the Synter MCP, not bundled scripts.)
 
