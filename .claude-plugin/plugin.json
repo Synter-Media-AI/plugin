@@ -29,9 +29,9 @@
     "synter_api_key": {
       "type": "string",
       "title": "Synter API key",
-      "description": "Your Synter API key (syn_...). Create one at syntermedia.ai/developer. Leave blank to onboard with /synter:quickstart, then re-enable with your key.",
+      "description": "Required. Your Synter API key (syn_...). Create one at syntermedia.ai/developer \u2014 takes 30 seconds. The Synter MCP server rejects connections without a valid key, so the plugin cannot start without it.",
       "sensitive": true,
-      "required": false
+      "required": true
     }
   }
 }
