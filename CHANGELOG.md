@@ -2,6 +2,16 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [0.3.0] — 2026-07-25
+
+Fourteen new skills deepening diagnostics, measurement, and creative coverage — every one grounded exclusively in public Synter MCP tools.
+
+### Added
+- **Platform depth** — `meta-ads-diagnostics` (Learning Phase, fatigue, overlap, Advantage+), `google-ads-quality-score`, `google-shopping-optimizer` (feeds, disapprovals, Shopping vs PMax), `performance-max-optimizer` (asset groups, brand cannibalization), `linkedin-ads-targeting` (ABM, lead gen forms).
+- **Measurement & data** — `pixel-capi-auditor` (dedup, Event Match Quality), `first-party-data-strategy` (Enhanced Conversions, server-side tagging, Consent Mode v2), `incrementality-testing` (geo holdouts, lift studies), `attribution` companions via `measure_incrementality` and `get_attribution`.
+- **Strategy** — `retargeting-sequence-designer` (staged funnels, recency windows, exclusions), `seasonal-budget-planner` (build your own seasonality index from your account data), `audience-expansion-strategy` (lookalike ladders, seed quality, layering), `geo-integrity-audit` (location-criteria and click-geography verification).
+- **Creative** — `video-ad-scriptwriter` (platform-specific scripts with timing marks), `ugc-creative-brief` (briefs, hooks, usage-rights structure).
+
 ## [0.2.0] — 2026-07-22
 
 Broadened skill and agent coverage so the operator can plan, port, and run campaigns across every platform without falling back on internal tools it cannot reach.
