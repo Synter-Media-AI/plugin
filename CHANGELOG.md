@@ -2,6 +2,15 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [0.4.0] — 2026-08-04
+
+RSA asset floor: the Google Ads API accepts as few as 3 headlines and 2 descriptions, but ads built at that minimum score "Poor" on Google Ad Strength and get throttled in the auction. The plugin now enforces a real floor everywhere ad copy is created or reviewed.
+
+### Changed
+- **`ad-copy-generation`** — RSAs require **11 headlines / 4 descriptions minimum (15/4 recommended)**, every slot filled, the ad group's actual keywords echoed in at least 5 headlines, no filler padding, no truncation (rewrite to the character limit instead).
+- **`campaign-preflight`** — new blocking "Creative asset completeness" check: per-ad asset counts read from the platform and compared against the floor; Google Ad Strength POOR/AVERAGE must be fixed before launch; the same fill-every-slot rule applies on every platform at its own ceiling.
+- **`creative-director`** and **`media-buyer`** agents — carry the floor rule wherever they direct ad creation or launch.
+
 ## [0.3.0] — 2026-07-25
 
 Fourteen new skills deepening diagnostics, measurement, and creative coverage — every one grounded exclusively in public Synter MCP tools.
