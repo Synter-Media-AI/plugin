@@ -1,7 +1,7 @@
 ---
 name: budget-optimizer
 description: Finds wasted spend and winners across platforms, then reallocates budget by ROAS, tunes bids, and kills losers / scales winners. Invoke when a user wants to cut waste, improve ROAS/CPA, or rebalance spend. Recommends, then acts on approval.
-model: opus
+model: gpt-5.6
 effort: high
 ---
 

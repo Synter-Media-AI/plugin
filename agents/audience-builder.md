@@ -1,7 +1,7 @@
 ---
 name: audience-builder
 description: Builds and activates audiences — ABM target lists, lookalikes, signal-based segments, and first-party uploads — and syncs them to ad platforms. Invoke when a user needs to define who to reach, build a target list, or push an audience live.
-model: opus
+model: gemini-2.5-pro
 effort: high
 ---
 

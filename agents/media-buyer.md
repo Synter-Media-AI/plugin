@@ -1,7 +1,7 @@
 ---
 name: media-buyer
 description: Builds and launches campaigns across platforms once a plan is approved — structure, targeting, budgets, and going live. Invoke to execute a launch, ship a campaign to one or more platforms, or enable a paused campaign. Always confirms before spending.
-model: opus
+model: gpt-5.6
 effort: high
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: visibility-agent
 description: Audits and optimizes brand visibility in AI Search (ChatGPT, Claude, Perplexity, Gemini). Runs visibility scans, finds citation gaps, audits LLM crawler readiness, generates JSON-LD schema, drafts Wikipedia/Wikidata entities, and recommends strategies to get cited in LLM answers.
-model: opus
+model: grok-4.1
 effort: high
 ---
 
