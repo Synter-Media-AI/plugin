@@ -64,7 +64,7 @@ Bundled alongside the workflows is a library of advertising-craft knowledge skil
 
 ### Agents — `/agents`
 
-`campaign-strategist` · `media-buyer` · `audience-builder` · `creative-director` · `budget-optimizer` · `performance-analyst`
+`campaign-strategist` · `media-buyer` · `audience-builder` · `creative-director` · `budget-optimizer` · `performance-analyst` · `visibility-agent`
 
 They run automatically when the task fits, or call one directly.
 
