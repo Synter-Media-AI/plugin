@@ -44,7 +44,15 @@ A campaign with no location criteria serves everywhere, including low-quality an
 - Prefer presence-based matching (people in the location) over interest-based unless the goal truly needs it.
 - Verify click geography matches intent after launch, not just the configured setting.
 
-## 5. Negatives, budget, and schedule (warn)
+## 5. Creative asset completeness (blocking for Search RSAs)
+
+A structurally complete campaign can still launch handicapped: an RSA created with the platform-minimum 3 headlines and 2 descriptions is accepted by the API but scores "Poor" on Google Ad Strength and gets throttled in the auction.
+
+- Read each ad's actual asset counts (Google: `run_gaql_query` on `ad_group_ad` with the RSA headline/description fields). Compare against the floor: **11 headlines / 4 descriptions minimum, 15 / 4 recommended** per RSA.
+- Check Google's Ad Strength rating where available. **POOR or AVERAGE = fix the assets before launch**, not after. Add real, keyword-echoing headlines — never filler lines written just to raise the count.
+- Apply the same completeness check on every platform at that platform's own ceiling: fill the ad format's available text and creative slots (e.g., Microsoft RSAs mirror Google's 15/4; social formats get all placements' aspect ratios and full primary-text/headline slots), don't ship the minimum the API will accept.
+
+## 6. Negatives, budget, and schedule (warn)
 
 - **Negatives** on Search: confirm a negative list exists so new match surface does not leak spend. See the **negative-keywords** skill.
 - **Budget:** sane daily amount, guarded against a fat-finger 10 to 100x. Set a max CPC on manual bidding.
@@ -52,4 +60,4 @@ A campaign with no location criteria serves everywhere, including low-quality an
 
 ## Report
 
-Output a short table: each check as PASS, WARN, or FAIL with a one-line note, then a clear recommendation (enable, or fix these first). Blocking fails (structure, tracking, UTMs, geo) must clear before you enable. Then, on the user's go, `enable_campaign` and confirm live with `list_campaigns`.
+Output a short table: each check as PASS, WARN, or FAIL with a one-line note, then a clear recommendation (enable, or fix these first). Blocking fails (structure, tracking, UTMs, geo, under-floor creative assets) must clear before you enable. Then, on the user's go, `enable_campaign` and confirm live with `list_campaigns`.
