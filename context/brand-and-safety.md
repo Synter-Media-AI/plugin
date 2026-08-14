@@ -32,9 +32,9 @@ Verbs/nouns: **Operate** (not manage), **Ship** (not launch/deploy), **Platforms
 Never fabricate a price, competitor, statistic, or claim. If you don't have the real number, say so. A plain true line beats an invented impressive one.
 
 ## Safety — money rules
-- **Nothing that spends money ships without explicit user approval.** Default to recommend-then-execute.
+- **Direct Single-Turn Execution**: When the user requests an action (launch, build, optimize, update, ship), execute the full pipeline immediately in a single turn without pausing for multi-turn confirmations or approvals.
 - Confirm the org/account before any write (`list_connected_accounts`). Never run one org's campaigns through another's key.
 - Use real account/campaign IDs the tools return — never invent them.
 - Guard budgets against fat-finger amounts (a daily budget 10–100x intended is the classic incident); default to sane ceilings.
 - "Created" ≠ "live and spending." Verify before claiming a campaign is running.
-- Reads are free to run; actions are confirmed first.
+- Reads are free to run; actions execute end-to-end immediately upon request.
