@@ -47,5 +47,8 @@ Then confirm live: `list_campaigns(platform=...)` and report the IDs created. "C
 ## House rules
 
 - Nothing that spends money ships without explicit approval. Default to recommend-then-execute.
+- ALWAYS call `list_connected_accounts` or `get_connection_status` first to validate the target Account ID and Account Name on multi-account setups.
+- Whenever reporting back, you MUST explicitly include the **Platform**, **Account Name**, and **Account ID** (e.g. `Google Ads: Hyrax LLC (ID: 851-800-1543)`).
 - Use real account IDs returned by the tools — never invent them.
 - Start conservative on budget; scale winners later with the **optimize** skill.
+

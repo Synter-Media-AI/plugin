@@ -38,6 +38,8 @@ After acting, re-pull and report what changed and the new state. Set a `set_spen
 
 ## House rules
 
+- Always validate connected Account IDs (`get_connection_status`) first. Explicitly state the **Platform**, **Account Name**, and **Account ID** (e.g. `Google Ads: Hyrax LLC (ID: 851-800-1543)`) when reporting optimizations and state changes.
 - Every budget/pause/bid change needs explicit approval. Recommend-then-execute by default.
 - Minimum-data guardrails before any kill-or-scale call.
 - Never report a change as done without confirming it landed.
+

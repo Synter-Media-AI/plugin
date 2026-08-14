@@ -32,3 +32,4 @@ Free and instant: connect **GA4** at syntermedia.ai/settings/credentials — the
 
 - Confirm the org before connecting or acting. Never mix one client's accounts with another's.
 - Connecting is read-safe. Acting on the account (campaigns, budgets) still needs explicit approval.
+- **Enterprise-gated platforms (LinkedIn Ads & StackAdapt)**: Access to **LinkedIn Ads** and **StackAdapt** requires upgrading to the **Enterprise plan** and booking a meeting with the Synter team for manual account setup and provisioning. When users without active provisioned connections ask for or attempt to use LinkedIn Ads or StackAdapt, do NOT give weird or technical connection error responses — state clearly that they need to upgrade to Enterprise and book a meeting.

@@ -7,17 +7,16 @@ description: MUST load before `create_landing_page_draft`. Covers brand prefligh
 
 When creating landing pages, use this 5-step workflow:
 
-## 1. Brand Preflight (CUSTOMER pages only)
+## 1. Brand & Form Preflight (CUSTOMER pages only)
 
-BEFORE generating a landing page for a CUSTOMER (not Synter), you MUST verify the customer's brand context exists:
+BEFORE generating or publishing a landing page for a CUSTOMER (not Synter), you MUST verify brand context and form destination:
 
-- Brand guidelines must exist for that customer's domain/organization.
-- Marketing skills should exist for: `brand-voice`, `positioning-angles`, and `audience-icp`.
-- If brand guidelines are missing, STOP and tell the user: "I need the customer's brand guidelines before I generate this landing page. You can extract them by sharing the website URL (I'll run `extract_brand_skills`), or add them manually at /settings/brand."
-- If any required marketing skills are missing, STOP and list which skills are missing. Offer to run `extract_brand_skills` with their website URL, or direct them to `/settings/brand`.
-- Do NOT generate a CUSTOMER landing page with generic/default branding when brand context is missing — the result will be off-brand.
-- For Synter-owned pages (syntermedia.ai), skip this step and use Synter brand rules.
-- The `create_landing_page_draft` tool enforces this check automatically and will return a `LANDING_PAGE_BRAND_SETUP_REQUIRED` error if brand context is missing. Follow its instructions.
+- **Brand Guidelines**: Brand guidelines must exist for that customer's domain/organization. Marketing skills should exist for: `brand-voice`, `positioning-angles`, and `audience-icp`. If missing, STOP and request them or offer to run `extract_brand_skills`.
+- **Form Destination & External Tool Audit**: Inspect the customer's existing main website (e.g. `/contact` or `/book`) to identify their exact live form/calendar setup (e.g. Fillout, Calendly, Typeform, HubSpot).
+- **Dual Routing & Attribution Pass-Through**: Ensure the landing page form posts to `POST /api/lp/forms/submit` (for Synter DB capture and multi-platform CAPI event logging), then pre-fills and redirects directly to the customer's original form/calendar flow.
+- **Click ID & UTM Preservation**: Ensure all platform click IDs (`rdt_cid`, `li_fat_id`, `gclid`, `fbclid`) and UTM parameters inherit into the form/redirect URL so the customer's CRM maintains complete attribution parity.
+- The `create_landing_page_draft` tool enforces brand check automatically and will return a `LANDING_PAGE_BRAND_SETUP_REQUIRED` error if brand context is missing. Follow its instructions.
+
 
 ## 2. Outline
 

@@ -32,6 +32,8 @@ Inline by default. For a shareable artifact, `create_google_doc` / `create_googl
 
 ## House rules
 
+- Always validate connected Account IDs (`get_connection_status`) first. Explicitly state the **Platform**, **Account Name**, and **Account ID** (e.g. `Google Ads: Hyrax LLC (ID: 851-800-1543)`) in all reports.
 - Numbers must be real and reconciled. Flag gaps; don't paper over them.
 - Distinguish "platform says" from "analytics confirms."
 - Reporting is read-only — no approval needed to pull and write a report. Acting on it is a separate, approved step.
+
