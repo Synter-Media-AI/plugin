@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Neon Niblick — Mini Golf Scorecard</title>
+<meta name="theme-color" content="#0a2e2a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⛳</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#07211d;
+    --bg-1:#0d3a33;
+    --felt:#0f4038;
+    --felt-line:rgba(255,255,255,0.07);
+    --paper:#0b2b26;
+    --ink:#eefdf6;
+    --ink-dim:#9fc9bd;
+    --pink:#ff4d8d;
+    --yellow:#ffd23f;
+    --green:#3ddc84;
+    --orange:#ff8a3d;
+    --cyan:#3ddce0;
+    --purple:#c084ff;
+    --line:rgba(238,253,246,0.14);
+    --shadow-hard:0 10px 0 rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(255,210,63,0.08), transparent 40%),
+      radial-gradient(circle at 85% 92%, rgba(255,77,141,0.10), transparent 45%),
+      repeating-linear-gradient(135deg, var(--bg-1) 0 2px, var(--bg-0) 2px 4px),
+      var(--bg-0);
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    padding:clamp(14px, 3vw, 36px);
+    overflow-x:hidden;
+  }
+
+  /* ---------- decorative pennant bunting ---------- */
+  .bunting{
+    display:flex;
+    justify-content:center;
+    gap:4px;
+    max-width:900px;
+    margin:0 auto 6px;
+    overflow:hidden;
+    height:26px;
+  }
+  .bunting span{
+    width:0;height:0;
+    border-left:13px solid transparent;
+    border-right:13px solid transparent;
+    border-top:22px solid var(--c);
+    opacity:0.9;
+    animation:sway 2.6s ease-in-out infinite;
+    transform-origin:top center;
+  }
+  .bunting span:nth-child(odd){animation-delay:-1.3s;}
+  @keyframes sway{
+    0%,100%{transform:rotate(-4deg);}
+    50%{transform:rotate(4deg);}
+  }
+
+  header{
+    max-width:1100px;
+    margin:0 auto 28px;
+    text-align:center;
+    position:relative;
+  }
+  .flag-icon{
+    font-size:2.6rem;
+    display:inline-block;
+    transform-origin:bottom left;
+    animation:flap 2.4s ease-in-out infinite;
+    margin-right:6px;
+  }
+  @keyframes flap{
+    0%,100%{transform:rotate(0deg);}
+    50%{transform:rotate(8deg);}
+  }
+  h1{
+    font-family:'Bungee', sans-serif;
+    font-weight:400;
+    font-size:clamp(1.8rem, 5vw, 3.4rem);
+    letter-spacing:1px;
+    margin:0;
+    line-height:1.05;
+    color:var(--yellow);
+    text-shadow:
+      3px 3px 0 var(--pink),
+      6px 6px 0 rgba(0,0,0,0.4);
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .subtitle{
+    margin:10px 0 0;
+    color:var(--ink-dim);
+    font-size:0.85rem;
+    letter-spacing:3px;
+    text-transform:uppercase;
+  }
+  .subtitle b{color:var(--green);}
+
+  main{max-width:1100px;margin:0 auto;}
+
+  /* ---------- course setup card ---------- */
+  .card{
+    background:var(--paper);
+    border:2px solid var(--line);
+    border-radius:18px;
+    box-shadow:var(--shadow-hard), 0 0 0 1px rgba(0,0,0,0.2) inset;
+    padding:clamp(14px,2.4vw,26px);
+    margin-bottom:22px;
+    position:relative;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:18px;
+    background:
+      linear-gradient(90deg, transparent 0, transparent calc(100% - 1px)),
+      repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 0 2px, transparent 2px 5px);
+    pointer-events:none;
+  }
+  .card h2{
+    font-family:'Bungee', sans-serif;
+    font-weight:400;
+    font-size:1rem;
+    margin:0 0 14px;
+    color:var(--cyan);
+    letter-spacing:1px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h2 .num{
+    background:var(--cyan);
+    color:var(--bg-0);
+    border-radius:50%;
+    width:26px;height:26px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.85rem;
+  }
+
+  .par-row{
+    display:grid;
+    grid-template-columns:repeat(9, 1fr);
+    gap:8px;
+  }
+  .par-cell{
+    text-align:center;
+  }
+  .par-cell label{
+    display:block;
+    font-size:0.65rem;
+    color:var(--ink-dim);
+    letter-spacing:1px;
+    margin-bottom:5px;
+  }
+  .par-cell input{
+    width:100%;
+    text-align:center;
+    background:var(--felt);
+    border:1px solid var(--felt-line);
+    border-radius:8px;
+    color:var(--yellow);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:1rem;
+    padding:7px 0;
+  }
+  .par-cell input:focus{outline:2px solid var(--yellow); outline-offset:1px;}
+  .par-total{
+    margin-top:10px;
+    font-size:0.75rem;
+    color:var(--ink-dim);
+    text-align:right;
+  }
+  .par-total b{color:var(--yellow);}
+
+  /* ---------- scorecard table ---------- */
+  .table-wrap{
+    overflow-x:auto;
+    border-radius:14px;
+    border:2px solid var(--line);
+    background:var(--felt);
+    -webkit-overflow-scrolling:touch;
+  }
+  table{
+    border-collapse:separate;
+    border-spacing:0;
+    width:100%;
+    min-width:780px;
+  }
+  thead th{
+    position:sticky;
+    top:0;
+    background:#0a332c;
+    color:var(--ink-dim);
+    font-weight:500;
+    font-size:0.72rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:10px 6px;
+    border-bottom:2px solid var(--line);
+    text-align:center;
+    z-index:2;
+  }
+  thead th.par-sub{
+    color:var(--yellow);
+    font-size:0.68rem;
+    padding-top:0;
+  }
+  thead th:first-child{
+    text-align:left;
+    padding-left:16px;
+  }
+  th.player-col, td.player-col{
+    position:sticky;
+    left:0;
+    background:#0a332c;
+    z-index:1;
+    min-width:132px;
+    border-right:2px solid var(--line);
+  }
+  tbody td{
+    padding:6px;
+    text-align:center;
+    border-bottom:1px solid var(--felt-line);
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even) td:not(.player-col){background:rgba(255,255,255,0.015);}
+
+  .player-name{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:8px 10px 8px 16px;
+    font-family:'Bungee', sans-serif;
+    font-size:0.82rem;
+    font-weight:400;
+    letter-spacing:0.5px;
+  }
+  .dot{
+    width:12px;height:12px;
+    border-radius:50%;
+    flex-shrink:0;
+    box-shadow:0 0 8px 1px var(--dotcolor);
+    background:var(--dotcolor);
+  }
+
+  .score-input{
+    width:44px;
+    height:40px;
+    text-align:center;
+    background:var(--paper);
+    border:1px solid var(--felt-line);
+    border-radius:9px;
+    color:var(--ink);
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:1rem;
+    transition:transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  }
+  .score-input:focus{
+    outline:none;
+    border-color:var(--yellow);
+    box-shadow:0 0 0 3px rgba(255,210,63,0.25);
+    transform:scale(1.06);
+  }
+  .score-input.under{color:var(--green);}
+  .score-input.over{color:var(--pink);}
+  .score-input.even{color:var(--ink-dim);}
+
+  td.total-col{
+    font-family:'Bungee', sans-serif;
+    font-size:1.05rem;
+    color:var(--yellow);
+    min-width:64px;
+  }
+  td.rel-col{
+    min-width:56px;
+    font-weight:700;
+  }
+  .rel-under{color:var(--green);}
+  .rel-over{color:var(--pink);}
+  .rel-even{color:var(--ink-dim);}
+
+  /* ---------- leaderboard ---------- */
+  .leaderboard-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .lb-row{
+    display:grid;
+    grid-template-columns:34px 1fr auto auto;
+    align-items:center;
+    gap:12px;
+    background:var(--felt);
+    border:1px solid var(--felt-line);
+    border-radius:12px;
+    padding:10px 14px;
+    position:relative;
+    overflow:hidden;
+  }
+  .lb-row.lead{
+    border-color:var(--yellow);
+    box-shadow:0 0 0 1px var(--yellow), 0 0 22px -4px rgba(255,210,63,0.55);
+  }
+  .lb-rank{
+    font-family:'Bungee', sans-serif;
+    font-size:1.1rem;
+    color:var(--ink-dim);
+    text-align:center;
+  }
+  .lb-row.lead .lb-rank{color:var(--yellow);}
+  .lb-name{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Bungee', sans-serif;
+    font-size:0.9rem;
+  }
+  .lb-score{
+    font-size:1.3rem;
+    font-weight:800;
+    color:var(--ink);
+    min-width:38px;
+    text-align:right;
+  }
+  .lb-rel{
+    font-size:0.85rem;
+    font-weight:700;
+    min-width:46px;
+    text-align:right;
+  }
+  .trophy{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:1.4rem;
+    opacity:0.9;
+    animation:bob 2s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(-50%);}
+    50%{transform:translateY(-58%);}
+  }
+
+  /* ---------- controls ---------- */
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    justify-content:center;
+    margin:26px 0 10px;
+  }
+  button{
+    font-family:'Bungee', sans-serif;
+    font-weight:400;
+    letter-spacing:1px;
+    font-size:0.8rem;
+    padding:12px 22px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    transition:transform 0.12s ease, filter 0.12s ease;
+  }
+  button:active{transform:translateY(2px);}
+  .btn-primary{
+    background:var(--pink);
+    color:#1a0510;
+    box-shadow:0 5px 0 #99123f;
+  }
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    box-shadow:none;
+  }
+  .btn-ghost:hover{color:var(--ink); border-color:var(--ink-dim);}
+
+  footer{
+    text-align:center;
+    color:var(--ink-dim);
+    font-size:0.7rem;
+    letter-spacing:1px;
+    margin:30px 0 10px;
+    opacity:0.6;
+  }
+
+  .save-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:0.68rem;
+    color:var(--green);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    opacity:0;
+    transition:opacity 0.4s ease;
+  }
+  .save-badge.show{opacity:1;}
+  .save-badge .puff{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 6px 1px var(--green);
+  }
+
+  @media (max-width:640px){
+    h1{gap:2px;}
+    .flag-icon{font-size:1.8rem;}
+    .par-row{grid-template-columns:repeat(9,minmax(38px,1fr));}
+    .par-cell label{font-size:0.55rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="bunting" id="bunting" aria-hidden="true"></div>
+
+<header>
+  <h1><span class="flag-icon">⛳</span>Neon Niblick</h1>
+  <p class="subtitle">Nine Holes &middot; <b>Six Rivals</b> &middot; One Trophy</p>
+</header>
+
+<main>
+
+  <section class="card" aria-labelledby="par-heading">
+    <h2 id="par-heading"><span class="num">P</span>Course Par</h2>
+    <div class="par-row" id="parRow"></div>
+    <div class="par-total">Course total: <b id="parTotal">0</b> strokes</div>
+  </section>
+
+  <section class="card" aria-labelledby="score-heading">
+    <h2 id="score-heading"><span class="num">S</span>Scorecard</h2>
+    <div class="table-wrap">
+      <table id="scoreTable">
+        <thead>
+          <tr id="headHoles"></tr>
+          <tr id="headPars"></tr>
+        </thead>
+        <tbody id="scoreBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="lb-heading">
+    <h2 id="lb-heading"><span class="num">&#127942;</span>Leaderboard</h2>
+    <div class="leaderboard-list" id="leaderboard"></div>
+  </section>
+
+  <div class="controls">
+    <button class="btn-primary" id="newRoundBtn">&#8635; New Round</button>
+    <button class="btn-ghost" id="resetParBtn">Reset Par to Default</button>
+    <span class="save-badge" id="saveBadge"><span class="puff"></span>Saved</span>
+  </div>
+
+</main>
+
+<footer>Scores auto-save to this device &middot; play through &middot; lowest strokes wins</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var PLAYERS = [
+    {name:"Janet",  color:"var(--pink)"},
+    {name:"Sandy",  color:"var(--yellow)"},
+    {name:"Max",    color:"var(--green)"},
+    {name:"Julien", color:"var(--cyan)"},
+    {name:"Dennis", color:"var(--orange)"},
+    {name:"Joel",   color:"var(--purple)"}
+  ];
+  var HOLES = 9;
+  var DEFAULT_PAR = [3,2,3,4,2,3,3,4,2];
+  var STORAGE_KEY = "neonNiblickMiniGolf_v1";
+
+  var state = loadState();
+
+  function defaultState(){
+    var scores = {};
+    PLAYERS.forEach(function(p){
+      scores[p.name] = new Array(HOLES).fill(null);
+    });
+    return { par: DEFAULT_PAR.slice(), scores: scores };
+  }
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      if(!parsed.par || parsed.par.length !== HOLES) parsed.par = DEFAULT_PAR.slice();
+      if(!parsed.scores) parsed.scores = {};
+      PLAYERS.forEach(function(p){
+        if(!Array.isArray(parsed.scores[p.name]) || parsed.scores[p.name].length !== HOLES){
+          parsed.scores[p.name] = new Array(HOLES).fill(null);
+        }
+      });
+      return parsed;
+    }catch(e){
+      return defaultState();
+    }
+  }
+
+  var saveTimer = null;
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    var badge = document.getElementById("saveBadge");
+    badge.classList.add("show");
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){ badge.classList.remove("show"); }, 900);
+  }
+
+  function buildBunting(){
+    var el = document.getElementById("bunting");
+    var colors = ["var(--pink)","var(--yellow)","var(--green)","var(--cyan)","var(--orange)","var(--purple)"];
+    var html = "";
+    for(var i=0;i<21;i++){
+      html += '<span style="--c:'+colors[i % colors.length]+'"></span>';
+    }
+    el.innerHTML = html;
+  }
+
+  function buildParRow(){
+    var row = document.getElementById("parRow");
+    var html = "";
+    for(var h=0; h<HOLES; h++){
+      html += '<div class="par-cell">'+
+        '<label>Hole '+(h+1)+'</label>'+
+        '<input type="number" min="1" max="15" inputmode="numeric" class="par-input" data-hole="'+h+'" value="'+state.par[h]+'">'+
+        '</div>';
+    }
+    row.innerHTML = html;
+    row.querySelectorAll(".par-input").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        var h = parseInt(this.dataset.hole, 10);
+        var v = parseInt(this.value, 10);
+        state.par[h] = isNaN(v) ? 0 : v;
+        renderAll();
+        saveState();
+      });
+    });
+    updateParTotal();
+  }
+
+  function updateParTotal(){
+    var total = state.par.reduce(function(a,b){ return a + (b||0); }, 0);
+    document.getElementById("parTotal").textContent = total;
+  }
+
+  function buildTableHead(){
+    var headHoles = document.getElementById("headHoles");
+    var headPars = document.getElementById("headPars");
+    var h1 = '<th class="player-col">Player</th>';
+    var h2 = '<th class="player-col"></th>';
+    for(var h=0; h<HOLES; h++){
+      h1 += '<th>Hole '+(h+1)+'</th>';
+      h2 += '<th class="par-sub">par '+state.par[h]+'</th>';
+    }
+    h1 += '<th>Total</th><th>+/&minus;</th>';
+    h2 += '<th class="par-sub"></th><th class="par-sub"></th>';
+    headHoles.innerHTML = h1;
+    headPars.innerHTML = h2;
+  }
+
+  function relToParClass(rel){
+    if(rel < 0) return "under";
+    if(rel > 0) return "over";
+    return "even";
+  }
+  function relToParLabel(rel){
+    if(rel === 0) return "E";
+    return (rel > 0 ? "+" : "") + rel;
+  }
+
+  function buildTableBody(){
+    var body = document.getElementById("scoreBody");
+    var html = "";
+    PLAYERS.forEach(function(p){
+      html += '<tr>';
+      html += '<td class="player-col"><div class="player-name"><span class="dot" style="--dotcolor:'+p.color+'"></span>'+p.name+'</div></td>';
+      for(var h=0; h<HOLES; h++){
+        var val = state.scores[p.name][h];
+        html += '<td><input class="score-input" type="number" min="0" max="20" inputmode="numeric" '+
+          'data-player="'+p.name+'" data-hole="'+h+'" value="'+(val===null?"":val)+'"></td>';
+      }
+      html += '<td class="total-col" data-total="'+p.name+'">&mdash;</td>';
+      html += '<td class="rel-col" data-rel="'+p.name+'">&mdash;</td>';
+      html += '</tr>';
+    });
+    body.innerHTML = html;
+
+    body.querySelectorAll(".score-input").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        var player = this.dataset.player;
+        var hole = parseInt(this.dataset.hole, 10);
+        var v = this.value === "" ? null : parseInt(this.value, 10);
+        state.scores[player][hole] = (v===null || isNaN(v)) ? null : v;
+        colorizeInput(this, hole);
+        updateTotals();
+        updateLeaderboard();
+        saveState();
+      });
+    });
+  }
+
+  function colorizeInput(inp, hole){
+    inp.classList.remove("under","over","even");
+    var v = inp.value === "" ? null : parseInt(inp.value, 10);
+    var par = state.par[hole];
+    if(v === null || isNaN(v) || !par) return;
+    var rel = v - par;
+    inp.classList.add(relToParClass(rel));
+  }
+
+  function colorizeAllInputs(){
+    document.querySelectorAll(".score-input").forEach(function(inp){
+      colorizeInput(inp, parseInt(inp.dataset.hole, 10));
+    });
+  }
+
+  function playerTotals(name){
+    var arr = state.scores[name];
+    var played = arr.filter(function(v){ return v !== null && !isNaN(v); });
+    var strokes = played.reduce(function(a,b){ return a+b; }, 0);
+    var parSoFar = 0;
+    for(var i=0;i<arr.length;i++){
+      if(arr[i] !== null && !isNaN(arr[i])) parSoFar += (state.par[i]||0);
+    }
+    return { strokes: strokes, rel: strokes - parSoFar, holesPlayed: played.length };
+  }
+
+  function updateTotals(){
+    PLAYERS.forEach(function(p){
+      var t = playerTotals(p.name);
+      var totalCell = document.querySelector('[data-total="'+p.name+'"]');
+      var relCell = document.querySelector('[data-rel="'+p.name+'"]');
+      totalCell.textContent = t.holesPlayed ? t.strokes : "—";
+      if(t.holesPlayed){
+        relCell.textContent = relToParLabel(t.rel);
+        relCell.className = "rel-col rel-" + relToParClass(t.rel);
+      } else {
+        relCell.textContent = "—";
+        relCell.className = "rel-col";
+      }
+    });
+  }
+
+  function updateLeaderboard(){
+    var board = document.getElementById("leaderboard");
+    var rows = PLAYERS.map(function(p){
+      var t = playerTotals(p.name);
+      return { name:p.name, color:p.color, strokes:t.strokes, rel:t.rel, played:t.holesPlayed };
+    });
+    rows.sort(function(a,b){
+      if(a.played === 0 && b.played === 0) return 0;
+      if(a.played === 0) return 1;
+      if(b.played === 0) return -1;
+      return a.strokes - b.strokes;
+    });
+    var anyPlayed = rows.some(function(r){ return r.played > 0; });
+    var html = "";
+    rows.forEach(function(r, idx){
+      var isLead = anyPlayed && r.played > 0 && idx === 0 && (rows[1] ? r.strokes < rows[1].strokes || rows[1].played===0 : true);
+      html += '<div class="lb-row'+(isLead?' lead':'')+'">';
+      html += '<div class="lb-rank">'+(r.played ? (idx+1) : "–")+'</div>';
+      html += '<div class="lb-name"><span class="dot" style="--dotcolor:'+r.color+'"></span>'+r.name+'</div>';
+      html += '<div class="lb-score">'+(r.played ? r.strokes : "—")+'</div>';
+      html += '<div class="lb-rel '+(r.played ? "rel-"+relToParClass(r.rel) : "")+'">'+(r.played ? relToParLabel(r.rel) : "")+'</div>';
+      if(isLead) html += '<span class="trophy">&#127942;</span>';
+      html += '</div>';
+    });
+    board.innerHTML = html;
+  }
+
+  function renderAll(){
+    buildTableHead();
+    updateParTotal();
+  }
+
+  function newRound(){
+    if(!confirm("Start a new round? This clears every player's scores (par stays the same).")) return;
+    PLAYERS.forEach(function(p){ state.scores[p.name] = new Array(HOLES).fill(null); });
+    buildTableBody();
+    colorizeAllInputs();
+    updateTotals();
+    updateLeaderboard();
+    saveState();
+  }
+
+  function resetPar(){
+    if(!confirm("Reset the course par back to the default layout?")) return;
+    state.par = DEFAULT_PAR.slice();
+    buildParRow();
+    buildTableHead();
+    colorizeAllInputs();
+    updateTotals();
+    updateLeaderboard();
+    saveState();
+  }
+
+  buildBunting();
+  buildParRow();
+  buildTableHead();
+  buildTableBody();
+  colorizeAllInputs();
+  updateTotals();
+  updateLeaderboard();
+
+  document.getElementById("newRoundBtn").addEventListener("click", newRound);
+  document.getElementById("resetParBtn").addEventListener("click", resetPar);
+
+})();
+</script>
+
+</body>
+</html>
