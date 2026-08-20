@@ -12,7 +12,7 @@
     {
       "name": "synter",
       "source": ".",
-      "logo": "assets/logo.png",
+      "logo": "https://raw.githubusercontent.com/Synter-Media-AI/plugin/main/assets/logo.png",
       "description": "The AI Agent Operator for Ads. Connect 21 ad platforms, build audiences, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute. Nothing that spends money ships without your approval."
     }
   ]

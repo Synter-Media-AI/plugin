@@ -7,6 +7,9 @@ All notable changes to the Synter plugin are documented here. This project follo
 ### Added
 - **Cursor Plugin packaging** — `.cursor-plugin/plugin.json`, `.cursor-plugin/marketplace.json`, and `mcp.json` so the same repo can be imported as a Cursor Team Marketplace and submitted to the [Cursor Marketplace](https://cursor.com/marketplace/publish). The hosted Synter MCP (`https://mcp.syntermedia.ai`) takes `SYNTER_API_KEY` via Cursor plugin variables. Listing metadata includes the Synter mark (`assets/logo.png`, 1024×1024) and the marketplace description on both the plugin manifest and the marketplace index.
 
+### Fixed
+- Cursor install no longer requires `SYNTER_API_KEY` up front (onboarding and free GA4 tools work without one). HTTP MCP declares `type: "http"`. Logo uses an absolute GitHub URL so the marketplace crawler does not 404. Cursor hooks use `sessionStart` instead of Claude's `SessionStart`.
+
 ## [0.4.0] — 2026-08-04
 
 RSA asset floor: the Google Ads API accepts as few as 3 headlines and 2 descriptions, but ads built at that minimum score "Poor" on Google Ad Strength and get throttled in the auction. The plugin now enforces a real floor everywhere ad copy is created or reviewed.
