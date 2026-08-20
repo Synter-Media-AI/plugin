@@ -5,7 +5,7 @@ All notable changes to the Synter plugin are documented here. This project follo
 ## [0.4.1] — 2026-08-19
 
 ### Added
-- **Cursor Plugin packaging** — `.cursor-plugin/plugin.json`, `.cursor-plugin/marketplace.json`, and `mcp.json` so the same repo can be imported as a Cursor Team Marketplace and submitted to the [Cursor Marketplace](https://cursor.com/marketplace/publish). The hosted Synter MCP (`https://mcp.syntermedia.ai`) takes `SYNTER_API_KEY` via Cursor plugin variables.
+- **Cursor Plugin packaging** — `.cursor-plugin/plugin.json`, `.cursor-plugin/marketplace.json`, and `mcp.json` so the same repo can be imported as a Cursor Team Marketplace and submitted to the [Cursor Marketplace](https://cursor.com/marketplace/publish). The hosted Synter MCP (`https://mcp.syntermedia.ai`) takes `SYNTER_API_KEY` via Cursor plugin variables. Listing metadata includes the Synter mark (`assets/logo.png`, 1024×1024) and the marketplace description on both the plugin manifest and the marketplace index.
 
 ## [0.4.0] — 2026-08-04
 
