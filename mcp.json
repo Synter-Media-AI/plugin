@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "synter": {
+      "url": "https://mcp.syntermedia.ai",
+      "headers": {
+        "X-Synter-Key": "${SYNTER_API_KEY}"
+      }
+    }
+  }
+}
