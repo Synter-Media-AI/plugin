@@ -1,0 +1,44 @@
+{
+  "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
+  "name": "synter",
+  "displayName": "Synter",
+  "version": "0.4.1",
+  "description": "The AI Agent Operator for Ads. Connect 21 ad platforms, build audiences, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute. Nothing that spends money ships without your approval.",
+  "author": {
+    "name": "Synter",
+    "email": "joel@synterai.com"
+  },
+  "homepage": "https://syntermedia.ai",
+  "repository": "https://github.com/Synter-Media-AI/plugin",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "ads",
+    "advertising",
+    "campaigns",
+    "audiences",
+    "media-buying",
+    "creative",
+    "roas",
+    "google-ads",
+    "meta-ads",
+    "linkedin-ads",
+    "mcp",
+    "synter"
+  ],
+  "skills": "./skills/",
+  "agents": "./agents/",
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "SYNTER_API_KEY": {
+        "type": "string",
+        "title": "Synter API key",
+        "description": "Required. Your Synter API key (syn_...). Create one at syntermedia.ai/developer. The hosted MCP server rejects unauthenticated connections."
+      }
+    },
+    "required": ["SYNTER_API_KEY"]
+  }
+}

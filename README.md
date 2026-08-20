@@ -1,6 +1,6 @@
-# Synter — Claude Code plugin
+# Synter — Claude Code & Cursor plugin
 
-**The AI Agent Operator for Ads.** Claude Code for advertising. You direct, the agents execute.
+**The AI Agent Operator for Ads.** Claude Code and Cursor for advertising. You direct, the agents execute.
 
 Connect every ad platform, build audiences from signals and first-party data, generate on-brand creative, plan and launch cross-platform campaigns, and reallocate spend by ROAS — all in one conversation. Nothing that spends money ships without your approval.
 
@@ -10,7 +10,7 @@ One interface. Every ad platform. Ship faster.
 
 ## Install
 
-In Claude Code:
+### Claude Code
 
 ```text
 /plugin marketplace add Synter-Media-AI/plugin
@@ -19,9 +19,17 @@ In Claude Code:
 
 When enabling, paste your **Synter API key** (`syn_...`) — or leave it blank and run `/synter:quickstart` to onboard and get one. Create a key at [syntermedia.ai/developer](https://syntermedia.ai/developer).
 
+### Cursor
+
+**Team / local:** import `https://github.com/Synter-Media-AI/plugin` under **Dashboard → Plugins → Team Marketplaces**, or symlink this repo into `~/.cursor/plugins/local/synter` and reload the window.
+
+**Public marketplace:** submit this repository at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). Cursor reviews every listing; the plugin is MIT and open source.
+
+After install, set `SYNTER_API_KEY` in **Plugins → Configure**. The hosted MCP is `https://mcp.syntermedia.ai`.
+
 Free GA4 and onboarding tools work with no key and no credits.
 
-> Requires Claude Code with plugin support. US data; campaign write actions spend real money — every spend asks for your approval first.
+> Campaign write actions spend real money — every spend asks for your approval first.
 
 ---
 
@@ -79,9 +87,13 @@ The Synter Advertising Platform MCP (`https://mcp.syntermedia.ai`) — cross-pla
 ```text
 plugin/
 ├── .claude-plugin/
-│   ├── plugin.json          # manifest + userConfig (API key)
-│   └── marketplace.json     # one-plugin marketplace
-├── .mcp.json                # Synter MCP (HTTP, key via userConfig header)
+│   ├── plugin.json          # Claude Code manifest + userConfig (API key)
+│   └── marketplace.json     # Claude Code marketplace
+├── .cursor-plugin/
+│   ├── plugin.json          # Cursor Plugin manifest + SYNTER_API_KEY variable
+│   └── marketplace.json     # Cursor Team Marketplace index
+├── .mcp.json                # Synter MCP for Claude (key via userConfig header)
+├── mcp.json                 # Synter MCP for Cursor (${SYNTER_API_KEY})
 ├── skills/                  # /synter:* slash commands (SKILL.md each)
 ├── agents/                  # subagent definitions
 ├── hooks/hooks.json         # SessionStart safety + voice primer
