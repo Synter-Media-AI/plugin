@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="Synter" width="128" height="128" />
+</p>
+
 # Synter — Claude Code & Cursor plugin
 
 **The AI Agent Operator for Ads.** Claude Code and Cursor for advertising. You direct, the agents execute.
