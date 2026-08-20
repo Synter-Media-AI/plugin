@@ -11,7 +11,7 @@
   "homepage": "https://syntermedia.ai",
   "repository": "https://github.com/Synter-Media-AI/plugin",
   "license": "MIT",
-  "logo": "assets/logo.png",
+  "logo": "https://raw.githubusercontent.com/Synter-Media-AI/plugin/main/assets/logo.png",
   "keywords": [
     "ads",
     "advertising",
@@ -28,7 +28,7 @@
   ],
   "skills": "./skills/",
   "agents": "./agents/",
-  "hooks": "./hooks/hooks.json",
+  "hooks": "./hooks/cursor-hooks.json",
   "mcpServers": "./mcp.json",
   "variables": {
     "type": "object",
@@ -36,9 +36,8 @@
       "SYNTER_API_KEY": {
         "type": "string",
         "title": "Synter API key",
-        "description": "Required. Your Synter API key (syn_...). Create one at syntermedia.ai/developer. The hosted MCP server rejects unauthenticated connections."
+        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the free GA4 tools."
       }
-    },
-    "required": ["SYNTER_API_KEY"]
+    }
   }
 }
