@@ -2,6 +2,18 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [1.0.0] — 2026-08-27
+
+### Changed
+- **Approval gating is universal again.** The Solo/Scale tier carve-out that allowed direct single-turn execution has been reverted — every tier now requires explicit approval before any create/enable/budget/launch/pause call that spends money. Reads (`list_*`, `get_*`, `pull_*`, `verify_*`, reports) remain free to run without asking. The session-start hook, output style, and brand-and-safety context all describe the same universal gate again.
+- Version canonicalized to **1.0.0** across `.claude-plugin/plugin.json`, `.cursor-plugin/plugin.json`, and `.cursor-plugin/marketplace.json`, closing the skew between the Claude and Cursor packaging surfaces.
+
+### Added
+- **Packaging and release automation** — a zip build produces `dist/synter-plugin-<version>.zip` with the plugin at the archive root, matching Claude Desktop's zip-upload layout. CI validates every PR (manifest JSON, marketplace/plugin name match, skill frontmatter, `.mcp.json`/`mcp.json` interpolation guards) and a release workflow attaches the built zip to the GitHub Release on each `synter--v*` tag push.
+
+### Fixed
+- README no longer tells Claude Code installers they can "leave it blank" — `userConfig.synter_api_key` is `required: true` and a blank key yields zero Synter tools (see 0.1.1 below). The install steps now point straight at [syntermedia.ai/developer](https://syntermedia.ai/developer) and clarify that `.mcp.json` (Claude) and `mcp.json` (Cursor) use different key-interpolation syntax and must not be cross-wired.
+
 ## [0.4.1] — 2026-08-19
 
 ### Added

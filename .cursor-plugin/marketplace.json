@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Synter's official plugin marketplace. The AI Agent Operator for Ads.",
-    "version": "0.4.1"
+    "version": "1.0.0"
   },
   "plugins": [
     {

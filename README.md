@@ -21,7 +21,7 @@ One interface. Every ad platform. Ship faster.
 /plugin install synter@synter
 ```
 
-When enabling, paste your **Synter API key** (`syn_...`) — or leave it blank and run `/synter:quickstart` to onboard and get one. Create a key at [syntermedia.ai/developer](https://syntermedia.ai/developer).
+Create a key at [syntermedia.ai/developer](https://syntermedia.ai/developer) and paste it when enabling the plugin — the Synter MCP server rejects unauthenticated connections, so the plugin cannot start without one. Once enabled, `/synter:quickstart` handles first-run onboarding.
 
 ### Cursor
 
@@ -96,8 +96,8 @@ plugin/
 ├── .cursor-plugin/
 │   ├── plugin.json          # Cursor Plugin manifest + SYNTER_API_KEY variable
 │   └── marketplace.json     # Cursor Team Marketplace index
-├── .mcp.json                # Synter MCP for Claude (key via userConfig header)
-├── mcp.json                 # Synter MCP for Cursor (${SYNTER_API_KEY})
+├── .mcp.json                # Synter MCP for Claude (header: ${user_config.synter_api_key})
+├── mcp.json                 # Synter MCP for Cursor (header: ${SYNTER_API_KEY})
 ├── skills/                  # /synter:* slash commands (SKILL.md each)
 ├── agents/                  # subagent definitions
 ├── hooks/hooks.json         # SessionStart safety + voice primer
@@ -110,6 +110,8 @@ plugin/
 ├── CHANGELOG.md
 └── LICENSE                  # MIT
 ```
+
+> **Don't cross-wire the two MCP configs.** `.mcp.json` is Claude-only and must interpolate `${user_config.synter_api_key}` (sourced from `.claude-plugin/plugin.json`'s `userConfig`); `mcp.json` is Cursor-only and must interpolate `${SYNTER_API_KEY}` (sourced from `.cursor-plugin/plugin.json`'s `variables`). Copying one file's header value into the other silently breaks that client's authentication.
 
 ---
 

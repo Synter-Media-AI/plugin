@@ -2,7 +2,7 @@
   "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
   "name": "synter",
   "displayName": "Synter",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "The AI Agent Operator for Ads. Connect 21 ad platforms, build audiences, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute. Nothing that spends money ships without your approval.",
   "author": {
     "name": "Synter",
