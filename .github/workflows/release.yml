@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'synter--v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Validate, build, and publish release zip
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run manifest validation
+        run: node scripts/validate-manifests.js
+
+      - name: Ensure zip/rsync are available
+        run: |
+          command -v zip >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq zip
+          command -v rsync >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq rsync
+
+      - name: Build plugin zip
+        run: bash scripts/build-zip.sh
+
+      - name: Resolve version
+        id: version
+        run: echo "version=$(node -p "require('./.claude-plugin/plugin.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/synter-plugin-${{ steps.version.outputs.version }}.zip
+          generate_release_notes: true
