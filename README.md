@@ -23,6 +23,16 @@ One interface. Every ad platform. Ship faster.
 
 Create a key at [syntermedia.ai/developer](https://syntermedia.ai/developer) and paste it when enabling the plugin — the Synter MCP server rejects unauthenticated connections, so the plugin cannot start without one. Once enabled, `/synter:quickstart` handles first-run onboarding.
 
+### Claude Desktop
+
+Claude Desktop's **Settings → Plugins** UI installs this plugin either of two ways:
+
+**Add marketplace** — click **Add marketplace**, point it at `Synter-Media-AI/plugin` (the GitHub repo, same source Claude Code's `/plugin marketplace add` reads), then install `synter` from the listing. This tracks `main`, so you always get the latest tagged manifests.
+
+**Upload plugin** — download the packaged zip from the [v1.0.0 release](https://github.com/Synter-Media-AI/plugin/releases/latest/download/synter-plugin-1.0.0.zip) (browse all releases at [github.com/Synter-Media-AI/plugin/releases](https://github.com/Synter-Media-AI/plugin/releases)) and drag it into **Upload plugin**. Every tagged release (`synter--v*`) rebuilds this zip via `.github/workflows/release.yml`, with the plugin manifest at the archive root — the layout Desktop's upload flow expects.
+
+Both routes need the same API key as Claude Code — create one at [syntermedia.ai/developer](https://syntermedia.ai/developer) and paste it when enabling the plugin.
+
 ### Cursor
 
 **Team / local:** import `https://github.com/Synter-Media-AI/plugin` under **Dashboard → Plugins → Team Marketplaces**, or symlink this repo into `~/.cursor/plugins/local/synter` and reload the window.
@@ -34,6 +44,21 @@ After install, set `SYNTER_API_KEY` in **Plugins → Configure**. The hosted MCP
 Free GA4 and onboarding tools work with no key and no credits.
 
 > Campaign write actions spend real money — every spend asks for your approval first.
+
+### ChatGPT (Developer Mode / Connectors)
+
+ChatGPT's custom-connector setup (**Settings → Connectors → Advanced → Developer mode**, or the Workspace admin equivalent under **Apps**) accepts a remote MCP server URL plus an authentication mechanism — but per OpenAI's own docs, that mechanism is limited to **no authentication** or **OAuth 2.1**. There's no field for a static API key or a custom request header. Verified against OpenAI's current documentation:
+
+- [Developer mode and MCP apps in ChatGPT](https://help.openai.com/en/articles/12584461-developer-mode-and-full-mcp-connectors-in-chatgpt-beta) (OpenAI Help Center) — app setup lets you "pick the authentication mechanism, if applicable," then walks through the OAuth authorization prompt; no custom-header option is described.
+- [Authentication – Apps SDK](https://developers.openai.com/apps-sdk/build/auth) (OpenAI Developers) — the only documented way to add custom auth to an MCP server ChatGPT connects to is a full OAuth 2.1 flow (protected-resource metadata, CIMD/DCR, PKCE). Static API keys or bearer headers aren't part of the spec ChatGPT implements.
+
+Synter's hosted MCP server authenticates every request with a static `X-Synter-Key` header — the same credential the Claude Code, Claude Desktop, and Cursor configs above send — and doesn't implement OAuth. **That means pointing ChatGPT's connector picker straight at `https://mcp.syntermedia.ai` won't authenticate today: ChatGPT has no field to carry the required key.** This is a real gap, not a documentation omission — closing it means adding an OAuth 2.1 front end to the MCP server, which is out of scope for this release.
+
+Until then, the working paths to Synter's tools are the ones already documented on this page:
+
+- **Claude Code, Claude Desktop, or Cursor** — the plugin sends the header correctly out of the box (see Install above).
+- **Any other MCP client that supports custom headers** — wire the HTTP endpoint directly with `X-Synter-Key: syn_your_api_key_here` (see "Wire the MCP straight into any client" below).
+- **A client with no remote-MCP support at all** — run the published stdio server locally: `SYNTER_API_KEY=syn_... npx -y @synterai/mcp-server` (get a key at [syntermedia.ai/developer](https://syntermedia.ai/developer)). Note this doesn't help ChatGPT specifically — ChatGPT's connector product only reaches remote HTTPS servers, it cannot spawn a local stdio process.
 
 ---
 
