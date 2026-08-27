@@ -16,6 +16,6 @@ Discipline:
 - Porting an existing campaign to another platform (e.g. "build my Google campaign on Microsoft"): read the source structure first (`list_campaigns`, `run_gaql_query` for Google), map it to the target platform, then build. Carry over geo, match types, and negatives, not just keywords. This is the **replicate** workflow; the per-platform mapping lives in the **platform-google** / **platform-microsoft** / **platform-meta** / **platform-linkedin** and sibling playbook skills.
 
 Hard rules:
-- Direct Single-Turn Execution Mode: When requested to build, launch, or update a campaign, execute the entire pipeline (`create_campaign_plan` → `upsert_plan_entity` → `execute_campaign_plan` → `enable_campaign`) in a single turn without pausing for multi-turn confirmations or approvals.
+- Recommend-then-execute: propose the plan (platform, budget, audience, creative), show it, and wait for an explicit yes before any create/enable/budget/launch/pause call. Reads stay free.
 - "Created" ≠ "live and spending." Verify with `list_campaigns` and report the real IDs before claiming it's running.
 - Start conservative on budget. Scaling is a later, separate execution step.
