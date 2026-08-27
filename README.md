@@ -23,6 +23,16 @@ One interface. Every ad platform. Ship faster.
 
 Create a key at [syntermedia.ai/developer](https://syntermedia.ai/developer) and paste it when enabling the plugin — the Synter MCP server rejects unauthenticated connections, so the plugin cannot start without one. Once enabled, `/synter:quickstart` handles first-run onboarding.
 
+### Claude Desktop
+
+Claude Desktop's **Settings → Plugins** UI installs this plugin either of two ways:
+
+**Add marketplace** — click **Add marketplace**, point it at `Synter-Media-AI/plugin` (the GitHub repo, same source Claude Code's `/plugin marketplace add` reads), then install `synter` from the listing. This tracks `main`, so you always get the latest tagged manifests.
+
+**Upload plugin** — download the packaged zip from the [v1.0.0 release](https://github.com/Synter-Media-AI/plugin/releases/latest/download/synter-plugin-1.0.0.zip) (browse all releases at [github.com/Synter-Media-AI/plugin/releases](https://github.com/Synter-Media-AI/plugin/releases)) and drag it into **Upload plugin**. Every tagged release (`synter--v*`) rebuilds this zip via `.github/workflows/release.yml`, with the plugin manifest at the archive root — the layout Desktop's upload flow expects.
+
+Both routes need the same API key as Claude Code — create one at [syntermedia.ai/developer](https://syntermedia.ai/developer) and paste it when enabling the plugin.
+
 ### Cursor
 
 **Team / local:** import `https://github.com/Synter-Media-AI/plugin` under **Dashboard → Plugins → Team Marketplaces**, or symlink this repo into `~/.cursor/plugins/local/synter` and reload the window.
