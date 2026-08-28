@@ -40,6 +40,7 @@ This plugin packages **agents, skills, an MCP server, a hook, and an output styl
 | `/synter:launch` | Plan, preflight, and ship a cross-platform campaign. |
 | `/synter:replicate` | Rebuild an existing campaign from one platform onto another (e.g. Google to Microsoft). |
 | `/synter:optimize` | Cut wasted spend, scale winners, reallocate budget by ROAS. |
+| `/synter:outbound` | Run cold email through Prospector — pipeline, campaigns, sending health. |
 | `/synter:report` | Cross-channel performance report and exec summary. |
 | `/synter:help` | What Synter can do, and where to get support. |
 
@@ -57,6 +58,8 @@ Bundled alongside the workflows is a library of advertising-craft knowledge skil
 **Creative:** `ad-copy-generation` · `creative-testing` · `creative-fatigue-detector` · `ad-policy-compliance` · `landing-page-creation`
 
 **Measurement:** `conversion-tracking` · `attribution` · `utm-builder` · `executive-reporting`
+
+**Outbound:** `outbound-research` · `outbound-replies`
 
 **Research:** `competitor-analysis`
 
