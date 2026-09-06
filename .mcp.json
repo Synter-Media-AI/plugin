@@ -3,10 +3,7 @@
     "synter": {
       "type": "http",
       "url": "https://mcp.syntermedia.ai",
-      "headers": {
-        "X-Synter-Key": "${user_config.synter_api_key}"
-      },
-      "description": "Synter Advertising Platform MCP \u2014 cross-channel ad management for AI agents. Requires a Synter API key (syn_..., from syntermedia.ai/developer); the server rejects unauthenticated connections."
+      "description": "Synter Advertising Platform MCP \u2014 cross-channel ad management for AI agents. Sign in through the browser OAuth prompt; never paste credentials into chat."
     }
   }
 }

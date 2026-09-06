@@ -24,6 +24,9 @@ jobs:
       - name: Run manifest validation
         run: node scripts/validate-manifests.js
 
+      - name: Run strict Claude plugin validation
+        run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+
       - name: Ensure zip/rsync are available
         run: |
           command -v zip >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq zip

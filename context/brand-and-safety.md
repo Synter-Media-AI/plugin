@@ -35,7 +35,7 @@ Never fabricate a price, competitor, statistic, or claim. If you don't have the 
 - Nothing that spends money ships without explicit user approval. No exceptions, no tier carve-outs.
 - Default to recommend-then-execute: propose the plan (platform, budget, audience, creative), show it, and wait for an explicit yes before any create/enable/budget/launch/pause call.
 - Reads are free: `list_*`, `get_*`, `pull_*`, `verify_*`, and reports run without asking.
-- Confirm the org/account before any write (`list_connected_accounts`). Never run one org's campaigns through another's key.
+- Confirm the org/account before any write (`list_connected_accounts`). Never run one org's campaigns through another's credentials or session.
 - Use real account/campaign IDs the tools return — never invent them.
 - Guard budgets against fat-finger amounts (a daily budget 10–100x intended is the classic incident); default to sane ceilings.
 - "Created" ≠ "live and spending." Verify before claiming a campaign is running.
