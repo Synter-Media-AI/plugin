@@ -47,18 +47,19 @@ Free GA4 and onboarding tools work with no key and no credits.
 
 ### ChatGPT (Developer Mode / Connectors)
 
-ChatGPT's custom-connector setup (**Settings → Connectors → Advanced → Developer mode**, or the Workspace admin equivalent under **Apps**) accepts a remote MCP server URL plus an authentication mechanism — but per OpenAI's own docs, that mechanism is limited to **no authentication** or **OAuth 2.1**. There's no field for a static API key or a custom request header. Verified against OpenAI's current documentation:
+ChatGPT's custom-connector setup (**Settings → Connectors → Advanced → Developer mode**, or the Workspace admin equivalent under **Apps**) accepts Synter's production remote MCP server through OAuth 2.1:
 
 - [Developer mode and MCP apps in ChatGPT](https://help.openai.com/en/articles/12584461-developer-mode-and-full-mcp-connectors-in-chatgpt-beta) (OpenAI Help Center) — app setup lets you "pick the authentication mechanism, if applicable," then walks through the OAuth authorization prompt; no custom-header option is described.
 - [Authentication – Apps SDK](https://developers.openai.com/apps-sdk/build/auth) (OpenAI Developers) — the only documented way to add custom auth to an MCP server ChatGPT connects to is a full OAuth 2.1 flow (protected-resource metadata, CIMD/DCR, PKCE). Static API keys or bearer headers aren't part of the spec ChatGPT implements.
 
-Synter's hosted MCP server authenticates every request with a static `X-Synter-Key` header — the same credential the Claude Code, Claude Desktop, and Cursor configs above send — and doesn't implement OAuth. **That means pointing ChatGPT's connector picker straight at `https://mcp.syntermedia.ai` won't authenticate today: ChatGPT has no field to carry the required key.** This is a real gap, not a documentation omission — closing it means adding an OAuth 2.1 front end to the MCP server, which is out of scope for this release.
+Add `https://mcp.syntermedia.ai` as the remote MCP URL and complete the Synter authorization flow in the browser. The hosted service publishes OAuth authorization-server and protected-resource metadata, supports dynamic client registration and PKCE, and returns the required resource challenge to unauthenticated MCP clients. The API-key header in this plugin remains the authentication path for Claude Code, Claude Desktop, Cursor, and other clients that support custom headers.
 
-Until then, the working paths to Synter's tools are the ones already documented on this page:
+Supported connection paths are:
 
-- **Claude Code, Claude Desktop, or Cursor** — the plugin sends the header correctly out of the box (see Install above).
+- **ChatGPT** — connect the production MCP URL and authorize with OAuth 2.1.
+- **Claude Code, Claude Desktop, or Cursor** — the plugin sends the API-key header correctly out of the box (see Install above).
 - **Any other MCP client that supports custom headers** — wire the HTTP endpoint directly with `X-Synter-Key: syn_your_api_key_here` (see "Wire the MCP straight into any client" below).
-- **A client with no remote-MCP support at all** — run the published stdio server locally: `SYNTER_API_KEY=syn_... npx -y @synterai/mcp-server` (get a key at [syntermedia.ai/developer](https://syntermedia.ai/developer)). Note this doesn't help ChatGPT specifically — ChatGPT's connector product only reaches remote HTTPS servers, it cannot spawn a local stdio process.
+- **A client with no remote-MCP support** — run the published stdio server locally: `SYNTER_API_KEY=syn_... npx -y @synterai/mcp-server` (get a key at [syntermedia.ai/developer](https://syntermedia.ai/developer)).
 
 ---
 
