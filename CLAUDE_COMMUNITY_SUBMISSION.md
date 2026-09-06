@@ -50,15 +50,19 @@ Direct installation from Synter's marketplace:
 /plugin install synter@synter
 ```
 
-After Anthropic approves and publishes the directory listing, Claude Code users
-install it from Anthropic's automatically available official marketplace:
+After Anthropic approves and publishes the community-directory listing, Claude
+Code users add Anthropic's community marketplace and install Synter from its
+published `claude-community` catalog:
 
 ```text
-/plugin install synter@claude-plugins-official
+/plugin marketplace add anthropics/claude-plugins-community
+/plugin install synter@claude-community
 ```
 
-Do not advertise the directory command until the listing appears in Anthropic's
-public plugin directory.
+Do not advertise the directory command until `synter` appears in Anthropic's
+public community catalog. The separate, automatically configured
+`claude-plugins-official` marketplace is curated by Anthropic and has no public
+application process.
 
 The public repository is also directly installable in Claude Desktop and
 Cowork: **Customize → Plugins → Personal plugins → + → Add marketplace → Add
