@@ -2,8 +2,21 @@
 
 Prepared: 2026-09-06
 
-This is the reviewer-ready package for the public Synter plugin repository. It
-does not record or imply that the provider-side submission form was sent.
+This is the reviewer-ready package for the public Synter plugin repository.
+Synter's separate remote MCP connector submission is in review; that does not
+submit or publish this plugin in Anthropic's plugin directory.
+
+## Current directory status
+
+- **Connector Directory:** submitted 2026-09-05 from the Synter Team
+  organization; slug `synter`; status **In review** at
+  `https://claude.ai/admin-settings/directory/submissions/synter`.
+- **Plugin Directory:** no submission ID or published listing has been
+  verified. This public repository remains directly installable while the
+  separate plugin submission is completed.
+
+Anthropic documents the Connector Directory and Plugin Directory as separate,
+complementary catalogs. Do not treat connector review as plugin publication.
 
 ## Submission fields
 
@@ -84,8 +97,9 @@ Direct installation is not public-directory discovery.
 - [ ] Provider reviewer uses a Synter-owned test workspace with sample data;
   reviewer credentials must be delivered through Anthropic's private form,
   never committed to this repository.
-- [ ] An authorized Synter representative accepts the Software Directory Terms
-  and submits through the authenticated Claude.ai or Console form.
+- [ ] An authorized Synter representative submits this public GitHub plugin
+  through the authenticated plugin form. The existing connector submission
+  does not satisfy this step.
 
 ## Security and data-use evidence
 
@@ -132,12 +146,12 @@ discretion under the Software Directory Policy's unsupported-use restrictions;
 do not claim acceptance or an Anthropic Verified status before it appears in
 the directory.
 
-## Provider-side action still required
+## Provider-side plugin action still required
 
-Submission requires an authenticated Synter representative with the required
-Claude.ai directory-management access or Console Developer/Admin/Owner role,
-acceptance of Anthropic's Software Directory Terms, and a private reviewer test
-account. Use one of:
+The remote MCP connector is already in review. Publishing this plugin still
+requires an authenticated Synter representative with the required Claude.ai
+directory-management access or Console Developer/Admin/Owner role and a
+private reviewer test account. Use one of:
 
 - `https://claude.ai/admin-settings/directory/submissions/plugins/new`
 - `https://platform.claude.com/plugins/submit`
