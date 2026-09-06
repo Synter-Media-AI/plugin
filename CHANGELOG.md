@@ -2,6 +2,11 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [1.1.1] — 2026-09-06
+
+### Fixed
+- Replaced the stale rasterized plugin artwork with Synter's canonical transparent 1024×1024 brand mark. Cursor consumes this asset through its supported `logo` manifest field; Claude's current strict plugin manifest has no icon field, so the same asset is prepared for the authenticated Anthropic directory submission rather than adding an unsupported manifest key.
+
 ## [1.1.0] — 2026-09-06
 
 ### Changed

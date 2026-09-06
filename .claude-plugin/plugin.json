@@ -3,7 +3,7 @@
   "name": "synter",
   "displayName": "Synter",
   "description": "The AI Agent Operator for Ads. Connect every ad platform, build audiences from signals and first-party data, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — all in one conversation. You direct, the agents execute. Nothing ships without your approval.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "author": {
     "name": "Synter",

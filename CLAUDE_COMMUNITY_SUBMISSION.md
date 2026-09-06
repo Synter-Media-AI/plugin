@@ -16,6 +16,7 @@ does not record or imply that the provider-side submission form was sent.
 | License | MIT |
 | Category | Marketing and advertising |
 | Short description | Operate cross-channel advertising with approval-gated Synter agents, skills, and MCP tools. |
+| Brand icon | `assets/logo.png` — canonical transparent 1024×1024 Synter mark |
 | Support | `https://syntermedia.ai/contact` |
 | Privacy policy | `https://syntermedia.ai/privacy` |
 | Terms | `https://syntermedia.ai/terms` |
@@ -58,6 +59,11 @@ Direct installation is not public-directory discovery.
 - [x] `.claude-plugin/plugin.json` names the plugin `synter` and points to the
   canonical public repository.
 - [x] `.claude-plugin/marketplace.json` references the repository root.
+- [x] `assets/logo.png` is the canonical transparent 1024×1024 Synter mark,
+  ready for the directory listing's brand-image upload.
+- [x] No unsupported `icon` or `logo` key was added to the Claude manifest;
+  Anthropic's current strict schema has no such field. The Cursor manifest's
+  supported `logo` field points to this asset.
 - [x] `.mcp.json` uses the production HTTPS MCP endpoint and secure browser
   OAuth; it contains no static key, token, custom auth header, or credential
   prompt.
