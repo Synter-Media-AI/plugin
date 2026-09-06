@@ -2,6 +2,11 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [1.1.2] — 2026-09-06
+
+### Fixed
+- Aligned post-approval installation guidance with Anthropic's current plugin-directory documentation: approved plugins are surfaced through the automatically available `claude-plugins-official` marketplace.
+
 ## [1.1.1] — 2026-09-06
 
 ### Fixed

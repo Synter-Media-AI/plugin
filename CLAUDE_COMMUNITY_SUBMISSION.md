@@ -37,16 +37,15 @@ Direct installation from Synter's marketplace:
 /plugin install synter@synter
 ```
 
-After Anthropic approves and publishes the community listing, its separate
-installation path will be:
+After Anthropic approves and publishes the directory listing, Claude Code users
+install it from Anthropic's automatically available official marketplace:
 
 ```text
-/plugin marketplace add anthropics/claude-plugins-community
-/plugin install synter@claude-community
+/plugin install synter@claude-plugins-official
 ```
 
-Do not advertise the community command until the listing appears in Anthropic's
-catalog.
+Do not advertise the directory command until the listing appears in Anthropic's
+public plugin directory.
 
 The public repository is also directly installable in Claude Desktop and
 Cowork: **Customize → Plugins → Personal plugins → + → Add marketplace → Add
@@ -60,7 +59,7 @@ Direct installation is not public-directory discovery.
   canonical public repository.
 - [x] `.claude-plugin/marketplace.json` references the repository root.
 - [x] `assets/logo.png` is the canonical transparent 1024×1024 Synter mark,
-  ready for the directory listing's brand-image upload.
+  ready to supply if the authenticated directory form requests brand artwork.
 - [x] No unsupported `icon` or `logo` key was added to the Claude manifest;
   Anthropic's current strict schema has no such field. The Cursor manifest's
   supported `logo` field points to this asset.
