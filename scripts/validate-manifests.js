@@ -50,6 +50,22 @@ if (pluginJson && marketplaceJson) {
       `.claude-plugin/plugin.json name ("${pluginJson.name}")`
     );
   }
+
+  const cursorPluginJson = manifests['.cursor-plugin/plugin.json'];
+  const cursorMarketplaceJson = manifests['.cursor-plugin/marketplace.json'];
+  const cursorMarketplaceVersion = cursorMarketplaceJson && cursorMarketplaceJson.metadata && cursorMarketplaceJson.metadata.version;
+  if (cursorPluginJson && cursorPluginJson.version !== pluginJson.version) {
+    errors.push(
+      `.cursor-plugin/plugin.json version ("${cursorPluginJson.version}") does not match ` +
+      `.claude-plugin/plugin.json version ("${pluginJson.version}")`
+    );
+  }
+  if (cursorMarketplaceVersion !== pluginJson.version) {
+    errors.push(
+      `.cursor-plugin/marketplace.json metadata.version ("${cursorMarketplaceVersion}") does not match ` +
+      `.claude-plugin/plugin.json version ("${pluginJson.version}")`
+    );
+  }
 }
 
 // (c) Skill frontmatter check: name matches directory, description present.
@@ -95,12 +111,18 @@ if (fs.existsSync(SKILLS_DIR)) {
   errors.push('skills/: directory not found');
 }
 
-// (d) Interpolation guards — the two mcp manifests must reference their
-// respective client's variable substitution syntax, or a client's install
-// UI silently ships a dead API key.
-const mcpDotJson = readFile('.mcp.json');
-if (!mcpDotJson.includes('user_config.synter_api_key')) {
-  errors.push('.mcp.json: missing required literal "user_config.synter_api_key"');
+// (d) Authentication guards — Claude's public directory requires OAuth for
+// authenticated remote MCP services. Cursor keeps its supported API-key path.
+const claudeMcp = manifests['.mcp.json'];
+const claudeServer = claudeMcp && claudeMcp.mcpServers && claudeMcp.mcpServers.synter;
+if (!claudeServer || claudeServer.type !== 'http' || claudeServer.url !== 'https://mcp.syntermedia.ai') {
+  errors.push('.mcp.json: Synter must use the production HTTPS remote MCP endpoint');
+}
+if (claudeServer && claudeServer.headers) {
+  errors.push('.mcp.json: Claude plugin must use browser OAuth, not static request headers');
+}
+if (pluginJson && pluginJson.userConfig && pluginJson.userConfig.synter_api_key) {
+  errors.push('.claude-plugin/plugin.json: Claude plugin must not collect a static Synter API key');
 }
 
 const mcpJson = readFile('mcp.json');
@@ -117,4 +139,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('All manifests, skill frontmatter, and interpolation guards passed.');
+console.log('All manifests, skill frontmatter, versions, and authentication guards passed.');

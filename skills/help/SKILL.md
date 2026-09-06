@@ -27,14 +27,18 @@ Direct API connections to Google, Meta, LinkedIn, Microsoft, Reddit, TikTok, X, 
 
 ## Getting set up
 
-- No key yet? Run **/synter:quickstart** or `synter_onboarding_start(email="...")`.
-- Create an API key at **syntermedia.ai/developer**, then set it as the plugin's `synter_api_key` and `/reload-plugins`.
+- Run **/synter:quickstart** and complete the secure Synter browser sign-in when
+  Claude prompts. Never paste an API key, access token, or authorization code
+  into chat.
+- If the OAuth prompt does not appear, reconnect the Synter MCP server from the
+  client's connector/plugin settings and retry in a new conversation.
 - Free GA4 tools work with no key and no credits.
 
 ## Docs & support
 
 - Docs: **syntermedia.ai** and the developer quickstart at **syntermedia.ai/docs/quickstart**.
 - Product: **syntermedia.ai**.
-- Support: reach the team through the in-app support channel.
+- Privacy: **syntermedia.ai/privacy**.
+- Support: **syntermedia.ai/contact** or the in-app support channel.
 
 Anything that spends money asks for your approval first. Reads are free to run.

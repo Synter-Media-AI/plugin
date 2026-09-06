@@ -23,9 +23,10 @@ rm -f "$ZIP_PATH"
 
 echo "Built $ZIP_PATH"
 
-# Hard root-check: Claude Desktop's zip upload requires the manifest at
-# <archive-root>/.claude-plugin/plugin.json, not nested under a repo folder.
-unzip -l "$ZIP_PATH" | grep -q 'synter/.claude-plugin/plugin.json' \
-  || { echo "FATAL: plugin.json not at archive root" >&2; exit 1; }
+# Hard layout check: Claude accepts the plugin directly at the archive root or
+# inside one top-level folder. The release artifact uses the latter.
+unzip -Z1 "$ZIP_PATH" > "$STAGE/archive-entries.txt"
+grep -Fxq 'synter/.claude-plugin/plugin.json' "$STAGE/archive-entries.txt" \
+  || { echo "FATAL: plugin.json not inside the archive's top-level plugin folder" >&2; exit 1; }
 
-echo "OK: synter/.claude-plugin/plugin.json present at archive root"
+echo "OK: synter/.claude-plugin/plugin.json present"

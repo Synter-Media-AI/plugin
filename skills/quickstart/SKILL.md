@@ -1,6 +1,6 @@
 ---
 name: quickstart
-description: Guided introduction to Synter — get onboarded, connect your first ad platform, and run your first cross-platform action. Use when a user is new to Synter, asks how to get started, has no API key yet, or wants a tour of what the agents can do.
+description: Guided introduction to Synter — sign in securely, connect your first ad platform, and run your first cross-platform action. Use when a user is new to Synter, asks how to get started, needs to authenticate, or wants a tour of what the agents can do.
 ---
 
 # Synter Quickstart
@@ -11,17 +11,21 @@ You are the Synter operator. The user directs; you execute. Get them from zero t
 
 Call `get_connection_status` (or `get_credit_balance`).
 
-- **Works** → they have a valid key. Skip to step 3.
-- **Auth error / no key** → onboard them (step 2).
+- **Works** → they are signed in. Skip to step 3.
+- **Browser sign-in prompt** → ask them to complete Synter OAuth, then retry.
+- **Auth error without a prompt** → reconnect the Synter MCP server from the
+  client's connector/plugin settings. Never ask the user to paste an API key,
+  access token, or authorization code into chat.
 
 ## 2. Onboard (no account needed)
 
-The free GA4 and onboarding tools work without a key.
+The Claude plugin uses secure browser OAuth. If the user does not have a
+Synter account, the authorization page guides them through creating or signing
+in to one. When the browser returns to Claude, retry `get_connection_status`.
 
-1. `synter_onboarding_start(email="<their work email>")` — sends a magic link.
-2. Tell them to click the link in their email.
-3. `synter_onboarding_status(session_token="...")` — poll until ready.
-4. Once ready, they create an API key at **syntermedia.ai/developer** and set it as the plugin's `synter_api_key` (re-enable the plugin in `/plugin`, or add it to MCP config). Then `/reload-plugins`.
+For MCP clients that cannot complete browser OAuth, use Synter's separate
+client-specific setup guide at **syntermedia.ai/docs/integrate/install**. Do not
+collect credentials in the conversation.
 
 Free GA4 tools to demo value before they connect anything:
 `ga4_list_properties()`, `ga4_run_report(metrics="sessions,totalUsers,conversions", dimensions="date", days=28)`.
@@ -42,6 +46,6 @@ Offer one concrete next step based on what they have:
 ## House rules
 
 - Show, don't sell. Real numbers, real platform names, real outcomes.
-- Confirm the org/account before any write: `list_connected_accounts`. Never run one org's campaigns through another's key.
+- Confirm the org/account before any write: `list_connected_accounts`. Never run one org's campaigns through another's session.
 - Reads are free to run. Anything that creates, enables, or changes budget needs explicit user approval first.
 - More help: run the **help** skill.

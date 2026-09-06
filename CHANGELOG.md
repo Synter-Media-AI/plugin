@@ -2,6 +2,17 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [1.1.0] — 2026-09-06
+
+### Changed
+- Claude and Cowork now authenticate the hosted Synter MCP through secure browser OAuth 2.1 instead of collecting a static API key in plugin configuration. The MCP endpoint publishes protected-resource and authorization-server metadata, supports dynamic client registration and PKCE, and returns a standards-compliant `401` challenge for protected tool calls.
+- Installation and troubleshooting guidance now distinguishes direct GitHub marketplace installation from Anthropic directory discovery and tells users never to paste credentials into chat.
+- Claude and Cursor package versions remain aligned so release archives and marketplace caches receive the updated skills and documentation.
+
+### Added
+- Anthropic community directory submission fields, policy evidence, test prompts, and reviewer checklist.
+- Strict Claude plugin validation in pull-request and release CI.
+
 ## [1.0.0] — 2026-08-27
 
 ### Changed
