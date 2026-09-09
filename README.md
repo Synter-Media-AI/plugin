@@ -6,9 +6,9 @@
 
 **The AI Agent Operator for Ads.** Claude, Cowork, Claude Code, and Cursor for advertising. You direct, the agents execute.
 
-Connect every ad platform, build audiences from signals and first-party data, generate on-brand creative, plan and launch cross-platform campaigns, and reallocate spend by ROAS — all in one conversation. Nothing that spends money ships without your approval.
+Operate connected ad platforms, build audiences from signals and first-party data, generate on-brand creative, plan and launch cross-platform campaigns, and reallocate spend by ROAS — all in one conversation. Nothing that spends money ships without your approval.
 
-One interface. Every ad platform. Ship faster.
+One interface. Your ad platforms. Ship faster.
 
 ---
 
@@ -16,9 +16,20 @@ One interface. Every ad platform. Ship faster.
 
 ### Claude Code
 
+Claude Code installs Synter from its GitHub marketplace. Run these commands in
+Claude Code, not Claude Desktop:
+
 ```text
 /plugin marketplace add Synter-Media-AI/plugin
 /plugin install synter@synter
+```
+
+If the `synter` marketplace is already configured, do not add it again. Refresh
+the existing marketplace and plugin instead:
+
+```text
+/plugin marketplace update synter
+/plugin update synter@synter
 ```
 
 Start a new conversation and run `/synter:quickstart`. Claude opens Synter's
@@ -27,22 +38,40 @@ API key, access token, or authorization code into chat.
 
 ### Claude Desktop and Cowork
 
-Open **Customize → Plugins**. Under **Personal plugins**, click **+ → Add
-marketplace → Add from a repository**, enter `Synter-Media-AI/plugin`, and
-install `synter` from that marketplace. The full GitHub URL also works.
+Desktop supports two separate install sources. Pick one; do not create a second
+marketplace merely to update an existing uploaded plugin.
 
-Alternatively, download the package from the [latest GitHub
-release](https://github.com/Synter-Media-AI/plugin/releases/latest) and choose
-**+ → Upload plugin**. A tagged release (`synter--v*`) rebuilds the zip through
-the repository's release workflow.
+**Repository marketplace:** open **Customize → Plugins**. Under **Personal
+plugins**, click **+ → Add marketplace → Add from a repository**, enter
+`Synter-Media-AI/plugin`, and install `synter`. If a marketplace named `synter`
+already exists, use that existing marketplace instead of adding the repository
+again.
+
+**Custom upload:** download `synter-plugin-<version>.zip` and its checksum from
+the [latest GitHub release](https://github.com/Synter-Media-AI/plugin/releases/latest),
+then choose **+ → Upload plugin**. Upload the ZIP itself without unpacking or
+wrapping it in another folder. This path is independent of the GitHub
+marketplace.
+
+To replace an uploaded **Synter 1.0.0**, upload the current ZIP to the same
+personal/manual marketplace. The stable plugin name is `synter`, so a
+same-name upload replaces the older version rather than creating a second
+plugin. Start a new conversation and verify the installed version is at least
+1.1.3. If the UI only offers removal for the old personal upload, remove that
+upload and then upload the new ZIP; do not add another marketplace named
+`synter`.
 
 Start a new conversation after installation and complete the Synter browser
 sign-in prompt. Skills work in Claude chat and Cowork; hooks and sub-agents run
 in Cowork. The plugin can be installed directly today, but it will not appear
 in Anthropic's public directory until Anthropic approves the separate community
-submission.
+submission. Installation and OAuth are separate: a successful install adds the
+connector, while the first protected tool call starts browser authorization.
 
-Official install documentation: [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude) and [Install plugins in Cowork](https://claude.com/docs/cowork/guide/plugins).
+See [INSTALL.md](./INSTALL.md) for update and troubleshooting details. Official
+references: [Use plugins in Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude),
+[Claude Code plugin discovery and updates](https://code.claude.com/docs/en/discover-plugins),
+and the [plugin package reference](https://code.claude.com/docs/en/plugins-reference).
 
 ### Cursor
 
@@ -77,7 +106,15 @@ Supported connection paths are:
 
 ## What's in the box
 
-This plugin packages **agents, skills, an MCP server, a hook, and an output style** — the same shape as the [Watt Data plugin](https://github.com/wattdata/plugin), built for Synter.
+The Claude package contains **57 skills, 7 agents, one SessionStart hook, one
+OAuth MCP connector, and one output style**. The release build verifies this
+inventory and its one-folder ZIP layout before producing a checksum.
+
+`.claude-plugin/plugin.json` is the authoritative Claude package manifest.
+`assets/logo.png` is the canonical 1024×1024 transparent Synter mark and ships
+in the ZIP. Claude's current plugin manifest schema has no `logo` or `icon`
+field, so the repository does not add unsupported branding metadata; Cursor's
+supported `logo` field uses the same asset through the canonical GitHub URL.
 
 ### Skills — `/synter:*`
 
@@ -120,7 +157,12 @@ They run automatically when the task fits, or call one directly.
 
 ### MCP server
 
-The Synter Advertising Platform MCP (`https://mcp.syntermedia.ai`) — cross-platform campaign read/write, creative generation, audiences, attribution, and GA4. Tools register automatically once the plugin is enabled.
+The Synter Advertising Platform MCP (`https://mcp.syntermedia.ai`) provides the
+hosted tool catalog for cross-platform campaign operations, creative,
+audiences, attribution, and GA4. The connector registers when the plugin is
+enabled; protected tools require browser OAuth. Tool availability depends on
+the connected accounts and current hosted catalog rather than a fixed platform
+count in this repository.
 
 ---
 
@@ -128,6 +170,7 @@ The Synter Advertising Platform MCP (`https://mcp.syntermedia.ai`) — cross-pla
 
 ```text
 plugin/
+├── plugin.json             # symlink to the authoritative Claude manifest
 ├── .claude-plugin/
 │   ├── plugin.json          # Claude/Cowork plugin manifest
 │   └── marketplace.json     # Claude Code marketplace
@@ -146,6 +189,7 @@ plugin/
 │   ├── synter-agent.mjs
 │   └── README.md
 ├── CHANGELOG.md
+├── INSTALL.md
 └── LICENSE                  # MIT
 ```
 
@@ -206,6 +250,9 @@ and store it in the client's secret configuration, never in chat.
 }
 ```
 
+The npm stdio package is a separate MCP-only installation. It does not install
+this plugin's branded logo, skills, agents, hook, or Desktop upload metadata.
+
 ---
 
 ## Safety
@@ -220,6 +267,7 @@ Your agent can create campaigns, change budgets, and pause spend. The plugin def
 git clone https://github.com/Synter-Media-AI/plugin synter-plugin && cd synter-plugin
 claude plugin validate . --strict   # check the manifest + frontmatter
 claude --plugin-dir .               # load locally without a marketplace
+bash scripts/build-zip.sh           # build + validate the Desktop ZIP/checksum
 ```
 
 After editing `hooks/`, `.mcp.json`, or `agents/`, run `/reload-plugins`.

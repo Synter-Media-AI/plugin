@@ -23,3 +23,6 @@ jobs:
 
       - name: Run strict Claude plugin validation
         run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+
+      - name: Build and validate Desktop package
+        run: bash scripts/build-zip.sh

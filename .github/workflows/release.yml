@@ -27,10 +27,20 @@ jobs:
       - name: Run strict Claude plugin validation
         run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
 
+      - name: Ensure release tag matches manifest version
+        run: |
+          version=$(node -p "require('./.claude-plugin/plugin.json').version")
+          test "$GITHUB_REF_NAME" = "synter--v$version" || {
+            echo "Tag $GITHUB_REF_NAME does not match manifest version $version" >&2
+            exit 1
+          }
+
       - name: Ensure zip/rsync are available
         run: |
-          command -v zip >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq zip
-          command -v rsync >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq rsync
+          if ! command -v zip >/dev/null || ! command -v rsync >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq zip rsync
+          fi
 
       - name: Build plugin zip
         run: bash scripts/build-zip.sh
@@ -42,5 +52,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/synter-plugin-${{ steps.version.outputs.version }}.zip
+          files: |
+            dist/synter-plugin-${{ steps.version.outputs.version }}.zip
+            dist/synter-plugin-${{ steps.version.outputs.version }}.zip.sha256
           generate_release_notes: true
