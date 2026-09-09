@@ -2,6 +2,20 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [1.1.3] — 2026-09-09
+
+### Fixed
+- Separated Claude Code marketplace installation from Claude Desktop/Cowork custom ZIP upload, including explicit update steps for an existing uploaded 1.0.0 plugin and duplicate marketplace-name troubleshooting.
+- Kept `.claude-plugin/plugin.json` authoritative through the root manifest symlink, aligned version 1.1.3 across Claude and Cursor marketplace metadata, removed stale fixed platform-count claims, and standardized publisher contact metadata.
+- Replaced broad “every platform” coverage claims with capability wording tied to connected accounts and the current hosted MCP catalog.
+
+### Added
+- A clean, allowlisted Desktop/Cowork ZIP build with a SHA-256 checksum and archive-level validation for one-folder layout, version, 57 skills, 7 agents, the SessionStart hook, OAuth connector, and 1024×1024 Synter logo.
+- Dedicated installation, update, OAuth, and troubleshooting guidance in `INSTALL.md`.
+
+### Verification limits
+- Source manifests, the generated ZIP, component inventory, hook syntax, logo file, and strict Claude plugin schema are locally verifiable. Fresh Desktop upload and OAuth authorization remain client-side flows and are not claimed by these package checks.
+
 ## [1.1.2] — 2026-09-06
 
 ### Fixed

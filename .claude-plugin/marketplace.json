@@ -10,7 +10,8 @@
     {
       "name": "synter",
       "source": "./",
-      "description": "Connect every ad platform, build audiences from signals, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute."
+      "version": "1.1.3",
+      "description": "Operate connected ad platforms with Synter agents, skills, and approval-gated MCP tools."
     }
   ]
 }

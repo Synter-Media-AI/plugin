@@ -2,11 +2,11 @@
   "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
   "name": "synter",
   "displayName": "Synter",
-  "version": "1.1.2",
-  "description": "The AI Agent Operator for Ads. Connect 21 ad platforms, build audiences, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute. Nothing that spends money ships without your approval.",
+  "version": "1.1.3",
+  "description": "The AI Agent Operator for Ads. Operate connected ad platforms, build audiences, generate on-brand creative, launch campaigns, and optimize spend — all with explicit approval before spend-changing actions.",
   "author": {
     "name": "Synter",
-    "email": "joel@synterai.com"
+    "email": "support@synterai.com"
   },
   "homepage": "https://syntermedia.ai",
   "repository": "https://github.com/Synter-Media-AI/plugin",

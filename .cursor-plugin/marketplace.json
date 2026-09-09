@@ -2,18 +2,18 @@
   "name": "synter",
   "owner": {
     "name": "Synter",
-    "email": "joel@synterai.com"
+    "email": "support@synterai.com"
   },
   "metadata": {
     "description": "Synter's official plugin marketplace. The AI Agent Operator for Ads.",
-    "version": "1.1.2"
+    "version": "1.1.3"
   },
   "plugins": [
     {
       "name": "synter",
       "source": ".",
       "logo": "https://raw.githubusercontent.com/Synter-Media-AI/plugin/main/assets/logo.png",
-      "description": "The AI Agent Operator for Ads. Connect 21 ad platforms, build audiences, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute. Nothing that spends money ships without your approval."
+      "description": "Operate connected ad platforms with Synter agents, skills, and approval-gated MCP tools."
     }
   ]
 }

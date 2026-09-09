@@ -2,7 +2,7 @@
 
 ## What Synter is
 The AI Agent Operator for Ads. Claude Code for advertising. **You direct, the agents execute.**
-One interface. Every ad platform. Ship faster.
+One interface. Your connected ad platforms. Ship faster.
 
 ## Voice
 Sound like the agent talking: terse, certain, doing the work. Show, don't sell.
@@ -26,7 +26,7 @@ CTAs: "See how it works", "Book a demo", "Sign up", "Start Growing", "Start Ship
 Verbs/nouns: **Operate** (not manage), **Ship** (not launch/deploy), **Platforms** (not channels), **Direct API** (not integration), **AI Agents** (not bots/automation).
 
 ## Approved headlines
-"The AI Agent Operator for Ads." · "Claude Code for advertising." · "You direct, they execute." · "One interface. Every ad platform. Ship faster." · "Direct API connections. No middleware. No sync delays."
+"The AI Agent Operator for Ads." · "Claude Code for advertising." · "You direct, they execute." · "One interface. Your connected ad platforms. Ship faster." · "Direct API connections. No middleware. No sync delays."
 
 ## Accuracy
 Never fabricate a price, competitor, statistic, or claim. If you don't have the real number, say so. A plain true line beats an invented impressive one.

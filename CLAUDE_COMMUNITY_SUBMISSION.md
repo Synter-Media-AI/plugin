@@ -1,6 +1,6 @@
 # Claude plugin directory submission
 
-Prepared: 2026-09-06
+Prepared: 2026-09-09
 
 This is the reviewer-ready package for the public Synter plugin repository.
 Synter's separate remote MCP connector submission is in review; that does not
@@ -69,6 +69,11 @@ Cowork: **Customize → Plugins → Personal plugins → + → Add marketplace �
 from a repository**, then enter `Synter-Media-AI/plugin` and install `synter`.
 Direct installation is not public-directory discovery.
 
+Desktop custom ZIP upload is a separate source. Use the versioned archive from
+the latest GitHub release and replace an older same-name `synter` upload in its
+existing personal/manual marketplace; do not add a duplicate marketplace as an
+update workaround. See `INSTALL.md` for the complete update flow.
+
 ## Validation and reviewer checklist
 
 - [x] Repository is public and contains an MIT license.
@@ -91,11 +96,14 @@ Direct installation is not public-directory discovery.
 - [x] Production OAuth protected-resource and authorization-server metadata
   return `200`; a protected tool call returns `401` with a
   `WWW-Authenticate` resource-metadata challenge.
-- [x] The production MCP tool surface has 195 tools; every tool supplies a
-  title plus boolean `readOnlyHint` and `destructiveHint` annotations.
-- [x] Clean Claude Code configuration can add `Synter-Media-AI/plugin`, install
-  `synter@synter`, and inventory all 57 skills, 7 agents, 1 hook, and 1 MCP
-  server.
+- [x] The production MCP tool surface had 196 tools in the September 9 QA run;
+  every discovered tool supplied a title plus boolean `readOnlyHint` and
+  `destructiveHint` annotations. The hosted catalog is dynamic and this is not
+  a package invariant.
+- [x] A clean Claude Code configuration installed release 1.1.2 from
+  `Synter-Media-AI/plugin` and inventoried all 57 skills, 7 agents, 1 hook, and
+  1 MCP server. Release 1.1.3 source and archive checks are local; a fresh
+  Desktop upload is still unverified.
 - [ ] Provider reviewer exercises `/synter:quickstart`, one read-only report,
   and one write preview without approving the write.
 - [ ] Provider reviewer uses a Synter-owned test workspace with sample data;
@@ -138,7 +146,7 @@ boundary before any external spend-changing action.
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
 | OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.syntermedia.ai` |
-| Tool annotations | All 195 discovered tools include `title`, boolean `readOnlyHint`, and boolean `destructiveHint` |
+| Tool annotations | All 196 tools discovered in the September 9 QA run included `title`, boolean `readOnlyHint`, and boolean `destructiveHint`; hosted count may change |
 | Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/contact` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
 | Approval boundary | Spend-changing operations require explicit approval; a model response is not approval |
