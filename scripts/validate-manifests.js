@@ -32,6 +32,7 @@ const MANIFEST_PATHS = [
   '.cursor-plugin/marketplace.json',
   '.mcp.json',
   'mcp.json',
+  'plugin.json',
 ];
 
 const manifests = {};
@@ -123,6 +124,57 @@ if (claudeServer && claudeServer.headers) {
 }
 if (pluginJson && pluginJson.userConfig && pluginJson.userConfig.synter_api_key) {
   errors.push('.claude-plugin/plugin.json: Claude plugin must not collect a static Synter API key');
+}
+
+// (e) Root plugin.json is an Agent Plugins 1.0.0 manifest (Cursor detects it
+// as a second plugin format). Keep it a real file — symlinks break on Windows
+// checkouts and some marketplace crawlers — and keep it schema-clean.
+const AGENT_PLUGIN_SCHEMA = 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json';
+const AGENT_PLUGIN_KEYS = new Set([
+  '$schema', 'name', 'version', 'description', 'author', 'homepage',
+  'repository', 'license', 'keywords', 'extensions',
+]);
+if (fs.lstatSync(path.join(REPO_ROOT, 'plugin.json')).isSymbolicLink()) {
+  errors.push('plugin.json: must be a regular file, not a symlink');
+}
+const rootPluginJson = manifests['plugin.json'];
+if (rootPluginJson) {
+  if (rootPluginJson.$schema !== AGENT_PLUGIN_SCHEMA) {
+    errors.push(`plugin.json: $schema must be ${AGENT_PLUGIN_SCHEMA}`);
+  }
+  for (const key of Object.keys(rootPluginJson)) {
+    if (!AGENT_PLUGIN_KEYS.has(key)) {
+      errors.push(`plugin.json: "${key}" is not an Agent Plugins 1.0.0 manifest field`);
+    }
+  }
+  if (pluginJson && rootPluginJson.name !== pluginJson.name) {
+    errors.push('plugin.json: name does not match .claude-plugin/plugin.json');
+  }
+  if (pluginJson && rootPluginJson.version !== pluginJson.version) {
+    errors.push('plugin.json: version does not match .claude-plugin/plugin.json');
+  }
+}
+
+// (f) Cursor Marketplace checklist: logo committed and referenced by a
+// relative path that exists in the repo.
+for (const [relPath, logo] of [
+  ['.cursor-plugin/plugin.json', manifests['.cursor-plugin/plugin.json'] && manifests['.cursor-plugin/plugin.json'].logo],
+  ['.cursor-plugin/marketplace.json', (manifests['.cursor-plugin/marketplace.json'] && manifests['.cursor-plugin/marketplace.json'].plugins || [])[0] && manifests['.cursor-plugin/marketplace.json'].plugins[0].logo],
+]) {
+  if (!logo) continue;
+  if (/^[a-z]+:\/\//i.test(logo) || logo.startsWith('/') || logo.includes('..')) {
+    errors.push(`${relPath}: logo must be a relative repo path (got "${logo}")`);
+  } else if (!fs.existsSync(path.join(REPO_ROOT, logo))) {
+    errors.push(`${relPath}: logo "${logo}" does not exist`);
+  }
+}
+
+// (g) Listing copy: no "free" framing in Cursor-facing manifest text (pricing
+// is Solo $20/mo or credits).
+for (const relPath of ['.cursor-plugin/plugin.json', '.cursor-plugin/marketplace.json']) {
+  if (/\bfree\b/i.test(readFile(relPath))) {
+    errors.push(`${relPath}: remove "free" wording from listing copy`);
+  }
 }
 
 const mcpJson = readFile('mcp.json');

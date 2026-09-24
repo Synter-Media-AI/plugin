@@ -11,7 +11,7 @@
   "homepage": "https://syntermedia.ai",
   "repository": "https://github.com/Synter-Media-AI/plugin",
   "license": "MIT",
-  "logo": "https://raw.githubusercontent.com/Synter-Media-AI/plugin/main/assets/logo.png",
+  "logo": "assets/logo.png",
   "keywords": [
     "ads",
     "advertising",
@@ -36,7 +36,7 @@
       "SYNTER_API_KEY": {
         "type": "string",
         "title": "Synter API key",
-        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the free GA4 tools."
+        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the GA4 and onboarding tools first; paid actions need Solo ($20/mo) or credits."
       }
     }
   }

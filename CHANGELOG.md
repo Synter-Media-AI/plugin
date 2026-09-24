@@ -2,6 +2,14 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
+## [Unreleased]
+
+### Changed
+- Cursor Marketplace submission prep: `logo` in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json` is now the repo-relative `assets/logo.png` (Cursor resolves it to a commit-pinned raw.githubusercontent URL), per the submission checklist.
+- Removed "free" wording from the Cursor `SYNTER_API_KEY` description and README; paid actions are framed as Solo ($20/mo) or credits.
+- Root `plugin.json` is now a real Agent Plugins 1.0.0 manifest instead of a symlink to the Claude manifest (the symlink failed the Agent Plugins schema and breaks on symlink-less checkouts).
+- `scripts/validate-manifests.js` guards the root manifest, relative Cursor logo paths, and "free" wording in Cursor listing copy.
+
 ## [1.1.2] — 2026-09-06
 
 ### Fixed
