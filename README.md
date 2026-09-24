@@ -52,7 +52,7 @@ Official install documentation: [Use plugins in Claude](https://support.claude.c
 
 After install, set `SYNTER_API_KEY` in **Plugins → Configure**. The hosted MCP is `https://mcp.syntermedia.ai`.
 
-Free GA4 and onboarding tools work with no key and no credits.
+GA4 and onboarding tools work before you add a key; paid actions need Solo ($20/mo) or credits.
 
 > Campaign write actions spend real money — every spend asks for your approval first.
 
@@ -134,6 +134,7 @@ plugin/
 ├── .cursor-plugin/
 │   ├── plugin.json          # Cursor Plugin manifest + SYNTER_API_KEY variable
 │   └── marketplace.json     # Cursor Team Marketplace index
+├── plugin.json              # Agent Plugins 1.0.0 manifest (open standard; real file, not a symlink)
 ├── .mcp.json                # Synter remote MCP for Claude (browser OAuth)
 ├── mcp.json                 # Synter MCP for Cursor (header: ${SYNTER_API_KEY})
 ├── skills/                  # /synter:* slash commands (SKILL.md each)
@@ -210,7 +211,7 @@ and store it in the client's secret configuration, never in chat.
 
 ## Safety
 
-Your agent can create campaigns, change budgets, and pause spend. The plugin defaults to **recommend-then-execute** and asks for explicit approval before anything spends money. It confirms the org/account before any write, uses only the real IDs the platform returns, and guards against fat-finger budgets. Reads are always free to run.
+Your agent can create campaigns, change budgets, and pause spend. The plugin defaults to **recommend-then-execute** and asks for explicit approval before anything spends money. It confirms the org/account before any write, uses only the real IDs the platform returns, and guards against fat-finger budgets. Reads (lists, reports, pulls) never need spend approval.
 
 ---
 
