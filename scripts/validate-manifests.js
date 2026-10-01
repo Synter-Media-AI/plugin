@@ -112,10 +112,10 @@ if (fs.existsSync(SKILLS_DIR)) {
 }
 
 // (d) Authentication guards — Claude's public directory requires OAuth for
-// authenticated remote MCP services. Cursor keeps its supported API-key path.
+// authenticated remote MCP services. Cursor uses the same OAuth-only remote.
 const claudeMcp = manifests['.mcp.json'];
 const claudeServer = claudeMcp && claudeMcp.mcpServers && claudeMcp.mcpServers.synter;
-if (!claudeServer || claudeServer.type !== 'http' || claudeServer.url !== 'https://mcp.syntermedia.ai') {
+if (!claudeServer || claudeServer.type !== 'http' || claudeServer.url !== 'https://mcp.synterai.com') {
   errors.push('.mcp.json: Synter must use the production HTTPS remote MCP endpoint');
 }
 if (claudeServer && claudeServer.headers) {
@@ -125,9 +125,16 @@ if (pluginJson && pluginJson.userConfig && pluginJson.userConfig.synter_api_key)
   errors.push('.claude-plugin/plugin.json: Claude plugin must not collect a static Synter API key');
 }
 
-const mcpJson = readFile('mcp.json');
-if (!mcpJson.includes('SYNTER_API_KEY')) {
-  errors.push('mcp.json: missing required literal "SYNTER_API_KEY"');
+const cursorMcp = manifests['mcp.json'];
+const cursorServer = cursorMcp && cursorMcp.mcpServers && cursorMcp.mcpServers.synter;
+if (!cursorServer || cursorServer.type !== 'http' || cursorServer.url !== 'https://mcp.synterai.com') {
+  errors.push('mcp.json: Synter must use the production HTTPS remote MCP endpoint');
+}
+if (cursorServer && cursorServer.headers) {
+  errors.push('mcp.json: Cursor plugin must use browser OAuth, not static request headers');
+}
+if (manifests['.cursor-plugin/plugin.json'] && manifests['.cursor-plugin/plugin.json'].variables) {
+  errors.push('.cursor-plugin/plugin.json: Cursor plugin must not collect a static Synter API key');
 }
 
 if (errors.length > 0) {

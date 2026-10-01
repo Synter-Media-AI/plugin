@@ -29,15 +29,5 @@
   "skills": "./skills/",
   "agents": "./agents/",
   "rules": "./rules/",
-  "mcpServers": "./mcp.json",
-  "variables": {
-    "type": "object",
-    "properties": {
-      "SYNTER_API_KEY": {
-        "type": "string",
-        "title": "Synter API key",
-        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the free GA4 tools."
-      }
-    }
-  }
+  "mcpServers": "./mcp.json"
 }
