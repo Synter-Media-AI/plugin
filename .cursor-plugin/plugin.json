@@ -11,7 +11,7 @@
   "homepage": "https://syntermedia.ai",
   "repository": "https://github.com/Synter-Media-AI/plugin",
   "license": "MIT",
-  "logo": "https://raw.githubusercontent.com/Synter-Media-AI/plugin/main/assets/logo.png",
+  "logo": "assets/logo.png",
   "keywords": [
     "ads",
     "advertising",
@@ -28,7 +28,7 @@
   ],
   "skills": "./skills/",
   "agents": "./agents/",
-  "hooks": "./hooks/cursor-hooks.json",
+  "rules": "./rules/",
   "mcpServers": "./mcp.json",
   "variables": {
     "type": "object",

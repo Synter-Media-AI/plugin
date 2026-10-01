@@ -1,9 +1,0 @@
-{
-  "hooks": {
-    "sessionStart": [
-      {
-        "command": "./scripts/session-context.sh"
-      }
-    ]
-  }
-}
