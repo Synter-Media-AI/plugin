@@ -36,7 +36,7 @@
       "SYNTER_API_KEY": {
         "type": "string",
         "title": "Synter API key",
-        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the free GA4 tools."
+        "description": "Optional for onboarding. Paste your syn_... key from syntermedia.ai/developer to use connected ad accounts. Leave blank to run /synter:quickstart and the GA4 tools."
       }
     }
   }
