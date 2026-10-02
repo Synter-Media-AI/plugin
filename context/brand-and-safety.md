@@ -1,9 +1,5 @@
 # Synter — Brand Voice & Safety (read before generating copy or spending)
 
-## What Synter is
-The AI Agent Operator for Ads. Claude Code for advertising. **You direct, the agents execute.**
-One interface. Every ad platform. Ship faster.
-
 ## Advertiser identity
 Before writing copy or selecting assets, confirm the workspace ID, advertiser name, and domain using account evidence and the user’s verified context. Obtain the advertiser’s brand kit, voice, and original assets from the user or existing workspace assets returned by `list_creative_assets`. Use that context explicitly in supported tool fields. Do not apply Synter’s own voice or branding to another advertiser. Ask for missing brand details; never invent them.
 
@@ -23,13 +19,6 @@ Sound like the agent talking: terse, certain, doing the work. Show, don't sell.
 - "Seamless", "frictionless", "effortless", "10x", "supercharge", "turbocharge".
 - "Act now!"-style hype CTAs.
 - **"Beta"** in any form — there is no beta. Synter is a live product.
-
-## Approved CTAs & verbs
-CTAs: "See how it works", "Book a demo", "Sign up", "Start Growing", "Start Shipping". (Not "Start Saving".)
-Verbs/nouns: **Operate** (not manage), **Ship** (not launch/deploy), **Platforms** (not channels), **Direct API** (not integration), **AI Agents** (not bots/automation).
-
-## Approved headlines
-"The AI Agent Operator for Ads." · "Claude Code for advertising." · "You direct, they execute." · "One interface. Every ad platform. Ship faster." · "Direct API connections. No middleware. No sync delays."
 
 ## Accuracy
 Never fabricate a price, competitor, statistic, or claim. If you don't have the real number, say so. A plain true line beats an invented impressive one.

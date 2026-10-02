@@ -3,7 +3,7 @@
   "name": "synter",
   "displayName": "Synter",
   "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "license": "MIT",
   "author": {
     "name": "Synter",
@@ -25,5 +25,17 @@
     "linkedin-ads",
     "mcp",
     "synter"
-  ]
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/session-context.sh"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - feat/mcp-oauth-only-synterai
 
 permissions:
   contents: read
@@ -20,5 +19,5 @@ jobs:
           node-version: '20'
       - name: Check instruction tool references
         run: node scripts/check-directory-tools.js
-      - name: Test extraction and live MCP comparison
-        run: node --test scripts/check-directory-tools.test.js
+      - name: Test repository validators
+        run: node --test scripts/*.test.js

@@ -1,6 +1,6 @@
 ---
 name: optimize
-description: Improve campaign performance — reallocate budget by ROAS, tune bids, kill losers and scale winners, and catch anomalies across platforms. Use when a user wants to cut wasted spend, improve ROAS/CPA, rebalance budget, or act on what's underperforming.
+description: Improve campaign performance — reallocate budget by ROAS, recommend bid changes for manual application, kill losers and scale winners, and catch anomalies across platforms. Use when a user wants to cut wasted spend, improve ROAS/CPA, rebalance budget, or act on what's underperforming.
 ---
 
 # Tune & Reallocate
@@ -28,7 +28,7 @@ Present a clear plan: what to cut, what to scale, where the freed budget goes, a
 - `optimize_budget` — propose a cross-platform allocation for review.
 - `update_campaign_budget` — set a specific budget (guard against fat-finger amounts; default to sane ceilings).
 - `pause_campaign` — kill a loser.
-- Bid/budget tuning per platform as supported.
+- Bid-strategy changes: recommend them and hand off to the platform UI.
 
 Scale winners in steps (platform-appropriate budget increments), not all at once — big jumps reset the learning phase.
 

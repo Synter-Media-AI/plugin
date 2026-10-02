@@ -5,11 +5,11 @@ description: Build a cross-channel performance report — spend, conversions, CP
 
 # Cross-Channel Report
 
-Pull every platform, reconcile, and tell the story straight.
+Pull every connected platform the tools support, reconcile, and tell the story straight.
 
 ## 1. Gather
 
-Pull the period the user wants across all connected platforms (the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`)). Add analytics ground truth: `ga4_get_report` for sessions/conversions, `get_attribution` for conversion paths.
+Pull the period the user wants across all connected platforms using the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`). Add analytics ground truth: `ga4_get_report` for sessions/conversions, `get_attribution` for conversion paths.
 
 ## 2. Reconcile
 

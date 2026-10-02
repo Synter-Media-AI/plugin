@@ -2,7 +2,7 @@
 
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
-## Unreleased — 2026-10-01
+## [1.2.0] - 2026-10-02
 
 - Cursor connects to `https://mcp.synterai.com`; Claude retains `https://mcp.syntermedia.ai` to match the connector under review. Both use browser OAuth.
 - Setup and support documentation now describe the hosted connection, shipped skills, and local hook accurately.

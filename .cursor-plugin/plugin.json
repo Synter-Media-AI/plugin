@@ -2,7 +2,7 @@
   "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
   "name": "synter",
   "displayName": "Synter",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
   "author": {
     "name": "Synter",

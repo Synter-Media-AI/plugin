@@ -1,6 +1,6 @@
 ---
 name: launch
-description: Plan and launch a cross-platform ad campaign — strategy, targeting, creative, budget, and preflight — then ship it on the user's approval. Use when a user wants to launch, build, or run a new campaign on one or more platforms (Google, Meta, LinkedIn, Reddit, TikTok, X, and more).
+description: Plan and launch a cross-platform ad campaign — strategy, targeting, creative, budget, and preflight — then ship it on the user's approval. Use when a user wants to launch, build, or run a new campaign on one or more platforms (Google, Meta, LinkedIn, Reddit).
 ---
 
 # Launch a Campaign

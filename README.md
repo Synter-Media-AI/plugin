@@ -21,7 +21,7 @@ Start a new conversation and run `/synter:quickstart`. Complete Synter’s brows
 
 In **Customize → Plugins**, add `Synter-Media-AI/plugin` as a repository marketplace and install `synter`. You can also upload the plugin zip from the [latest GitHub release](https://github.com/Synter-Media-AI/plugin/releases/latest). Start a new conversation and complete the browser OAuth prompt.
 
-Direct installation does not imply that Anthropic has approved a public directory listing. See the [submission notes](CLAUDE_COMMUNITY_SUBMISSION.md) for the recorded review status.
+Direct installation does not imply that Anthropic has approved a public directory listing.
 
 ### Cursor
 
@@ -40,7 +40,7 @@ Claude retains the connector URL under Anthropic review. Keep the two configurat
 
 The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 34 supported tool names.
 
-Claude also runs one `SessionStart` hook from [hooks/hooks.json](hooks/hooks.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
+Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 
 There is no local MCP server or bundled compiled binary. The repository includes an optional [Node SDK runner](sdk/README.md), invoked manually, and development scripts for validation and packaging. The release zip excludes the SDK. Agent definitions may delegate work when the host client supports them.
 

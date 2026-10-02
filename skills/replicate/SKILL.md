@@ -18,7 +18,7 @@ Find the source campaign: `list_campaigns(platform="<source>")`. Get its real ID
 Pull the full structure, not just top-line metrics:
 
 - Read `list_campaigns`, `audit_account_structure`, and `pull_google_ads_performance` for a Google source. Ask for platform exports when budgets, geo criteria, keyword match types, negatives, or complete ad text are missing. Do not replicate unknown settings.
-- **Other sources (Meta, LinkedIn, TikTok, Reddit, X):** use `list_campaigns` + the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) and the matching platform playbook skill to read structure, audiences, budgets, and creative.
+- **Other sources (Meta, LinkedIn, Reddit, Microsoft):** use `list_campaigns` and the matching performance tool (`pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_reddit_ads_performance`, or `pull_microsoft_ads_performance`) for performance; request platform exports for structure, audiences, and creative. TikTok and X sources require a platform export.
 
 Write down the source structure explicitly before you build. If you cannot read a piece, say so — never invent a keyword list or a budget.
 

@@ -25,7 +25,7 @@ Build an ad schedule with bid modifiers per slot: raise where it converts, lower
 
 ## 4. Apply on approval
 
-Apply through the plan tools and confirm. Re-pull after a couple of weeks to check the pattern held; buyer behavior shifts seasonally (see **kill-scale-rules** for scaling discipline).
+Hand the schedule and modifiers to the account owner for the platform UI unless the live plan schema supports them; confirm after it is applied. Re-pull after a couple of weeks to check the pattern held; buyer behavior shifts seasonally (see **kill-scale-rules** for scaling discipline).
 
 ## Rules
 

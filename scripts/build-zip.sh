@@ -14,6 +14,7 @@ trap 'rm -rf "$STAGE"' EXIT
 rsync -a \
   --exclude '.git' --exclude '.github' --exclude 'dist' \
   --exclude 'sdk' --exclude '.cursor-plugin' \
+  --exclude 'CLAUDE_COMMUNITY_SUBMISSION.md' \
   ./ "$STAGE/synter/"
 
 mkdir -p dist

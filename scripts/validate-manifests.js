@@ -143,6 +143,24 @@ for (const manifestPath of ['.claude-plugin/plugin.json', '.cursor-plugin/plugin
   }
 }
 
+// (e) Keep the shell hook Claude-only: Cursor also auto-discovers hooks/hooks.json.
+if (fs.existsSync(path.join(REPO_ROOT, 'hooks/hooks.json'))) {
+  errors.push('hooks/hooks.json: forbidden because Cursor auto-discovers this file; keep Claude hooks inline');
+}
+const cursorManifest = manifests['.cursor-plugin/plugin.json'];
+if (cursorManifest && Object.prototype.hasOwnProperty.call(cursorManifest, 'hooks')) {
+  errors.push('.cursor-plugin/plugin.json: must not declare a hooks key');
+}
+const sessionStartHooks = pluginJson && pluginJson.hooks && pluginJson.hooks.SessionStart;
+const sessionContextCommand = '"${CLAUDE_PLUGIN_ROOT}"/scripts/session-context.sh';
+if (!Array.isArray(sessionStartHooks) || !sessionStartHooks.some(entry =>
+  entry && Array.isArray(entry.hooks) && entry.hooks.some(hook =>
+    hook && hook.type === 'command' && hook.command === sessionContextCommand
+  )
+)) {
+  errors.push('.claude-plugin/plugin.json: must declare an inline SessionStart command hook pointing at scripts/session-context.sh');
+}
+
 if (errors.length > 0) {
   console.error('Manifest validation failed:\n');
   for (const err of errors) {
@@ -152,4 +170,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('All manifests, skill frontmatter, versions, and authentication guards passed.');
+console.log('All manifests, skill frontmatter, versions, authentication guards, and hook isolation checks passed.');

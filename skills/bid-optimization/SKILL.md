@@ -1,6 +1,6 @@
 ---
 name: bid-optimization
-description: Recommend and apply bid and bid-strategy changes from performance data — CPC targets, device and audience modifiers, and target CPA/ROAS moves. Use when a user wants to lower CPCs, hit a target CPA or ROAS, or adjust bids across campaigns.
+description: Recommend bid and bid-strategy changes from performance data — CPC targets, device and audience modifiers, and target CPA/ROAS moves. Use when a user wants to lower CPCs, hit a target CPA or ROAS, or adjust bids across campaigns.
 ---
 
 # Bid Optimization
@@ -27,7 +27,7 @@ Pull recent campaign performance with `pull_google_ads_performance`, `pull_meta_
 
 ## 4. Apply on approval
 
-Apply through the plan tools or `update_campaign_budget` where budget is the real constraint. Confirm the change and re-measure after the platform has had time to adjust.
+Apply budget changes with `update_campaign_budget` on approval. Hand bid-strategy and modifier changes on existing campaigns to the platform UI unless the live plan schema supports them; confirm and re-measure.
 
 ## Rules
 
