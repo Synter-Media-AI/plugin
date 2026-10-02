@@ -10,7 +10,7 @@ Fast, conversational, timeline-native. Structure is campaign → ad group → ad
 ## Read what exists
 
 - `list_connected_accounts`, then `list_campaigns(platform="x")`.
-- `pull_x_ads_performance(days=7)` for spend, clicks, and CPA per campaign.
+- Dedicated performance reads for this platform are outside the plugin’s directory tools. Request a platform export for metrics and use `list_campaigns` for the state and fields actually returned. Do not substitute another platform’s data.
 
 ## Structure and targeting
 
@@ -21,12 +21,14 @@ Fast, conversational, timeline-native. Structure is campaign → ad group → ad
 ## Creative
 
 - Native tweet format wins over banner-style creative. Short copy, a clear hook, one ask. Video and single-image both work.
-- Generate options with `generate_text_ad` / `generate_image_ad` / `generate_video_ad` and apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+- Write text with `create_ad_copy`, select existing approved assets with `list_creative_assets`, and apply the verified advertiser’s brand voice. Request missing media from the advertiser. See **creative-testing**.
 
 ## Plan and ship
 
-- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` for reach and CPA. Run **campaign-preflight**: geo, tracking (`verify_pixel_ownership`), sane budgets.
+- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` for reach and CPA. Run **campaign-preflight**: geo, tracking (`get_pixel_health`), sane budgets.
 - Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without a clear go.
 - Confirm live with `list_campaigns(platform="x")` and report the real ID. Start small; measure conversions before scaling with the **optimize** skill.
 
 Porting from another platform? Use the **replicate** skill. Search keywords translate to X keyword and interest targeting, but re-check conversion intent before spending.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

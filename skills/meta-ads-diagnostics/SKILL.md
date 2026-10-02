@@ -26,7 +26,7 @@ Pull daily impressions, reach, frequency, and CTR for the last 30 days. Compute 
 - 30-50%: rotate creatives now.
 - Over 50%: pause and replace.
 
-Frequency confirms it: prospecting past ~3.0 or retargeting past ~5.0 with falling CTR is fatigue, not audience quality. Refresh in proportion — copy swap for mild decline, new visual angle for moderate, new concept or format change for severe. Build replacements with the **creative** skill and validate with **creative-testing**.
+Frequency confirms it: prospecting past ~3.0 or retargeting past ~5.0 with falling CTR is fatigue, not audience quality. Refresh in proportion — copy swap for mild decline, new visual angle for moderate, new concept or format change for severe. Build replacements with the **ad-copy-generation** skill and validate with **creative-testing**.
 
 ## 3. Check audience overlap
 
@@ -47,9 +47,9 @@ Per-placement or per-demo breakdowns lie. Meta optimizes holistically, so a plac
 
 ## 6. Decision tree for the rest
 
-In order: Learning Phase → frequency over 3.0 (fatigue) → CPM rising with stable CTR (saturation or auction pressure; broaden) → CTR fine but CVR down (landing page; see **campaign-preflight**) → quality/conversion ranking below average (creative or post-click) → none of the above (tracking; audit with **conversion-tracking** and verify pixel destinations with `get_pixel_destinations`).
+Diagnose in order: delivery status, frequency and fatigue, auction pressure, landing-page conversion, then tracking. Use `get_pixel_health` and **conversion-tracking** for available tracking evidence.
 
-Apply fixes with `pause_campaign`, `update_campaign_budget`, or `upload_creative`, and confirm each write before shipping. Kill/scale calls go through **kill-scale-rules**.
+Apply approved pauses or budget changes with `pause_campaign` or `update_campaign_budget`. Select existing replacements with `list_creative_assets` and follow **launch** for supported plan changes. Kill/scale decisions use **kill-scale-rules**.
 
 ## Rules
 

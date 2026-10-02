@@ -11,7 +11,7 @@ Confirm the account: `list_connected_accounts`.
 
 ## 1. Pull QS with spend context
 
-Use `run_gaql_query` against `keyword_view` selecting `ad_group_criterion.quality_info.quality_score`, `search_predicted_ctr`, `creative_quality_score` (Ad Relevance), `post_click_quality_score` (Landing Page), plus impressions, cost, and conversions over LAST_30_DAYS. Filter to enabled keywords with meaningful impressions.
+Use `pull_google_ads_performance` and `audit_account_structure` to prioritize campaign issues. Request a Google Ads export for keyword-level Quality Score and its components if the returned data lacks them. Never infer a component score from campaign averages.
 
 Rank the fix list by cost, not by QS: a QS 3 keyword spending $4K/month matters more than twenty QS 4 keywords spending nothing. Pull the below-average components on the highest-spend keywords first.
 
@@ -25,7 +25,7 @@ Rough mechanics worth knowing: Ad Rank scales with bid times quality, and actual
 
 ## 3. Fix Expected CTR
 
-Rewrite the RSAs: keyword in 2-3 headlines, concrete numbers and differentiators in the rest, distinct headlines with no near-duplicates. Fill every relevant asset type — sitelinks, callouts, structured snippets, images — since assets lift CTR directly. Generate variants with `generate_text_ad` and check what is live with `get_ad_readback`. Expect 2-4 weeks for the rating to move.
+Write RSA variants with `create_ad_copy`: use relevant keywords, concrete differentiators, and distinct headlines. Compare current text and asset counts using `list_creative_assets` where available, or request a platform export. Follow **launch** before any deployment.
 
 ## 4. Fix Ad Relevance
 
@@ -35,9 +35,9 @@ Restructure to tightly themed ad groups: if no headline in the ad group contains
 
 - Speed: LCP under 2.5s, mobile-usable, no intrusive interstitials.
 - Message match: page headline mirrors the ad promise; ad-group keywords appear in the page copy above the fold.
-- Trust: HTTPS, visible contact info, clear pricing and policies.
+- Trust: HTTPS, visible contact info, clear offer details and policies.
 
-If the page needs replacing, build one with `create_landing_page` and ship it with `publish_landing_page`. This component is slowest to update — Google re-crawls on its own schedule, so allow 4-8 weeks.
+If the page needs replacing, provide a copy and usability brief for the site owner. The plugin does not publish landing pages. Recheck the destination before launch.
 
 ## 6. Track it over time
 

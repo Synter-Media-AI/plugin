@@ -10,7 +10,7 @@ Two motions: Sponsored ads on the retail search results, and DSP for programmati
 ## Read what exists
 
 - `list_connected_accounts`, then `list_campaigns(platform="amazon")`.
-- `pull_amazon_ads_performance(days=7)` for Sponsored Products/Brands/Display metrics. `pull_amazon_dsp_performance(days=7)` for DSP.
+- Dedicated performance reads for this platform are outside the plugin’s directory tools. Request a platform export for metrics and use `list_campaigns` for the state and fields actually returned. Do not substitute another platform’s data.
 
 ## Sponsored ads
 
@@ -20,7 +20,7 @@ Two motions: Sponsored ads on the retail search results, and DSP for programmati
 
 ## Amazon DSP
 
-- Programmatic display and video across Amazon inventory and the open web, targeted with Amazon shopping and audience signals. Use for reach, retargeting, and audience-based prospecting beyond keywords. Use `find_audience_signals` and `build_lookalike_audience` to shape audiences.
+- Review existing audiences with `list_audiences`. Use `research_campaign_opportunity` for available campaign research. Ask the account owner to create or synchronize new audience lists in the platform UI; use returned IDs only in supported plan fields.
 
 ## Plan and ship
 
@@ -29,3 +29,5 @@ Two motions: Sponsored ads on the retail search results, and DSP for programmati
 - Confirm live with `list_campaigns(platform="amazon")` and report the real ID. Scale by ACOS with the **optimize** skill.
 
 Porting from another platform? Use the **replicate** skill. Search intent maps to Sponsored Products keywords; audiences map to DSP.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

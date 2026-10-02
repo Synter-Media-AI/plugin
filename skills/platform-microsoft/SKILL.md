@@ -5,7 +5,7 @@ description: Operate Microsoft (Bing) Ads through Synter — read and build Sear
 
 # Microsoft (Bing) Ads Playbook
 
-Microsoft Ads is close to a mirror of Google Ads, which is why porting between them is common. Reads are free; anything that spends money waits for explicit approval.
+Microsoft Ads is close to a mirror of Google Ads, which is why porting between them is common. Reads do not require approval; anything that spends money waits for explicit approval.
 
 Confirm the account first: `list_connected_accounts`. Use the real ID the tool returns; never invent one. Not connected → run the **connect** skill.
 
@@ -29,13 +29,15 @@ To carry a live Google campaign across, use the **replicate** skill. It reads th
 
 ## Build a campaign
 
-`create_campaign_plan` → `upsert_plan_entity` per campaign / ad group / keyword / ad → `forecast_campaign`. Generate copy with `generate_text_ad` or the **creative** skill. Run **campaign-preflight**, then `execute_campaign_plan` + `enable_campaign` on approval.
+Use `create_campaign_plan` and `upsert_plan_entity` for the supported campaign structure, and `forecast_campaign` for available estimates. Write text with `create_ad_copy` and select existing advertiser assets with `list_creative_assets`. Follow **launch** for `run_launch_preflight`, explicit user approval, `approve_campaign_plan`, `execute_campaign_plan`, and verification with `get_plan_execution` before any approved activation.
 
 ## Operating rules
 
 - Enabling a campaign does not serve its ad groups if those stay paused. After enabling, re-pull and confirm the children actually serve; never trust the campaign status alone.
 - Carry negatives across, not just keywords. Keywords without negatives burn budget.
 - Verify geo/location criteria exist and match intent.
-- Conversion tracking must exist and be attached before scaling: `ga4_list_conversions`, `verify_pixel_ownership`.
+- Conversion tracking must exist and be attached before scaling: `ga4_get_conversions`, `get_pixel_health`.
 - Guard against a fat-finger daily budget 10 to 100x intended. Adjust with `update_campaign_budget`, pause with `pause_campaign`.
 - "Created" is not "live and spending." Confirm with `list_campaigns` and report the real IDs.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

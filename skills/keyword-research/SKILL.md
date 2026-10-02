@@ -5,20 +5,20 @@ description: Find high-intent, low-waste keywords for Search campaigns and add t
 
 # Keyword Research
 
-Find terms real buyers search, group them by intent, and add them where they convert. Reads are free; adding keywords to a live campaign is a change, so confirm before shipping.
+Find terms real buyers search, group them by intent, and add them where they convert. Reads do not require approval; adding keywords to a live campaign is a change, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`. This applies to search platforms (**platform-google**, **platform-microsoft**).
 
 ## 1. Start from intent, not volume
 
 Anchor to the conversion that defines success. Sort candidate terms by buyer intent:
-- **High intent:** problem-aware, ready to act ("buy", "pricing", "near me", branded competitor terms).
+- **High intent:** problem-aware, ready to act ("buy", "near me", branded competitor terms).
 - **Research intent:** comparing, not yet buying. Lower priority unless the funnel supports nurture.
 - **Junk:** informational or off-topic. These become negatives, not keywords. See the **negative-keywords** skill.
 
 ## 2. Mine what already works
 
-Pull the account's own search terms before inventing new ones: `run_gaql_query` on the search-term view (Google) or `pull_microsoft_ads_performance` history. Terms that already converted are the strongest seeds. Group survivors into tight ad groups by theme so ad copy can match.
+Use `research_campaign_opportunity` and available `pull_google_ads_performance` or `pull_microsoft_ads_performance` history. Request a platform search-term export if query-level detail is missing. Separate observed converting queries from proposed keywords; do not invent query performance.
 
 ## 3. Assign match types deliberately
 
@@ -28,7 +28,7 @@ Pull the account's own search terms before inventing new ones: `run_gaql_query` 
 
 ## 4. Add on approval
 
-Add keywords through the plan tools (`upsert_plan_entity` into the target ad group) and confirm the change. Then pair every expansion with negatives so new match surface does not leak budget. Verify conversion tracking exists first: `ga4_list_conversions`.
+Draft supported keyword entities with `upsert_plan_entity` and follow **launch** for review, preflight, approval, execution, and verification. Use the platform UI if keyword edits are unsupported. Pair expansions with exclusions and verify tracking with `ga4_get_conversions` and **conversion-tracking**.
 
 ## Rules
 

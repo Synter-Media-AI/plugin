@@ -1,17 +1,17 @@
 ---
 name: bid-optimization
-description: Recommend and apply bid and bid-strategy changes from performance data — CPC targets, device and audience modifiers, and target CPA/ROAS moves. Use when a user wants to lower CPCs, hit a target CPA or ROAS, or adjust bids across campaigns.
+description: Recommend bid and bid-strategy changes from performance data — CPC targets, device and audience modifiers, and target CPA/ROAS moves. Use when a user wants to lower CPCs, hit a target CPA or ROAS, or adjust bids across campaigns.
 ---
 
 # Bid Optimization
 
-Move bids toward the target CPA or ROAS using real performance, not guesses. Reads are free; changing bids spends differently, so confirm before shipping.
+Move bids toward the target CPA or ROAS using real performance, not guesses. Reads do not require approval; changing bids spends differently, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Read performance with enough data
 
-Pull recent performance per campaign and, where available, per ad group and segment: `pull_<platform>_ads_performance(days=...)` or `run_gaql_query` for Google detail. Do not act on thin data; a handful of conversions is noise. State the window and volume you based the call on.
+Pull recent campaign performance with `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, or `pull_reddit_ads_performance`. Use segment detail only if returned; request platform exports for missing breakdowns. State the period and conversion volume before making a recommendation.
 
 ## 2. Diagnose before you move
 
@@ -27,7 +27,7 @@ Pull recent performance per campaign and, where available, per ad group and segm
 
 ## 4. Apply on approval
 
-Apply through the plan tools or `update_campaign_budget` where budget is the real constraint. Confirm the change and re-measure after the platform has had time to adjust.
+Apply budget changes with `update_campaign_budget` on approval. Hand bid-strategy and modifier changes on existing campaigns to the platform UI unless the live plan schema supports them; confirm and re-measure.
 
 ## Rules
 

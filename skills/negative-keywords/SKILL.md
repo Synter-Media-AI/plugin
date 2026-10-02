@@ -5,13 +5,13 @@ description: Mine and manage negative keywords from search-term reports to stop 
 
 # Negative Keywords
 
-Negatives are how a Search campaign stops paying for the wrong clicks. They matter as much as the keywords themselves. Reads are free; adding negatives is a change, so confirm before shipping.
+Negatives are how a Search campaign stops paying for the wrong clicks. They matter as much as the keywords themselves. Reads do not require approval; adding negatives is a change, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Read the search-term report
 
-Pull what the campaign actually matched: `run_gaql_query` on the search-term view (Google) or `pull_microsoft_ads_performance` history. Look for terms with spend and clicks but no conversions, and terms that are simply off-intent.
+Use `research_campaign_opportunity` and available `pull_google_ads_performance` or `pull_microsoft_ads_performance` history. Request a platform search-term export if query-level detail is missing. Separate observed converting queries from proposed keywords; do not invent query performance.
 
 ## 2. Categorize
 

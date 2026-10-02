@@ -17,8 +17,8 @@ Find the source campaign: `list_campaigns(platform="<source>")`. Get its real ID
 
 Pull the full structure, not just top-line metrics:
 
-- **Google source:** `run_gaql_query` is the ground truth. Read campaign settings (budget, bid strategy, networks, geo/location criteria, languages, ad schedule), ad groups, keywords with **match types**, negative keywords (campaign and ad-group level), and the RSAs (every headline and description, and any pinning). Use `pull_google_ads_performance` for the metrics that tell you which pieces are worth carrying over.
-- **Other sources (Meta, LinkedIn, TikTok, Reddit, X):** use `list_campaigns` + `pull_<platform>_ads_performance` and the matching platform playbook skill to read structure, audiences, budgets, and creative.
+- Read `list_campaigns`, `audit_account_structure`, and `pull_google_ads_performance` for a Google source. Ask for platform exports when budgets, geo criteria, keyword match types, negatives, or complete ad text are missing. Do not replicate unknown settings.
+- **Other sources (Meta, LinkedIn, Reddit, Microsoft):** use `list_campaigns` and the matching performance tool (`pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_reddit_ads_performance`, or `pull_microsoft_ads_performance`) for performance; request platform exports for structure, audiences, and creative. TikTok and X sources require a platform export.
 
 Write down the source structure explicitly before you build. If you cannot read a piece, say so — never invent a keyword list or a budget.
 
@@ -33,13 +33,13 @@ Platforms are not identical. State the mapping and where it is lossy.
 - Rebuild fresh through Synter's plan tools. Do not describe this as Microsoft's native "Import from Google" — that is a different, platform-side path.
 
 **Cross-format pairs (e.g. Search → social, Google → Meta/TikTok):**
-- There is no keyword concept on social. Translate intent: keywords and search themes become audience signals and interests; RSAs become social ad copy and creative. Use `find_audience_signals` and the target platform playbook. Be explicit that this is a re-interpretation, not a copy.
+- Social campaigns require a new targeting interpretation. Use `research_campaign_opportunity` and existing `list_audiences` results to inform it; document how the proposed targeting differs from the source.
 
 ## 3. Build the target plan
 
 `create_campaign_plan` to draft the target structure, then `upsert_plan_entity` to add each campaign → ad group / ad set → ad, carrying over the mapped keywords, negatives, geo, schedule, and budget. `forecast_campaign` for reach/CPC/CPA on the new platform — the source platform's numbers do not transfer.
 
-Creative: reuse the source ad copy where the format allows; otherwise run the **creative** / **ad-copy-generation** skills to regenerate for the target platform. Apply brand voice — see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+Creative: reuse the source ad copy where the format allows; otherwise run the **ad-copy-generation** skills to regenerate for the target platform. Apply brand voice — see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
 
 ## 4. Preflight — before anything goes live
 
@@ -47,13 +47,13 @@ Run the **campaign-preflight** checklist and report pass/fail:
 
 - Geo/location criteria copied and correct (a "US" name with no location criteria is the classic miss).
 - Negatives carried over — porting keywords without negatives burns budget fast.
-- Conversion tracking exists and is attached on the target (`ga4_list_conversions` / `get_gtm_tag` / `verify_pixel_ownership`). No tracking → fix before launch.
+- Check target-side evidence with `ga4_get_conversions` and `get_pixel_health`. Resolve missing tracking verification before launch.
 - Budget and bid caps sane — guard against a fat-finger daily budget 10–100x intended.
 - Match types preserved; final URLs resolve and match the ad's promise.
 
 ## 5. Ship on approval
 
-Show the full mapped plan side by side with the source — platform, structure, budget, geo, creative, projected CPA — and name what changed in translation and why. Ask for a clear go. Only then `execute_campaign_plan` (or `create_campaign_for_audience` for an audience-targeted build), then `enable_campaign`.
+Show the mapped plan beside the source, including changed structure, geography, audience, budget, and assets. Follow **launch** for `run_launch_preflight`, explicit user approval, `approve_campaign_plan`, and `execute_campaign_plan`. Verify with `get_plan_execution` and `list_campaigns`; enable only within the approved scope.
 
 Confirm live: `list_campaigns(platform="<target>")` and report the real campaign ID created. "Created" and "live and spending" are different claims — verify before you say it is running.
 

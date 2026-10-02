@@ -1,0 +1,23 @@
+name: Directory tools
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  directory-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check instruction tool references
+        run: node scripts/check-directory-tools.js
+      - name: Test repository validators
+        run: node --test scripts/*.test.js

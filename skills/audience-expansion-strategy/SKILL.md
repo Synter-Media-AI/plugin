@@ -7,11 +7,11 @@ description: Expand targeting without wrecking CPA — lookalike ladders, seed q
 
 Expansion is a ladder, not a leap: each rung trades a little efficiency for a lot of reach, and you climb only when the rung below is saturated.
 
-Confirm the account and inventory what exists: `list_connected_accounts`, `list_audiences`, and performance per audience via `pull_<platform>_ads_performance`.
+Confirm the account and inventory what exists: `list_connected_accounts`, `list_audiences`, and performance per audience via the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`).
 
 ## 1. Audit before expanding
 
-Find which audiences drive 80% of conversions, which run above target CPA, and which show fatigue: frequency climbing past ~3-4/week, CTR down 20%+ week over week, CPA up 25%+ week over week. Expansion fixes saturation; it does not fix a broken offer or tired creative (see **creative**).
+Find which audiences drive 80% of conversions, which run above target CPA, and which show fatigue: frequency climbing past ~3-4/week, CTR down 20%+ week over week, CPA up 25%+ week over week. Expansion fixes saturation; it does not fix a broken offer or tired creative (see **ad-copy-generation**).
 
 ## 2. Climb the expansion ladder
 
@@ -24,17 +24,17 @@ Add one tier at a time with its own budget and CPA ceiling; kill any rung that e
 
 ## 3. Build lookalikes from quality seeds
 
-Seed quality decides lookalike quality. Ranked: top-20%-by-LTV customers, then all converters, then intent signals (cart, demo, pricing page), then engagement signals. Practical minimums for good results are ~1,000 matched users on most platforms regardless of lower stated floors. Two upgrades that consistently cut lookalike CPA: seed from top-value customers instead of all customers, and seed from recent (90-day) converters instead of all-time. Refresh seeds monthly.
+Seed quality decides lookalike quality. Ranked: top-20%-by-LTV customers, then all converters, then intent signals (cart, demo, offer page), then engagement signals. Practical minimums for good results are ~1,000 matched users on most platforms regardless of lower stated floors. Two improvements that consistently cut lookalike CPA: seed from top-value customers instead of all customers, and seed from recent (90-day) converters instead of all-time. Refresh seeds monthly.
 
-Build with `build_lookalike_audience`, create several sizes (1%, 3%, 5%) and test them against each other, then attach to campaigns with `attach_audience` or spin up dedicated ones with `create_campaign_for_audience`. Note platform differences: Google retired similar audiences in favor of Optimized Targeting with Customer Match as the signal; Meta, TikTok, and LinkedIn still build explicit lookalike/predictive audiences.
+Review existing seeds with `list_audiences`. Ask the account owner to create any required expansion audiences in the platform UI, then compare them in a controlled test. Use returned audience IDs in supported campaign-plan fields; follow **launch** for approval.
 
 ## 4. Layer for precision, exclude for hygiene
 
-Layer dimensions where precision matters: lookalike AND in-market segment AND NOT recent site visitors (give retargeting first shot). For B2B account lists, use `build_abm_audience`; to discover new seed signals, `find_audience_signals`.
+Describe the intended account criteria, exclusions, and layering. Use `research_campaign_opportunity` for available campaign research; hand off audience construction to the platform UI.
 
 Mandatory exclusions on every prospecting campaign:
 
-- Existing customers and recent converters (sync weekly via `sync_audience`).
+- Existing customers and recent converters; ask the account owner to refresh suppression lists weekly.
 - All retargeting pools — prospecting money should buy strangers.
 - Employees and CRM-disqualified leads.
 
@@ -48,7 +48,7 @@ Meta Advantage+ audiences and Google Optimized Targeting treat your audiences as
 
 ## 6. Monitor and rebalance
 
-Weekly: `pull_<platform>_ads_performance` per audience tier. Scale rungs beating target, refresh creative on fatiguing ones, and rebalance spend across tiers with `optimize_budget`. When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
+Weekly: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) per audience tier. Scale rungs beating target, refresh creative on fatiguing ones, and rebalance spend across tiers with `optimize_budget`. When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
 
 ## Rules
 

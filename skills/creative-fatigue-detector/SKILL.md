@@ -5,7 +5,7 @@ description: "Diagnose creative fatigue; refresh cadence; when to swap/rotate ad
 
 # Creative Fatigue Detection & Refresh Cadence
 
-Use Synter-calibrated thresholds to decide when to refresh creatives BEFORE performance collapses. Most teams refresh too late — the goal is to act on early warnings, not wait for CPA to blow up.
+Use these typical starting thresholds; prefer the account's own history to decide when to refresh creatives BEFORE performance collapses. Most teams refresh too late — the goal is to act on early warnings, not wait for CPA to blow up.
 
 ## Early Warning Signals (act on these BEFORE CPA spikes)
 

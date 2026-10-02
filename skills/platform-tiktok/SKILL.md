@@ -10,23 +10,25 @@ Native, sound-on, creator-style video is the product. Structure is campaign → 
 ## Read what exists
 
 - `list_connected_accounts` to confirm the org and account, then `list_campaigns(platform="tiktok")`.
-- `pull_tiktok_ads_performance(days=7)` for spend, clicks, and CPA per campaign. `tiktok_ads_get_insights` for detailed video metrics (views, watch time, completion).
+- Dedicated performance reads for this platform are outside the plugin’s directory tools. Request a platform export for metrics and use `list_campaigns` for the state and fields actually returned. Do not substitute another platform’s data.
 
 ## Structure and objectives
 
 - Objective sits at the campaign level (traffic, conversions, app installs, reach, lead generation). Pick the one that matches the real conversion, not the vanity metric.
 - Ad groups hold budget, targeting, placement, and schedule. Ads hold the creative.
-- Audiences: interest and behavior, custom audiences from your data, and lookalikes. Use `find_audience_signals` to size who is reachable and `build_lookalike_audience` from a seed.
+- Review existing audiences with `list_audiences`. Use `research_campaign_opportunity` for available campaign research. Ask the account owner to create or synchronize new audience lists in the platform UI; use returned IDs only in supported plan fields.
 
 ## Creative is the campaign
 
 - Vertical 9:16, sound-on, hook in the first 2 seconds. Spark Ads run through an organic post and usually outperform static uploads.
-- Generate options with `generate_video_ad` / `generate_ugc_ad`; apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`. Test several hooks, not one polished film. See the **creative-testing** skill.
+- Write text with `create_ad_copy`, select existing approved assets with `list_creative_assets`, and apply the verified advertiser’s brand voice. Request missing media from the advertiser. See **creative-testing**.
 
 ## Plan and ship
 
-- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` for reach and CPA. Run **campaign-preflight** before launch: geo, tracking (`verify_pixel_ownership`), sane budgets.
+- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` for reach and CPA. Run **campaign-preflight** before launch: geo, tracking (`get_pixel_health`), sane budgets.
 - Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without the user's clear go.
 - Confirm live with `list_campaigns(platform="tiktok")` and report the real ID. Start conservative; scale winners with the **optimize** skill.
 
 Porting a campaign here from another platform (e.g. Google Search)? Search keywords have no twin on TikTok. Translate intent into audience signals and creative. Use the **replicate** skill.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

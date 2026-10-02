@@ -24,6 +24,12 @@ jobs:
       - name: Run manifest validation
         run: node scripts/validate-manifests.js
 
+      - name: Validate directory tool references
+        run: node scripts/check-directory-tools.js
+
+      - name: Test repository validators
+        run: node --test scripts/*.test.js
+
       - name: Run strict Claude plugin validation
         run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
 

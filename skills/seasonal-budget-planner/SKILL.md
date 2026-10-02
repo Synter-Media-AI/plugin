@@ -7,7 +7,7 @@ description: Plan ad budgets around seasonal peaks — holiday scaling, CPM infl
 
 Peak season punishes flat budgets twice: CPMs inflate 50-150% while unprepared accounts pay them with untested creative and cold audiences. Plan in phases, not in a panic the week before.
 
-Ground the plan in your own history first: `pull_<platform>_ads_performance` over last year's season and `ga4_run_report` with a date dimension to see your real demand curve.
+Ground the plan in your own history first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) over last year's season and `ga4_get_report` with a date dimension to see your real demand curve.
 
 ## 1. Plan in four phases
 
@@ -51,7 +51,7 @@ If you are not in the category, these are your cheap weeks — competitors' budg
 
 ## 6. Execute and guard
 
-Encode the phased plan with `create_campaign_plan` and `execute_campaign_plan`, apply phase changes with `update_campaign_budget`, and rebalance across platforms mid-flight with `optimize_budget`. Set `set_spend_alert` before peak so a 5x daily budget cannot silently run for a week. During peak, review daily with `pull_<platform>_ads_performance`; after, reconcile what each platform claims against site truth with `reconcile_platforms`.
+Encode the phased proposal with `create_campaign_plan` and follow **launch** for preflight, approval, and execution. Apply approved phase changes with `update_campaign_budget`; use `optimize_budget` for allocation recommendations. Configure alerts in the platform UI. Review performance daily during peak and reconcile with `get_spend_reconciliation` afterward.
 
 ## Rules
 

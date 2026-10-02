@@ -7,7 +7,7 @@ description: Calculate ROAS, CPA, break-even, max CPC, and campaign profitabilit
 
 Turn spend and revenue into the numbers that decide whether a campaign lives. Reads only; this is math, not a spend change.
 
-Confirm the account: `list_connected_accounts`, then pull real figures with `pull_<platform>_ads_performance(days=...)`. Never invent revenue or margin; if the user has not given margin or conversion value, ask rather than assume.
+Confirm the account: `list_connected_accounts`, then pull real figures with the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`). Never invent revenue or margin; if the user has not given margin or conversion value, ask rather than assume.
 
 ## The core numbers
 

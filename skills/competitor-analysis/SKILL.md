@@ -9,7 +9,7 @@ See what competitors run so you can position against it, not copy it. Reads and 
 
 ## 1. Find what they run
 
-Use `public_ad_library_intelligence` where available for live and recent competitor creative, and web research for offers, landing pages, and positioning. Focus on what is running now and what has run long enough to imply it works.
+Use `research_campaign_opportunity` for available research. Ask for public ad-library links or examples when the tool does not return competitor ads. Separate observed messaging from hypotheses about performance; longevity alone does not establish profitability.
 
 ## 2. Read the pattern, not the pixels
 
@@ -28,4 +28,4 @@ Use `public_ad_library_intelligence` where available for live and recent competi
 
 - Inform strategy; never copy creative or claims. Copying inherits their weaknesses and risks trademark issues.
 - Separate what is proven (long-running, repeated) from what is a test.
-- Report the angles and gaps you found and the specific move you would make, then take it to the **creative** or **launch** skill.
+- Report the angles and gaps you found and the specific move you would make, then take it to the **ad-copy-generation** or **launch** skill.

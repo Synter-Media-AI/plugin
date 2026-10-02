@@ -7,7 +7,7 @@ description: Audit a Google Ads account's structure — ad group focus, keyword 
 
 Good structure is why an account is cheap to run and easy to read. This audit finds the structural drag before it costs money. Reads only; fixes are separate, approved changes.
 
-Confirm the account: `list_connected_accounts`, then read the real structure with `run_gaql_query` (campaigns, ad groups, keywords with match types, negatives) and `pull_google_ads_performance` for where spend actually sits.
+Confirm the account with `list_connected_accounts`, inspect structure with `audit_account_structure`, and use `pull_google_ads_performance` to prioritize findings by spend. Request a platform export for any keyword, negative, or match-type details not returned.
 
 ## What to audit
 

@@ -1,17 +1,17 @@
 ---
 name: first-party-data-strategy
-description: Build a post-cookie first-party data strategy — Enhanced Conversions, server-side tracking, Consent Mode v2, and activating owned data for targeting. Use when a user wants to recover lost conversion data, set up Enhanced Conversions or CAPI, implement consent mode, or plan for cookie deprecation.
+description: Build a post-cookie first-party data strategy — Enhanced Conversions, server-side tracking, Consent Mode v2, and planning how to use owned data for targeting. Use when a user wants to recover lost conversion data, set up Enhanced Conversions or CAPI, implement consent mode, or plan for cookie deprecation.
 ---
 
 # First-Party Data Strategy
 
-Third-party cookies are gone; the accounts that keep measuring are the ones that collect, consent, and send their own data. Build that pipeline in order: audit, capture, consent, activate.
+Third-party cookies are gone; the accounts that keep measuring are the ones that collect, consent, and send their own data. Build that pipeline in order: audit, capture, consent, then plan how to use it.
 
-Confirm the account and tracking surface first: `list_connected_accounts`, `get_connection_status`, and `get_pixel_destinations` to see what already exists.
+Confirm the workspace with `list_connected_accounts` and `get_connection_status`; read `get_pixel_health` for the available tracking diagnostics.
 
 ## 1. Audit what you collect today
 
-Inventory every point where you capture an identifier: forms, signups, purchases, email lists, CRM records, in-app events. For each, note the identifier (email, phone, address), consent status, and freshness. Check what conversion data actually reaches the platforms: `ga4_list_conversions` and `ga4_run_report` for the site side, `pull_<platform>_ads_performance` for what each platform claims. Big gaps between GA4 and platform numbers usually mean tracking loss, not attribution magic — see **conversion-tracking**.
+Inventory every point where you capture an identifier: forms, signups, purchases, email lists, CRM records, in-app events. For each, note the identifier (email, phone, address), consent status, and freshness. Check what conversion data actually reaches the platforms: `ga4_get_conversions` and `ga4_get_report` for the site side, the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for what each platform claims. Big gaps between GA4 and platform numbers usually mean tracking loss, not attribution magic — see **conversion-tracking**.
 
 ## 2. Set up Enhanced Conversions and CAPI
 
@@ -21,11 +21,11 @@ Hashed first-party identifiers recover conversions that cookies alone miss.
 - **Meta Conversions API:** send server-side events with hashed identifiers plus `fbc`/`fbp` cookie values, and deduplicate against the browser pixel with a shared `event_id`. Typical recovery is 15-30%.
 - LinkedIn, TikTok, and Reddit have equivalent server-side conversion APIs; the same hashing and dedup rules apply.
 
-Inspect and edit the tag layer directly: `list_gtm_tags`, `get_gtm_tag`, `update_gtm_tag_html`, then `publish_gtm_container`. Verify pixel ownership before touching anything with `verify_pixel_ownership`, and route events to platforms with `configure_pixel_destination`.
+Inspect the available diagnostics with `get_pixel_health`. Have the account owner make tag, event-routing, and consent changes in the platform UI or tag manager, then verify with a test event. The plugin cannot publish tags.
 
 ## 3. Move tracking server-side
 
-Client-only tags lose data to ad blockers and 7-day browser cookie caps. A server-side GTM container on a first-party subdomain (track.yourdomain.com) extends cookie lifespan to 1-2 years, enriches events before forwarding (LTV, customer segment), and sends once to every platform API. This is the single highest-leverage tracking upgrade for a returning-visitor business.
+Client-only tags lose data to ad blockers and 7-day browser cookie caps. A server-side GTM container on a first-party subdomain (track.yourdomain.com) extends cookie lifespan to 1-2 years, enriches events before forwarding (LTV, customer segment), and sends once to the platforms Synter connects to. This is the single highest-leverage tracking improvement for a returning-visitor business.
 
 ## 4. Implement Consent Mode v2
 
@@ -40,18 +40,18 @@ Set default consent state to denied before the CMP loads, update on user choice,
 
 Uploaded lists only work as well as they match. Rough expectations: hashed email alone matches 40-60% on Google and 50-70% on Meta; adding phone pushes combined match to 55-80%. LinkedIn matches better on work email than personal. Improve matches by sending multiple identifiers per record and normalizing before hashing. If a synced list delivers to far fewer users than you uploaded, fix the data before blaming the platform.
 
-## 6. Activate the data for targeting
+## 6. Prepare the data for upload in each platform's own tools
 
 Collected data earns its keep in audiences:
 
-- Sync customer and converter lists to platforms with `sync_audience` and attach them with `attach_audience`.
-- Seed expansion from your best customers: `build_lookalike_audience` (see **audience** for the full playbook).
+- Review available lists with `list_audiences`; the account owner handles synchronization and suppression updates in the platform UI.
+- Define a seed from the best customers and hand off its construction to the platform UI; see **audience**.
 - Always maintain suppression lists — existing customers and recent converters excluded from acquisition. Refresh at least weekly.
 - Pass conversion value where you have it so value-based bidding has something to optimize toward (see **bid-optimization**).
 
 ## 7. Verify the pipeline end to end
 
-After changes, confirm events flow: `ga4_run_report` for site-side counts, `pull_<platform>_ads_performance` for platform-side, and `reconcile_platforms` to compare. Then check attribution quality with `get_attribution` — see **attribution** for interpreting the deltas.
+After changes, compare site events with `ga4_get_report` and available platform performance results, then inspect attribution differences with `get_attribution`. Use `get_spend_reconciliation` for spend records separately. Mark unsupported event-level checks as unverified.
 
 ## Rules
 

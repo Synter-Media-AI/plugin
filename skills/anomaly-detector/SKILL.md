@@ -5,13 +5,13 @@ description: Catch spend spikes, CTR or conversion-rate drops, budget runaway, a
 
 # Anomaly Detector
 
-Find the sudden change before it burns a budget. Reads are free; setting alerts or pausing is a change and waits for approval.
+Find the sudden change before it burns a budget. Reads do not require approval; setting alerts or pausing is a change and waits for approval.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Pull a baseline and today
 
-Read a stable window and the recent period per platform: `pull_<platform>_ads_performance(days=...)`, or `run_gaql_query` for Google detail. You need enough history to know what normal looks like before you can call something abnormal.
+Read a stable historical window and the recent period with `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, or `pull_reddit_ads_performance`. State the period and missing data before calling a change abnormal.
 
 ## 2. Find real outliers, not noise
 
@@ -26,7 +26,7 @@ Rule out the mundane first: a tracking outage reads as a conversion cliff; a new
 
 ## 4. Act
 
-- Set forward-looking guardrails with `set_spend_alert` so the next runaway trips an alarm early.
+- Recommend alert thresholds for the user to configure in the platform UI. Do not claim alerts were installed.
 - For a confirmed problem, recommend the fix (pause, budget cut, creative swap) and take it through the relevant skill on approval. Do not pause on one noisy data point; see **pre-pause-analysis**.
 
 ## Rules

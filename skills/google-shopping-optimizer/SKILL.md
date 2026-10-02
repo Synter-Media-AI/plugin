@@ -7,7 +7,7 @@ description: Optimize Google Shopping — product feed quality, titles, Merchant
 
 Shopping performance is mostly feed quality. Fix titles, identifiers, images, and price accuracy before touching bids or structure.
 
-Confirm the account: `list_connected_accounts`. Pull campaign performance with `pull_google_ads_performance` and product-level detail via `run_gaql_query` on `shopping_performance_view`.
+Confirm the account with `list_connected_accounts`. Pull campaign performance with `pull_google_ads_performance`; request Merchant Center or Google Ads exports for product-level data not returned.
 
 ## 1. Audit the feed
 
@@ -23,7 +23,7 @@ Grade each top product: optimized, needs work, or at risk of disapproval. Fix by
 
 ## 2. Rewrite titles
 
-Structure: Brand + Product Type + Key Attributes (color, size, material, gender) + Model/Variant. Front-load the important terms — Shopping truncates around 70 characters. No ALL CAPS, no promo text ("SALE", "FREE SHIPPING"), no symbols. Aim for 70-100 characters, max 150.
+Structure: Brand + Product Type + Key Attributes (color, size, material, gender) + Model/Variant. Front-load the important terms — Shopping truncates around 70 characters. No ALL CAPS, no promo text ("SALE", "SPECIAL OFFER"), no symbols. Aim for 70-100 characters, max 150.
 
 ## 3. Clear disapprovals
 

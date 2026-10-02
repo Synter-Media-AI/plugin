@@ -10,7 +10,7 @@
     {
       "name": "synter",
       "source": "./",
-      "description": "Connect every ad platform, build audiences from signals, generate on-brand creative, launch cross-platform campaigns, and reallocate spend by ROAS — one conversation, every platform. You direct, the agents execute."
+      "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution."
     }
   ]
 }

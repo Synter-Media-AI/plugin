@@ -5,13 +5,13 @@ description: Analyze hour-of-day and day-of-week performance and set ad schedule
 
 # Dayparting and Ad Scheduling
 
-Spend when the account converts, not evenly around the clock. Reads are free; schedule and modifier changes affect delivery, so confirm before shipping.
+Spend when the account converts, not evenly around the clock. Reads do not require approval; schedule and modifier changes affect delivery, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Read time-segmented performance
 
-Pull performance by hour of day and day of week: `run_gaql_query` on the time segments (Google) or the platform performance pull with a date window long enough to be stable. You want conversions and CPA by time slot, not just clicks.
+Review time-of-day and weekday performance only when the platform performance tool returns those breakdowns. Otherwise ask for a platform export. Compare conversions and CPA by time slot over a stable period, not just clicks. Schedule edits require the platform UI when no supported plan field exists.
 
 ## 2. Find the real pattern
 
@@ -25,7 +25,7 @@ Build an ad schedule with bid modifiers per slot: raise where it converts, lower
 
 ## 4. Apply on approval
 
-Apply through the plan tools and confirm. Re-pull after a couple of weeks to check the pattern held; buyer behavior shifts seasonally (see **kill-scale-rules** for scaling discipline).
+Hand the schedule and modifiers to the account owner for the platform UI unless the live plan schema supports them; confirm after it is applied. Re-pull after a couple of weeks to check the pattern held; buyer behavior shifts seasonally (see **kill-scale-rules** for scaling discipline).
 
 ## Rules
 

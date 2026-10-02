@@ -5,7 +5,7 @@ description: Plan and reallocate budget across platforms by ROI, with revenue pr
 
 # Budget Planner
 
-Decide where the next dollar goes across platforms, grounded in real performance rather than gut feel. Reads are free; changing budgets is a change and waits for explicit approval.
+Decide where the next dollar goes across platforms, grounded in real performance rather than gut feel. Reads do not require approval; changing budgets is a change and waits for explicit approval.
 
 Confirm the account and what is connected: `list_connected_accounts`.
 
@@ -13,13 +13,13 @@ Confirm the account and what is connected: `list_connected_accounts`.
 
 Pull recent performance per platform so the plan sits on real numbers:
 
-- `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, and the other `pull_<platform>_ads_performance` tools for spend, conversions, and CPA per channel.
+- Use `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, and `pull_reddit_ads_performance` for available spend, conversions, and CPA by channel.
 - `get_attribution` to see how conversions credit across touchpoints, not just last click.
 - `measure_incrementality` where a holdout exists, to separate true lift from spend that would have converted anyway. This is the honest answer to "what is this channel really worth."
 
 ## 2. Reallocate by ROI
 
-`optimize_budget` reallocates spend across platforms toward the channels returning the most per dollar, within the total you set. Feed it the budget and any per-channel floors or caps, and it returns a proposed split.
+Use `optimize_budget` for a proposed allocation within the user’s total and per-channel limits supported by its schema. Treat the result as a recommendation until the exact changes are approved and applied.
 
 Read the output as a plan, not a command:
 
@@ -34,6 +34,6 @@ Read the output as a plan, not a command:
 
 ## 4. Ship on approval
 
-Show the current split, the proposed split, the projected outcome, and the rationale. Change budgets only on the user's clear go, with `update_campaign_budget` (or by executing an approved plan). Guard against fat-finger amounts. Then confirm the new budgets with a fresh `pull_<platform>_ads_performance` read.
+Show the current split, proposed split, projected outcome, and rationale. Change budgets only on explicit approval with `update_campaign_budget`, or follow **launch** for an approved plan. Guard against mistaken amounts. Confirm the new settings with `list_campaigns` and monitor subsequent performance.
 
 For single-account bid and pacing tuning rather than cross-platform allocation, use the **optimize** and **bid-optimization** skills. For pure ROAS and CPA math, use the **roas-calculator** skill.

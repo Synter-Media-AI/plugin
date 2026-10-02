@@ -23,7 +23,7 @@ Apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md` to ev
 
 ## Generate and vary
 
-Use `generate_text_ad` for volume, then edit for voice and accuracy. Produce enough distinct variants to test one variable at a time (see **creative-testing**). Never fabricate a price, claim, or statistic; if the real number is unknown, leave it out.
+Use `create_ad_copy` for volume, then edit for voice and accuracy. Produce enough distinct variants to test one variable at a time (see **creative-testing**). Never fabricate a price, claim, or statistic; if the real number is unknown, leave it out.
 
 ## Check before it ships
 

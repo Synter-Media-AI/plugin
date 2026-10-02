@@ -7,7 +7,7 @@ description: Build C-suite and board ad reports — blended ROAS, month-over-mon
 
 Write for a reader who does not live in the ad accounts. Lead with the result and the decision, not the dashboard. Reads only; this produces a report, it does not change spend.
 
-Confirm the account: `list_connected_accounts`, then pull real numbers across platforms: `pull_<platform>_ads_performance(days=...)`, `get_attribution` for the cross-platform view, `ga4_run_report` for outcomes. Reconcile platform self-reports before quoting a total (see **attribution**).
+Confirm the account: `list_connected_accounts`, then pull real numbers across platforms: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`), `get_attribution` for the cross-platform view, `ga4_get_report` for outcomes. Reconcile platform self-reports before quoting a total (see **attribution**).
 
 ## What an exec report says
 
@@ -21,7 +21,7 @@ Confirm the account: `list_connected_accounts`, then pull real numbers across pl
 
 - Narrative first, tables second. Every number earns its place; cut vanity metrics.
 - Round to what matters at their altitude; no false precision.
-- Deliver as a clean summary, or generate a shareable doc with `create_google_doc` / `create_google_sheet` when they want to circulate it. For operator-level per-channel detail rather than the exec view, use the **report** skill.
+- Deliver a copyable summary and table in the conversation. The plugin does not create external documents or send reports. Use **report** for operator-level per-channel detail.
 
 ## Rules
 

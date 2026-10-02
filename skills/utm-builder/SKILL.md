@@ -24,7 +24,7 @@ Clean UTMs are why analytics can tell platforms apart. Inconsistent tags turn re
 
 ## Wire it up
 
-Apply the convention across the campaign's final URLs, and confirm the parameters survive to the landing page (redirects sometimes strip them). Check they resolve in analytics with `ga4_run_report` (source/medium) after traffic starts. Consistent UTMs make the **attribution** and **report** skills far more accurate.
+Apply the convention across the campaign's final URLs, and confirm the parameters survive to the landing page (redirects sometimes strip them). Check they resolve in analytics with `ga4_get_report` (source/medium) after traffic starts. Consistent UTMs make the **attribution** and **report** skills far more accurate.
 
 ## Rules
 

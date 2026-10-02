@@ -7,7 +7,7 @@ description: Audit client-side pixels and server-side Conversions API implementa
 
 Bad tracking corrupts every downstream decision, so audit it before optimizing anything. The audit is the same on every platform: is the pixel firing, is the server event arriving, are the two deduplicated, and is enough matched user data attached.
 
-Confirm the account: `list_connected_accounts` and `get_connection_status`. Inspect what is actually deployed with `list_gtm_tags` and `get_gtm_tag`; see what tech the site runs with `builtwith_domain_lookup`.
+Confirm the account with `list_connected_accounts` and `get_connection_status`. Inspect `get_pixel_health`; obtain platform diagnostics or tag-manager exports for missing implementation details.
 
 ## 1. Verify the client side
 
@@ -22,11 +22,11 @@ Per platform, confirm the base tag is present and fires on every page, standard 
 | Reddit | `rdt_cid` (`_rdt_uuid`) | `rdt('init', ...)` |
 | Microsoft | `msclkid` | UET tag, auto-tagging on |
 
-Confirm pixel ownership with `verify_pixel_ownership`. Fix tag gaps directly: `update_gtm_tag_html`, then `publish_gtm_container`.
+Verify ownership and event delivery in the platform UI when not evidenced by `get_pixel_health`. Have the account owner fix tags and publish through their tag manager, then repeat the test.
 
 ## 2. Verify the server side
 
-Check each platform's events manager diagnostics for arriving server events. Route server-side conversion data with `configure_pixel_destination` and confirm the wiring with `get_pixel_destinations`. Google's server path is Enhanced Conversions (hashed user data on the conversion, plus Consent Mode v2 defaults for EEA/UK traffic); Microsoft's is offline conversion upload keyed on `msclkid`.
+Check server-event arrivals and routing in each platform’s diagnostics alongside `get_pixel_health`. The account owner must apply routing changes in the platform UI; this plugin does not configure destinations.
 
 ## 3. Audit deduplication
 
@@ -36,7 +36,7 @@ Failure signatures:
 
 - Conversions roughly double the true count: event ID missing on one side.
 - Counts too low: IDs present but formatted differently on each side, or event names mismatched.
-- Platform reports far more conversions than GA4 shows (`ga4_run_report` on the conversion event): dedup broken — this is the most common finding.
+- Platform reports far more conversions than GA4 shows (`ga4_get_report` on the conversion event): dedup broken — this is the most common finding.
 
 ## 4. Raise match quality
 
@@ -44,11 +44,11 @@ Match quality (Meta EMQ 0-10; TikTok match rate) decides how many conversions at
 
 ## 5. Reconcile across platforms
 
-Sum of per-platform reported conversions always exceeds reality because each platform claims its own touch. Compare platform claims against GA4 and each other with `reconcile_platforms`, and read multi-touch credit with `get_attribution` (deeper treatment in **attribution**). Use GA4 (`ga4_list_conversions`, `ga4_run_report`) as the neutral yardstick when judging whether a platform's count is inflated.
+Platforms can claim overlapping conversions. Compare platform results with `ga4_get_report` and inspect attribution with `get_attribution`, using consistent periods and stated attribution windows. Use `get_spend_reconciliation` for spend discrepancies; it does not establish conversion deduplication.
 
 ## 6. Report and fix in priority order
 
-Produce a per-platform grid: pixel present, CAPI live, dedup verified, match quality score, action needed. Fix in the order that recovers the most spend: broken dedup on the biggest platform first, then missing CAPI, then match-quality parameters, then the long tail. Re-verify with a test conversion after each fix, and set `set_spend_alert` on any account that was double-counting so budget decisions pause until numbers are trusted. Baseline event coverage setup belongs to **conversion-tracking**; this skill is the audit layer on top.
+Produce a per-platform grid: pixel present, server events observed, dedup verified, match quality, and action needed. Mark unavailable evidence as unverified. Prioritize broken dedup and missing events on high-spend accounts; ask the owner to fix the implementation and repeat a test conversion before scaling. See **conversion-tracking**.
 
 ## Rules
 

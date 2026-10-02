@@ -111,23 +111,54 @@ if (fs.existsSync(SKILLS_DIR)) {
   errors.push('skills/: directory not found');
 }
 
-// (d) Authentication guards — Claude's public directory requires OAuth for
-// authenticated remote MCP services. Cursor keeps its supported API-key path.
-const claudeMcp = manifests['.mcp.json'];
-const claudeServer = claudeMcp && claudeMcp.mcpServers && claudeMcp.mcpServers.synter;
-if (!claudeServer || claudeServer.type !== 'http' || claudeServer.url !== 'https://mcp.syntermedia.ai') {
-  errors.push('.mcp.json: Synter must use the production HTTPS remote MCP endpoint');
+// (d) Each client has its own OAuth-only remote URL. Claude must match the
+// connector under review; Cursor points at the Synter AI endpoint.
+for (const [configPath, expectedUrl] of [
+  ['.mcp.json', 'https://mcp.syntermedia.ai'],
+  ['mcp.json', 'https://mcp.synterai.com'],
+]) {
+  const config = manifests[configPath];
+  const servers = config && config.mcpServers;
+  const server = servers && servers.synter;
+  if (!servers || Object.keys(servers).length !== 1 || !server ||
+      server.type !== 'http' || server.url !== expectedUrl) {
+    errors.push(`${configPath}: expected a single Synter HTTP server at ${expectedUrl}`);
+  }
+  if (server && Object.keys(server).some(key => !['type', 'url', 'description'].includes(key))) {
+    errors.push(`${configPath}: OAuth-only remote configuration permits only type, url, and description; no headers, env, commands, or credential fields`);
+  }
 }
-if (claudeServer && claudeServer.headers) {
-  errors.push('.mcp.json: Claude plugin must use browser OAuth, not static request headers');
-}
-if (pluginJson && pluginJson.userConfig && pluginJson.userConfig.synter_api_key) {
-  errors.push('.claude-plugin/plugin.json: Claude plugin must not collect a static Synter API key');
+for (const manifestPath of ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']) {
+  const manifest = manifests[manifestPath];
+  if (!manifest) continue;
+  if (manifest.userConfig || manifest.variables || manifest.env || manifest.headers) {
+    errors.push(`${manifestPath}: do not collect static credentials or declare authentication headers`);
+  }
+  const expectedConfig = manifestPath.startsWith('.cursor') ? './mcp.json' : './.mcp.json';
+  if (manifest.mcpServers !== undefined && manifest.mcpServers !== expectedConfig) {
+    errors.push(`${manifestPath}: mcpServers must reference ${expectedConfig}`);
+  }
+  if (manifestPath.startsWith('.cursor') && manifest.mcpServers !== expectedConfig) {
+    errors.push(`${manifestPath}: missing Cursor mcpServers reference`);
+  }
 }
 
-const mcpJson = readFile('mcp.json');
-if (!mcpJson.includes('SYNTER_API_KEY')) {
-  errors.push('mcp.json: missing required literal "SYNTER_API_KEY"');
+// (e) Keep the shell hook Claude-only: Cursor also auto-discovers hooks/hooks.json.
+if (fs.existsSync(path.join(REPO_ROOT, 'hooks/hooks.json'))) {
+  errors.push('hooks/hooks.json: forbidden because Cursor auto-discovers this file; keep Claude hooks inline');
+}
+const cursorManifest = manifests['.cursor-plugin/plugin.json'];
+if (cursorManifest && Object.prototype.hasOwnProperty.call(cursorManifest, 'hooks')) {
+  errors.push('.cursor-plugin/plugin.json: must not declare a hooks key');
+}
+const sessionStartHooks = pluginJson && pluginJson.hooks && pluginJson.hooks.SessionStart;
+const sessionContextCommand = '"${CLAUDE_PLUGIN_ROOT}"/scripts/session-context.sh';
+if (!Array.isArray(sessionStartHooks) || !sessionStartHooks.some(entry =>
+  entry && Array.isArray(entry.hooks) && entry.hooks.some(hook =>
+    hook && hook.type === 'command' && hook.command === sessionContextCommand
+  )
+)) {
+  errors.push('.claude-plugin/plugin.json: must declare an inline SessionStart command hook pointing at scripts/session-context.sh');
 }
 
 if (errors.length > 0) {
@@ -139,4 +170,4 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-console.log('All manifests, skill frontmatter, versions, and authentication guards passed.');
+console.log('All manifests, skill frontmatter, versions, authentication guards, and hook isolation checks passed.');

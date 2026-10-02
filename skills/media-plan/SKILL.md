@@ -15,7 +15,7 @@ Anchor to the conversion that defines success and the target CPA or ROAS. Get th
 
 ## 2. Choose the channel mix
 
-Weight channels by how they perform for this objective and audience, grounded in the account's own history (`pull_<platform>_ads_performance`) and typical ranges (see **platform-benchmarks**). Use `find_audience_signals` for who is reachable where. Balance demand capture (search) against demand generation (social) to fit the funnel.
+Ground channel weights in account history using `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, and `pull_reddit_ads_performance`. Use `research_campaign_opportunity` for available research and `forecast_campaign` for estimates; label projections clearly. Balance demand capture and demand generation for the objective.
 
 ## 3. Split the budget and project outcomes
 

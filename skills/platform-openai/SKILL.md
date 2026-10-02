@@ -10,7 +10,7 @@ A newer surface: ads that appear alongside AI answers. Structure is campaign →
 ## Read what exists
 
 - `list_connected_accounts`, then `list_campaigns(platform="openai_ads")`.
-- `pull_openai_ads_performance(days=7, aggregation_level="campaign")` for metrics. Scope tighter with `ad_group_id` or `ad_id`, or set `aggregation_level` to ad_group or ad.
+- Dedicated performance reads for this platform are outside the plugin’s directory tools. Request a platform export for metrics and use `list_campaigns` for the state and fields actually returned. Do not substitute another platform’s data.
 
 ## Structure and intent
 
@@ -19,12 +19,14 @@ A newer surface: ads that appear alongside AI answers. Structure is campaign →
 
 ## Creative
 
-- Concise, useful, honest copy. Overtly promotional creative reads badly next to an AI answer. Generate options with `generate_text_ad` / `generate_image_ad` and apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+- Write text with `create_ad_copy`, select existing approved assets with `list_creative_assets`, and apply the verified advertiser’s brand voice. Request missing media from the advertiser. See **creative-testing**.
 
 ## Plan and ship
 
-- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` where projections are available. Run **campaign-preflight**: tracking attached (`verify_pixel_ownership` / `ga4_list_conversions`), sane budgets.
+- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` where projections are available. Run **campaign-preflight**: tracking attached (`get_pixel_health` / `ga4_get_conversions`), sane budgets.
 - Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without a clear go.
 - Confirm live with `list_campaigns(platform="openai_ads")` and report the real ID. Start conservative; read results before scaling with the **optimize** skill.
 
 Porting from another platform? Use the **replicate** skill and translate keyword intent into the questions this audience asks.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

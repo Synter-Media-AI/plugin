@@ -1,44 +1,22 @@
 ---
 name: help
-description: Explain what Synter can do, list the available skills and agents, and point to docs and support. Use when a user asks for help, what's possible, how something works, or where to get support.
+description: Explain the bundled skills, supported MCP tools, OAuth setup, and support options.
 ---
 
-# Synter Help
+# Synter help
 
-Synter is the AI Agent Operator for Ads. One interface, every ad platform. You direct, the agents execute. Nothing ships without your approval.
+This plugin connects to Synter’s hosted advertising service over OAuth. Use **quickstart** to sign in and **connect** to verify accounts.
 
-## Skills (slash commands)
+Main workflows:
 
-- **/synter:quickstart** — onboard, connect a platform, run a first action.
-- **/synter:connect** — link ad platforms and GA4 (Google, Meta, LinkedIn, Microsoft, Reddit, TikTok, X, Amazon, and more).
-- **/synter:audience** — build ABM lists, lookalikes, and signal-based segments; activate them.
-- **/synter:creative** — generate on-brand images, video, UGC, and ad copy.
-- **/synter:launch** — plan, preflight, and ship a cross-platform campaign.
-- **/synter:optimize** — cut wasted spend, scale winners, reallocate budget by ROAS.
-- **/synter:report** — cross-channel performance report and exec summary.
+- **report** and **attribution**: review performance and reconcile measurement.
+- **media-plan**, **launch**, and **replicate**: prepare campaign plans and execute approved changes.
+- **audience**: inspect existing audiences and plan targeting.
+- **ad-copy-generation**: write text ads for the verified advertiser.
+- **optimize**: review budget opportunities and apply approved changes.
 
-## Agents
+The README lists every bundled skill and agent. The supported tool directory is `tools/directory-tools.json`. Use only tools available in that directory and the live server schema; report unavailable capabilities plainly.
 
-`/agents` lists them. Synter ships: campaign-strategist, media-buyer, audience-builder, creative-director, budget-optimizer, performance-analyst. They run automatically when the task fits, or you can call one directly.
+The Claude package runs a SessionStart shell hook that prints static operating guidance. Cursor uses the rules file. The optional SDK runner in the repository is launched manually.
 
-## What it connects to
-
-Direct API connections to Google, Meta, LinkedIn, Microsoft, Reddit, TikTok, X, Amazon Ads/DSP, The Trade Desk, Criteo, retail media, and GA4 — read and write.
-
-## Getting set up
-
-- Run **/synter:quickstart** and complete the secure Synter browser sign-in when
-  Claude prompts. Never paste an API key, access token, or authorization code
-  into chat.
-- If the OAuth prompt does not appear, reconnect the Synter MCP server from the
-  client's connector/plugin settings and retry in a new conversation.
-- Free GA4 tools work with no key and no credits.
-
-## Docs & support
-
-- Docs: **syntermedia.ai** and the developer quickstart at **syntermedia.ai/docs/quickstart**.
-- Product: **syntermedia.ai**.
-- Privacy: **syntermedia.ai/privacy**.
-- Support: **syntermedia.ai/contact** or the in-app support channel.
-
-Anything that spends money asks for your approval first. Reads are free to run.
+[Privacy](https://syntermedia.ai/privacy) · [Support](https://syntermedia.ai/support)
