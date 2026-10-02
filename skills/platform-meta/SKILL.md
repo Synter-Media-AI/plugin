@@ -15,7 +15,7 @@ Campaign (objective) → ad set (audience, budget, placements, schedule) → ad 
 
 - Review existing audiences with `list_audiences`. Use `research_campaign_opportunity` for available campaign research. Ask the account owner to create or synchronize new audience lists in the platform UI; use returned IDs only in supported plan fields.
 - **Advantage+** shifts targeting and placement decisions to Meta. Use it when data volume supports it; keep enough signal flowing.
-- **Placements:** Feed, Stories, Reels, and more. Creative should fit the placement, not be stretched into it.
+- **Placements:** Feed, Stories, and Reels. Creative should fit the placement, not be stretched into it.
 
 ## Read a campaign
 

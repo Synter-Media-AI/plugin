@@ -1,11 +1,11 @@
 ---
 name: first-party-data-strategy
-description: Build a post-cookie first-party data strategy — Enhanced Conversions, server-side tracking, Consent Mode v2, and activating owned data for targeting. Use when a user wants to recover lost conversion data, set up Enhanced Conversions or CAPI, implement consent mode, or plan for cookie deprecation.
+description: Build a post-cookie first-party data strategy — Enhanced Conversions, server-side tracking, Consent Mode v2, and planning how to use owned data for targeting. Use when a user wants to recover lost conversion data, set up Enhanced Conversions or CAPI, implement consent mode, or plan for cookie deprecation.
 ---
 
 # First-Party Data Strategy
 
-Third-party cookies are gone; the accounts that keep measuring are the ones that collect, consent, and send their own data. Build that pipeline in order: audit, capture, consent, activate.
+Third-party cookies are gone; the accounts that keep measuring are the ones that collect, consent, and send their own data. Build that pipeline in order: audit, capture, consent, then plan how to use it.
 
 Confirm the workspace with `list_connected_accounts` and `get_connection_status`; read `get_pixel_health` for the available tracking diagnostics.
 
@@ -25,7 +25,7 @@ Inspect the available diagnostics with `get_pixel_health`. Have the account owne
 
 ## 3. Move tracking server-side
 
-Client-only tags lose data to ad blockers and 7-day browser cookie caps. A server-side GTM container on a first-party subdomain (track.yourdomain.com) extends cookie lifespan to 1-2 years, enriches events before forwarding (LTV, customer segment), and sends once to every platform API. This is the single highest-leverage tracking improvement for a returning-visitor business.
+Client-only tags lose data to ad blockers and 7-day browser cookie caps. A server-side GTM container on a first-party subdomain (track.yourdomain.com) extends cookie lifespan to 1-2 years, enriches events before forwarding (LTV, customer segment), and sends once to the platforms Synter connects to. This is the single highest-leverage tracking improvement for a returning-visitor business.
 
 ## 4. Implement Consent Mode v2
 
@@ -40,7 +40,7 @@ Set default consent state to denied before the CMP loads, update on user choice,
 
 Uploaded lists only work as well as they match. Rough expectations: hashed email alone matches 40-60% on Google and 50-70% on Meta; adding phone pushes combined match to 55-80%. LinkedIn matches better on work email than personal. Improve matches by sending multiple identifiers per record and normalizing before hashing. If a synced list delivers to far fewer users than you uploaded, fix the data before blaming the platform.
 
-## 6. Activate the data for targeting
+## 6. Prepare the data for upload in each platform's own tools
 
 Collected data earns its keep in audiences:
 

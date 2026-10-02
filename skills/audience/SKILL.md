@@ -1,6 +1,6 @@
 ---
 name: audience
-description: Review existing audiences and plan account-specific targeting, exclusions, and activation requirements.
+description: Review existing audiences and plan account-specific targeting, exclusions, and targeting and list requirements.
 ---
 
 # Audience planning
