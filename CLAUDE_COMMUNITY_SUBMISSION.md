@@ -30,7 +30,7 @@ complementary catalogs. Do not treat connector review as plugin publication.
 | Category | Marketing and advertising |
 | Short description | Operate cross-channel advertising with approval-gated Synter agents, skills, and MCP tools. |
 | Brand icon | `assets/logo.png` — canonical transparent 1024×1024 Synter mark |
-| Support | `https://syntermedia.ai/contact` |
+| Support | `https://syntermedia.ai/support` |
 | Privacy policy | `https://syntermedia.ai/privacy` |
 | Terms | `https://syntermedia.ai/terms` |
 
@@ -91,11 +91,8 @@ Direct installation is not public-directory discovery.
 - [x] Production OAuth protected-resource and authorization-server metadata
   return `200`; a protected tool call returns `401` with a
   `WWW-Authenticate` resource-metadata challenge.
-- [x] The production MCP tool surface has 195 tools; every tool supplies a
-  title plus boolean `readOnlyHint` and `destructiveHint` annotations.
-- [x] Clean Claude Code configuration can add `Synter-Media-AI/plugin`, install
-  `synter@synter`, and inventory all 57 skills, 7 agents, 1 hook, and 1 MCP
-  server.
+- [ ] Run the optional live directory check with reviewer-authorized OAuth before submission; the checked-in directory contains 34 tools.
+- [ ] Re-inventory the updated package: 52 skills, 6 agents, one Claude session hook, and one remote MCP server per client.
 - [ ] Provider reviewer exercises `/synter:quickstart`, one read-only report,
   and one write preview without approving the write.
 - [ ] Provider reviewer uses a Synter-owned test workspace with sample data;
@@ -107,9 +104,8 @@ Direct installation is not public-directory discovery.
 
 ## Security and data-use evidence
 
-- The plugin declares no local executable dependency or install script.
-- The only remote MCP destination is `https://mcp.syntermedia.ai`, which uses
-  OAuth 2.1 with PKCE for Claude clients.
+- Claude invokes a Bash session hook that prints static guidance through `cat`. Cursor declares no hook. The repository also contains a manually invoked Node SDK runner and development scripts; no compiled binaries are bundled.
+- Claude uses `https://mcp.syntermedia.ai` to match the connector under review. Cursor separately uses `https://mcp.synterai.com`. Both plugin configurations use browser OAuth without static credentials or headers.
 - The session hook prints a static operating and approval-safety primer into
   session context; it does not read or transmit credentials.
 - Advertising writes are approval-gated. The bundled guidance does not turn a
@@ -138,14 +134,13 @@ boundary before any external spend-changing action.
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
 | OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.syntermedia.ai` |
-| Tool annotations | All 195 discovered tools include `title`, boolean `readOnlyHint`, and boolean `destructiveHint` |
-| Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/contact` |
+| Tool directory | 34 checked-in tool names; live annotations require a fresh authenticated review |
+| Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/support` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
 | Approval boundary | Spend-changing operations require explicit approval; a model response is not approval |
 | Test account | Must be supplied privately by Synter in the submission form |
 
-The plugin manages advertising workflows and can invoke creative tools, so the
-submission must describe those capabilities accurately. Anthropic retains
+The plugin manages advertising workflows, writes text ads, and selects existing assets. The submission must describe those capabilities accurately. Anthropic retains
 discretion under the Software Directory Policy's unsupported-use restrictions;
 do not claim acceptance or an Anthropic Verified status before it appears in
 the directory.

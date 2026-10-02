@@ -5,7 +5,7 @@ description: Decide whether to kill or scale a campaign, ad set, or creative, wi
 
 # Kill or Scale
 
-The two decisions that move an account: cut what is losing, feed what is winning. Both fail when made too early or too hard. Reads are free; pausing or scaling spends differently, so confirm before shipping.
+The two decisions that move an account: cut what is losing, feed what is winning. Both fail when made too early or too hard. Reads do not require approval; pausing or scaling spends differently, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 

@@ -7,15 +7,15 @@ description: Optimize Google Ads Performance Max — asset group structure, asse
 
 PMax gives up query and placement control, so you steer it with the three inputs you still own: assets, audience signals, and the feed. Optimize those; don't fight the black box.
 
-Confirm the account: `list_connected_accounts`. Pull performance with `pull_google_ads_performance` and detail with `run_gaql_query`.
+Confirm the account with `list_connected_accounts`, then use `pull_google_ads_performance` and `audit_account_structure`. Request platform exports when asset or query-level details are missing.
 
 ## 1. Fill every asset slot
 
-Ad Strength tracks asset diversity. Per asset group, target: 10-15 distinct headlines, 4-5 long headlines, 4-5 descriptions, 5+ landscape and 5+ square images, 3+ portrait images, logos, and at least one real video — if you supply none, Google auto-generates one, usually badly. Generate gaps with `generate_text_ad`, `generate_image_ad`, and `generate_video_ad`, and ship via `upload_creative`.
+Inventory approved assets with `list_creative_assets` and write missing text with `create_ad_copy`. Request any missing images, logos, or video from the advertiser. Review asset completeness and brand consistency before following **launch**.
 
 ## 2. Replace Low assets on a cycle
 
-Query `asset_group_asset` with `run_gaql_query` for the `performance_label` on each asset (filter to `PERFORMANCE_MAX` campaigns).
+Review asset performance labels in a Google Ads export if they are absent from the tool results. Do not infer asset-level labels from campaign performance.
 
 - BEST: keep, and spin 2-3 close variations off it.
 - GOOD: keep and monitor.
@@ -26,7 +26,7 @@ Replace 1-2 assets at a time and never wipe a whole asset type at once. Validate
 
 ## 3. Mine search term insights and cut waste
 
-Query `search_term_insight` via `run_gaql_query` (Google only exposes category-level data for PMax). Flag categories with CPA over 2x target or clicks with zero conversions. PMax takes negatives at the account level only — build a list covering job-seeker terms, informational queries ("what is", "how to"), free/coupon hunters, and DIY terms, then manage it with **negative-keywords**. Re-check CPA and impression share 7-14 days after applying.
+Review a platform search-category export for irrelevant or unprofitable traffic. Propose negatives with **negative-keywords**, verify current platform support, and have the account owner apply unsupported changes in the platform UI.
 
 The most expensive miss: brand queries. If insights show a large brand share, PMax is buying conversions your brand campaign gets cheaper — add brand terms as account-level negatives and let the brand campaign recover.
 
@@ -34,16 +34,16 @@ The most expensive miss: brand queries. If insights show a large brand share, PM
 
 Signals guide initial learning; PMax expands beyond them. Stack them by strength:
 
-- Customer match lists first — purchasers and high-LTV segments (build with `build_abm_audience` or `build_lookalike_audience`, attach via `attach_audience`, keep fresh with `sync_audience`).
+- Review customer and high-value purchaser lists with `list_audiences`. Have the account owner create or refresh lists in the platform UI before using them in supported campaign-plan fields.
 - Custom segments from high-intent search terms and competitor URLs (50-100 entries each).
-- Site visitors and cart abandoners from GA4 (`ga4_run_report` to size them).
+- Site visitors and cart abandoners from GA4 (`ga4_get_report` to size them).
 - Interests and demographics last, as seasoning only.
 
 After 30 days, check which segments convert and whether expansion aligns with them. Deeper audience work lives in **audience**.
 
 ## 5. Check channel allocation
 
-Segment by network with `run_gaql_query`. For e-commerce, Shopping should carry most conversions; Search next; Display and YouTube minority shares. Diagnose imbalance:
+Use a platform channel export when the performance response lacks channel breakdowns. Compare conversion value and spend by channel before recommending a reallocation:
 
 - Display bloated with weak CVR: audience signals too loose — add purchase-intent custom segments.
 - Search share mostly brand: negate brand at account level.

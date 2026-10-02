@@ -5,13 +5,13 @@ description: Full-funnel check before pausing, cutting, or killing a paid campai
 
 # Pre-Pause Analysis
 
-Pausing is easy and often wrong. A campaign that looks like a loser is frequently a tracking gap, a geo leak, or an ad set the platform has not finished learning. Run this before any pause so you stop the right thing for the right reason. Reads are free; pausing is a change and waits for explicit approval.
+Pausing is easy and often wrong. A campaign that looks like a loser is frequently a tracking gap, a geo leak, or an ad set the platform has not finished learning. Run this before any pause so you stop the right thing for the right reason. Reads do not require approval; pausing is a change and waits for explicit approval.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Is the data even real
 
-- Confirm conversion tracking is firing and attached to the right action (`ga4_list_conversions`, `verify_pixel_ownership`). A campaign with broken tracking looks dead when it may be converting. See the **conversion-tracking** skill.
+- Confirm conversion tracking is firing and attached to the right action (`ga4_get_conversions`, `get_pixel_health`). A campaign with broken tracking looks dead when it may be converting. See the **conversion-tracking** skill.
 - Check the destination: does the final URL resolve and match the ad's promise. A broken or mismatched landing page kills conversion rate independent of the campaign.
 
 ## 2. Has it had enough time and volume

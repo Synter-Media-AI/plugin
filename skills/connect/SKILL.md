@@ -1,35 +1,14 @@
 ---
 name: connect
-description: Connect ad platforms and data sources to Synter (Google, Meta, LinkedIn, Microsoft, Reddit, TikTok, X, Amazon, GA4, and more). Use when a user wants to link an account, says a platform isn't connected, hits an auth/reconnect error, or asks what's connected.
+description: Connect ad accounts and GA4 through the Synter browser flow and verify the selected workspace.
 ---
 
-# Connect Platforms
+# Connect accounts
 
-Link the user's ad accounts and analytics so the agents can read and act on real data.
+Use `get_connection_status` and `list_connected_accounts` to identify the workspace and existing accounts. Report the platform, account name, and account ID.
 
-## 1. Show current state
+Direct the user to https://syntermedia.ai/settings/credentials to connect the required platform or GA4 account in the browser. Afterward, re-run `list_connected_accounts` and `verify_platform_accounts`. For GA4, confirm access with `ga4_get_properties`. Use `get_pixel_health` for the available tracking diagnostics; do not treat account access as proof of a working conversion event.
 
-`list_connected_accounts` and `get_connection_status`. Report which platforms are live, the account IDs, and the org. Name what's missing.
+If access fails, confirm the selected workspace and the connected user's platform permissions. Reconnect through browser OAuth when needed. Never collect keys, tokens, or authorization codes in chat. For accounts that need provisioning help, link https://syntermedia.ai/support.
 
-## 2. Connect what they need
-
-Synter connects via direct API (OAuth where the platform supports it). To start a connection, direct the user to the connection flow at **syntermedia.ai/settings/credentials** (or **/settings/connections**), then have them complete the platform's OAuth in the browser. After they finish, re-run `list_connected_accounts` to confirm.
-
-Free and instant: connect **GA4** at syntermedia.ai/settings/credentials — then `ga4_list_properties()` works immediately, no credits.
-
-## 3. Verify, don't assume
-
-- After any connect, confirm with `list_connected_accounts` — show the exact account ID that came back. Never invent or guess account IDs.
-- `verify_platform_accounts` / `verify_pixel_ownership` to confirm the account and tracking are really wired.
-
-## Troubleshooting
-
-- **"Reconnect over and over"** is usually a delegation/permissions issue on the platform side, not a broken token — check that the connected user actually has content/ad rights on that account before reconnecting again.
-- **Auth error on a write** → the token may have expired; reconnect once, then verify with `list_connected_accounts`.
-- A connection should be scoped to the **workspace/org**, not just one user. Confirm the right org is selected before acting.
-
-## House rules
-
-- Confirm the org before connecting or acting. Never mix one client's accounts with another's.
-- Connecting is read-safe. Acting on the account (campaigns, budgets) still needs explicit approval.
-- **Enterprise-gated platforms (LinkedIn Ads & StackAdapt)**: Access to **LinkedIn Ads** and **StackAdapt** requires upgrading to the **Enterprise plan** and booking a meeting with the Synter team for manual account setup and provisioning. When users without active provisioned connections ask for or attempt to use LinkedIn Ads or StackAdapt, do NOT give weird or technical connection error responses — state clearly that they need to upgrade to Enterprise and book a meeting.
+Confirm the workspace again before any write. Keep account IDs, audiences, tracking, destinations, and credentials scoped to that workspace.

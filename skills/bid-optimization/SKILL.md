@@ -5,13 +5,13 @@ description: Recommend and apply bid and bid-strategy changes from performance d
 
 # Bid Optimization
 
-Move bids toward the target CPA or ROAS using real performance, not guesses. Reads are free; changing bids spends differently, so confirm before shipping.
+Move bids toward the target CPA or ROAS using real performance, not guesses. Reads do not require approval; changing bids spends differently, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 
 ## 1. Read performance with enough data
 
-Pull recent performance per campaign and, where available, per ad group and segment: `pull_<platform>_ads_performance(days=...)` or `run_gaql_query` for Google detail. Do not act on thin data; a handful of conversions is noise. State the window and volume you based the call on.
+Pull recent campaign performance with `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, or `pull_reddit_ads_performance`. Use segment detail only if returned; request platform exports for missing breakdowns. State the period and conversion volume before making a recommendation.
 
 ## 2. Diagnose before you move
 

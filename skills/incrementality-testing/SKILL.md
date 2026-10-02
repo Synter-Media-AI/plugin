@@ -11,7 +11,7 @@ Start with `measure_incrementality` where the platform and data support it; desi
 
 ## 1. Define the question
 
-Pick one testable claim: channel incrementality ("does Display drive anything?"), budget incrementality ("does doubling spend double conversions?"), or tactic incrementality ("is retargeting real?"). One variable per test. Pull the baseline first: `pull_<platform>_ads_performance` for spend and attributed conversions, `ga4_run_report` for a platform-neutral conversion count.
+Pick one testable claim: channel incrementality ("does Display drive anything?"), budget incrementality ("does doubling spend double conversions?"), or tactic incrementality ("is retargeting real?"). One variable per test. Pull the baseline first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for spend and attributed conversions, `ga4_get_report` for a platform-neutral conversion count.
 
 ## 2. Choose the method
 
@@ -28,7 +28,7 @@ Pick one testable claim: channel incrementality ("does Display drive anything?")
 
 ## 4. Run it clean
 
-Freeze everything else: no creative swaps, no budget moves, no new campaigns in test or control markets mid-flight. Use `list_campaigns` to confirm nothing else is live in the control geos, and `set_spend_alert` to catch drift. Measure conversions from a neutral source (GA4), not the tested platform.
+Keep other inputs stable during the test: avoid creative swaps, unrelated budget changes, or new campaigns in test/control markets. Read `list_campaigns` regularly to catch drift and measure outcomes with GA4. Configure any automated alerts in the platform UI.
 
 ## 5. Analyze
 

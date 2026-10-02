@@ -5,7 +5,7 @@ description: Structure and read creative A/B tests across platforms — set up v
 
 # Creative Testing
 
-Test to learn, then scale the winner. Most "winners" called early are noise. Reads are free; launching variants spends money, so confirm before shipping.
+Test to learn, then scale the winner. Most "winners" called early are noise. Reads do not require approval; launching variants spends money, so confirm before shipping.
 
 Confirm the account: `list_connected_accounts`.
 
@@ -15,7 +15,7 @@ Change one variable per test (hook, image, headline, offer, format) so the resul
 
 ## 2. Set it up cleanly
 
-Build variants with the **creative** skill or `generate_image_ad` / `generate_video_ad` / `generate_text_ad`, ship them in the same ad group / ad set so they compete on equal footing, and give each enough budget and audience to gather signal. Run **campaign-preflight** before launch.
+Write text variants with `create_ad_copy` and select existing approved visual assets with `list_creative_assets`. Keep the comparison controlled and give each variant enough data. Follow **launch** and **campaign-preflight** before deploying a test.
 
 ## 3. Wait for enough data
 
@@ -25,7 +25,7 @@ Build variants with the **creative** skill or `generate_image_ad` / `generate_vi
 
 ## 4. Read and act
 
-Pull results per variant: `pull_<platform>_ads_performance(level="ad")`. Pick the winner on the metric that matters (usually CPA or ROAS, not CTR). Scale it with the **optimize** skill, retire the losers, and feed what you learned into the next test.
+Pull results per variant: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`). Pick the winner on the metric that matters (usually CPA or ROAS, not CTR). Scale it with the **optimize** skill, retire the losers, and feed what you learned into the next test.
 
 ## Rules
 

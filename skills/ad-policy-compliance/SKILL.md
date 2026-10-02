@@ -67,11 +67,11 @@ UNIVERSAL CHECKS (all platforms):
 
 | Violation | Example | Fix |
 |-----------|---------|-----|
-| Excessive capitalization | "FREE SHIPPING on ALL ORDERS" | "Free Shipping on All Orders" |
+| Excessive capitalization | "FAST SHIPPING on ALL ORDERS" | "Fast Shipping on All Orders" |
 | Excessive punctuation | "Amazing Deal!!!" | "Amazing Deal" |
 | Gimmicky use of symbols | "★★★ Best CRM ★★★" | Remove symbols from ad text |
 | Misleading ad | "Click Here ↓↓↓" | Use descriptive CTA |
-| Non-standard spacing | "F R E E" | "Free" |
+| Non-standard spacing | "S A L E" | "Sale" |
 | Phone number in ad text | "Call 1-800-555-1234" | Use call extension instead |
 | Unclear relevance | Ad about shoes → LP about insurance | Match ad to LP content |
 
@@ -136,7 +136,7 @@ CLAIMS THAT TRIGGER REVIEW:
 
 SAFE ALTERNATIVES:
   "Best" → "Top-rated" or "Award-winning" (with award cited)
-  "Guaranteed" → "Risk-free trial" or "Money-back guarantee"
+  "Guaranteed" → a specific, substantiated description of the offer
   "#1" → "Leading" or "Trusted by [X,000]+"
   "Instant results" → "See results in as little as [timeframe]"
 ```
@@ -279,7 +279,7 @@ REQUIRED:
   ✅ Must not mimic TikTok UI elements (fake like buttons, etc.)
   ✅ Landing page must be functional and match ad claims
   ✅ Product availability must match targeted regions
-  ✅ Accurate pricing (no hidden fees)
+  ✅ Accurate offer terms (no omitted conditions)
 
 CREATIVE RULES:
   ✅ Sound is expected (unlike other platforms) — include audio
@@ -567,46 +567,8 @@ X (TWITTER):
 
 ## Examples
 
-### Example: Financial Services Ad Policy Review
+### Example: Campaign policy review
 
-```markdown
-# Policy Review: Acme Loans Google Ads Campaign
+Record the advertiser, platform, final ad text, destination, and evidence supporting each claim. Flag unsupported promises or missing offer conditions. Ask the advertiser for verified terms instead of filling in examples that could be mistaken for an actual offer.
 
-## Ad Copy Under Review
-Headline 1: "Get a Personal Loan in Minutes"
-Headline 2: "Rates from 4.99% APR"
-Headline 3: "No Hidden Fees — Apply Now"
-Description: "Borrow $5K-$50K with competitive rates. 
-             Quick approval, funds in 24 hours."
-
-## Findings
-
-### ✅ PASS
-- APR mentioned in headline (4.99%)
-- No guaranteed approval language
-- No income claims
-- Professional tone
-
-### ⚠️ WARNINGS
-1. "Rates from 4.99% APR" — Landing page must show:
-   - APR range (4.99% - X.XX%)
-   - Representative example with total repayment
-   - Terms and conditions link
-   
-2. "Funds in 24 hours" — Must be accurate:
-   - If conditional, add "subject to approval" to LP
-   - Cannot guarantee timing in ad without qualification
-
-### ❌ REQUIRED FIXES
-1. Landing page missing "Representative APR Example" 
-   (required by Google for loan advertising)
-   Fix: Add example: "$10,000 loan at 7.99% APR, 
-   36 monthly payments of $313.11, total repayment $11,271.96"
-
-2. Google Ads financial services verification not completed
-   Fix: Complete advertiser identity verification at
-   ads.google.com/nav/selectaccount → Verification
-
-## Verdict: CONDITIONAL PASS
-Fix landing page disclaimer + complete verification before launch.
-```
+Return the checks passed, the unresolved issues, and the changes required before submission. A policy review does not guarantee platform acceptance or authorize deployment.

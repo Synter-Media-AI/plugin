@@ -6,8 +6,9 @@ Email **joel@synterai.com** with the subject "Security: Synter plugin". Please i
 
 ## What this plugin does
 
-- It contains Markdown skills, agents, and rules, plus one remote MCP server entry. It ships no executable hooks for Cursor.
-- The MCP server is Synter's hosted server over HTTPS. Cursor authenticates with browser OAuth (scopes `tools:read` and `tools:write`). An API key is an optional fallback for headless use and is never stored in this repo.
+The plugin ships Markdown skills, agents, and rules. Cursor connects to `https://mcp.synterai.com`; Claude connects to `https://mcp.syntermedia.ai`. Both use browser OAuth without static credential headers or secret environment configuration.
+
+Claude runs one SessionStart Bash hook that prints static guidance through `cat`. It does not read credentials or make network requests. Cursor declares no executable hooks. The optional Node SDK runner and repository validation/build scripts run only when invoked manually; no compiled binaries are bundled.
 
 ## Spend and write safety
 
@@ -16,4 +17,4 @@ Email **joel@synterai.com** with the subject "Security: Synter plugin". Please i
 
 ## Data handling
 
-Synter processes ad-account data only to perform the actions you request. See the [Privacy Policy](https://syntermedia.ai/privacy), [Terms](https://syntermedia.ai/terms), and [Security overview](https://syntermedia.ai/security).
+For service data handling, see the [Privacy Policy](https://syntermedia.ai/privacy), [Terms](https://syntermedia.ai/terms), and [Security overview](https://syntermedia.ai/security).

@@ -11,7 +11,7 @@ Confirm the account: `list_connected_accounts`.
 
 ## 1. Get the cross-platform view
 
-`get_attribution` for Synter's cross-platform picture, and `reconcile_platforms` to line up what each platform reports against a common source. Pull each platform's own numbers (`pull_<platform>_ads_performance`) and GA4 (`ga4_run_report`) so you can see where they disagree and why.
+Use `get_attribution` for the cross-platform attribution view and `get_spend_reconciliation` for spend differences. Compare conversion counts from `ga4_get_report` with `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, and `pull_reddit_ads_performance` for connected accounts. State what each source measures before interpreting differences.
 
 ## 2. Read the discrepancy honestly
 

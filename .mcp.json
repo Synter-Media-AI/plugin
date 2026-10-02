@@ -2,8 +2,8 @@
   "mcpServers": {
     "synter": {
       "type": "http",
-      "url": "https://mcp.synterai.com",
-      "description": "Synter Advertising Platform MCP — cross-channel ad management for AI agents. Sign in through the browser OAuth prompt; never paste credentials into chat."
+      "url": "https://mcp.syntermedia.ai",
+      "description": "Synter Advertising Platform MCP \u2014 cross-channel ad management for AI agents. Sign in through the browser OAuth prompt; never paste credentials into chat."
     }
   }
 }

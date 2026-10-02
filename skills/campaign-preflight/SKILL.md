@@ -5,7 +5,7 @@ description: Pre-launch checks for an ad campaign — structure, conversion trac
 
 # Campaign Pre-Flight
 
-Catch the mistakes that waste budget before a campaign goes live. Reads are free. Run the full checklist, report pass/warn/fail per item, and fix issues before enabling. Nothing that spends money ships without explicit approval.
+Catch the mistakes that waste budget before a campaign goes live. Reads do not require approval. Run the full checklist, report pass/warn/fail per item, and fix issues before enabling. Nothing that spends money ships without explicit approval.
 
 Confirm the account first: `list_connected_accounts`. Use the real account and campaign IDs the tools return.
 
@@ -13,8 +13,8 @@ Confirm the account first: `list_connected_accounts`. Use the real account and c
 
 A campaign that looks Active does not serve if pieces are missing. Read the real structure and confirm every level exists and is enabled:
 
-- **Google:** `run_gaql_query` for campaigns, ad groups, ads, and keywords. Confirm ad groups exist, each has enabled ads, Search has keywords, and a budget is set.
-- **Other platforms:** `list_campaigns(platform=...)` plus `pull_<platform>_ads_performance` and the matching platform playbook skill to confirm ad sets/ad groups, ads, and budget.
+- Use `audit_account_structure` and `get_campaign_plan` for available structure and asset details. Run `run_launch_preflight` on the plan. Confirm required ad groups, keywords, budgets, and assets only where the returned evidence supports them; obtain platform exports for missing detail.
+- **Other platforms:** `list_campaigns(platform=...)` plus the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) and the matching platform playbook skill to confirm ad sets/ad groups, ads, and budget.
 
 If a required level is missing, do not enable. Fix it first.
 
@@ -22,7 +22,7 @@ If a required level is missing, do not enable. Fix it first.
 
 Without tracking, the spend is blind and smart bidding cannot work.
 
-- `ga4_list_conversions` to confirm conversion actions exist. `get_gtm_tag` / `list_gtm_tags` to confirm the tag is present and published. `verify_pixel_ownership` to confirm the platform pixel is really wired.
+- Use `ga4_get_conversions`, `ga4_get_report`, and `get_pixel_health` for available conversion evidence. A configured action does not prove that a tag is firing; mark missing verification explicitly.
 - No tracking on a conversion-optimized campaign is a stop. Start on a click or traffic goal until conversions are verified (roughly 15 to 30 conversions before smart bidding has enough signal).
 
 ## 3. UTMs on every ad (blocking)
@@ -48,7 +48,7 @@ A campaign with no location criteria serves everywhere, including low-quality an
 
 A structurally complete campaign can still launch handicapped: an RSA created with the platform-minimum 3 headlines and 2 descriptions is accepted by the API but scores "Poor" on Google Ad Strength and gets throttled in the auction.
 
-- Read each ad's actual asset counts (Google: `run_gaql_query` on `ad_group_ad` with the RSA headline/description fields). Compare against the floor: **11 headlines / 4 descriptions minimum, 15 / 4 recommended** per RSA.
+- Read asset counts from `get_campaign_plan`, `list_creative_assets`, or a platform export. Compare each RSA against the plugin’s floor of 11 headlines and 4 descriptions, with 15/4 recommended. Do not claim a count you could not inspect.
 - Check Google's Ad Strength rating where available. **POOR or AVERAGE = fix the assets before launch**, not after. Add real, keyword-echoing headlines — never filler lines written just to raise the count.
 - Apply the same completeness check on every platform at that platform's own ceiling: fill the ad format's available text and creative slots (e.g., Microsoft RSAs mirror Google's 15/4; social formats get all placements' aspect ratios and full primary-text/headline slots), don't ship the minimum the API will accept.
 

@@ -50,9 +50,9 @@ Test hooks systematically: same body, 3-5 different first-3-second openings, ide
 
 ## 5. Produce and ship
 
-- Generate drafts with `generate_video_ad` (or `generate_ugc_ad` for creator-style delivery — see **ugc-creative-brief** for that format's rules).
-- Upload finals with `upload_creative`; confirm what is actually live with `get_ad_readback`.
-- Read results: `pull_<platform>_ads_performance` for CTR and CPA, `tiktok_ads_get_insights` for TikTok video metrics (watch time, completion). Judge hooks on retention, not just CTR.
+- Draft the written script and shot list in the conversation. Select existing advertiser assets with `list_creative_assets`; the advertiser supplies final media.
+- Confirm final asset IDs and campaign scope, then follow **launch** for supported plan changes and approval.
+- Review CTR and CPA with supported platform performance tools. Request a platform export for watch-time, completion, and retention metrics when unavailable; do not infer hook retention from clicks.
 
 ## Rules
 

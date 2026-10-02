@@ -9,7 +9,7 @@ Set expectations and split budget using how each platform typically performs for
 
 ## Use the account's own data first
 
-Before quoting a range, pull what this account already does: `pull_<platform>_ads_performance(days=...)` and `forecast_campaign`. Real history for this advertiser is the truth. Benchmarks are for platforms not yet run or for a directional split.
+Before quoting a range, pull what this account already does: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) and `forecast_campaign`. Real history for this advertiser is the truth. Benchmarks are for platforms not yet run or for a directional split.
 
 ## How platforms typically behave
 
@@ -29,3 +29,5 @@ Weight toward demand capture (search) for immediate conversions and demand gener
 - Never present a benchmark as a guaranteed result. State it as a typical range and name the source of any real number.
 - Prefer the account's own history over any external figure.
 - If you do not have a real number, say so; a plain true line beats an invented impressive one.
+
+Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.

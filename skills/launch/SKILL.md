@@ -17,17 +17,17 @@ Get the brief in plain English, then pin down what you need:
 - **Budget** — daily/total, and the **target CPA/ROAS**.
 - **Landing page / final URL** and the offer.
 
-Confirm the account: `list_connected_accounts`. Confirm conversion tracking exists: `ga4_list_conversions` / `get_gtm_tag` / `verify_pixel_ownership`. No tracking → fix that before launching, or the spend is blind.
+Confirm the account with `list_connected_accounts`. Check conversion evidence with `ga4_get_conversions`, `ga4_get_report`, and `get_pixel_health`. Resolve missing verification before launching.
 
 ## 2. Plan it
 
-Use `create_campaign_plan` to draft structure (campaigns → ad sets → ads), then `forecast_campaign` for reach/CPM/CPC/CPA projections. For the channel mix and budget split, lean on platform cost benchmarks and a clear rationale.
+Use `create_campaign_plan` to draft structure (campaigns → ad sets → ads), add supported entities with `upsert_plan_entity`, then `forecast_campaign` for reach/CPM/CPC/CPA projections. For the channel mix and budget split, lean on platform cost benchmarks and a clear rationale.
 
-Creative: run the **creative** skill, or `generate_image_ad` / `generate_text_ad` / `generate_video_ad`. Apply brand voice (see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`).
+Write text with `create_ad_copy` and select existing approved assets with `list_creative_assets`. Use the verified advertiser’s voice, logos, colors, and destination; see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
 
 ## 3. Preflight — before anything goes live
 
-Walk the checklist and report pass/fail:
+Read the complete plan with `get_campaign_plan` and run `run_launch_preflight`. Resolve failures, then show the exact final plan and report pass/fail:
 
 - Geo targeting correct, exclusion lists applied.
 - Conversion tracking firing and attached to the right action.
@@ -39,7 +39,7 @@ Walk the checklist and report pass/fail:
 
 Show the full plan — platform, audience, budget, creative, projected CPA — and ask for a clear go. Only then:
 
-- `create_campaign_for_audience(...)` for an audience-targeted launch, or `execute_campaign_plan` / `enable_campaign` for a built plan.
+- Record the user’s approval with `approve_campaign_plan`, then use `execute_campaign_plan`. Check `get_plan_execution` and, if a job ID is returned, `get_job_status`. Use `enable_campaign` only when activation is within the user-approved scope.
 - For multi-platform, ship each platform and confirm each one back with its real campaign ID.
 
 Then confirm live: `list_campaigns(platform=...)` and report the IDs created. "Created" and "live and spending" are different claims — verify before you say it's running.

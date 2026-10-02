@@ -9,11 +9,11 @@ Pull every platform, reconcile, and tell the story straight.
 
 ## 1. Gather
 
-Pull the period the user wants across all connected platforms (`pull_<platform>_ads_performance`). Add analytics ground truth: `ga4_run_report` for sessions/conversions, `get_attribution` for conversion paths.
+Pull the period the user wants across all connected platforms (the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`)). Add analytics ground truth: `ga4_get_report` for sessions/conversions, `get_attribution` for conversion paths.
 
 ## 2. Reconcile
 
-Use `reconcile_platforms` so platform-reported conversions line up with analytics — platforms over-claim. Note dedup and any tracking gaps (a 403 read error is not the same as broken tracking; say which it is).
+Use `get_spend_reconciliation` to compare spend records. Compare conversion counts separately with `ga4_get_report` and `get_attribution`, stating the attribution model and window. Flag deduplication uncertainty and access failures rather than treating them as verified tracking defects.
 
 ## 3. Tell the story
 
@@ -28,7 +28,7 @@ For an exec/board audience, keep it to the narrative and the numbers that matter
 
 ## 4. Deliver
 
-Inline by default. For a shareable artifact, `create_google_doc` / `create_google_sheet` / `create_document`, or send to the team via `send_slack_message`.
+Deliver a copyable narrative and tables in the conversation. Exporting documents or sending messages is outside this plugin’s tool surface.
 
 ## House rules
 
