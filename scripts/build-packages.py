@@ -36,12 +36,13 @@ def collect(root, target):
     files = {}
     def include(relative):
         source = root / relative
-        if source.is_symlink() or not source.is_file():
+        relative_path = Path(relative)
+        if any((root / part).is_symlink() for part in [relative_path, *relative_path.parents]) or not source.is_file():
             raise ValueError('Missing or unsafe package file: ' + relative)
         files[relative] = source.read_bytes()
     for relative in ['LICENSE', 'assets/logo.png', 'context/brand-and-safety.md', 'tools/directory-tools.json']:
         include(relative)
-    for relative in ['skills'] + (['agents', 'output-styles'] if target == 'claude' else []):
+    for relative in ['skills'] + (['agents', 'output-styles'] if target in ['claude', 'claude-directory'] else []):
         for source in sorted((root / relative).rglob('*')):
             if source.is_symlink():
                 raise ValueError('Symlinks are not allowed in package sources')
@@ -53,6 +54,17 @@ def collect(root, target):
         include('.claude-plugin/plugin.json')
         include('.mcp.json')
         include('scripts/session-context.sh')
+    elif target == 'claude-directory':
+        manifest.pop('hooks', None)
+        files['.claude-plugin/plugin.json'] = encoded(manifest)
+        include('.mcp.json')
+        for source, destination in [('README.md', 'README.md'), ('help.md', 'skills/help/SKILL.md')]:
+            path = root / 'config/claude-directory' / source
+            relative_path = path.relative_to(root)
+            if any((root / part).is_symlink() for part in [relative_path, *relative_path.parents]) or not path.is_file():
+                raise ValueError('Missing or unsafe directory documentation')
+            files[destination] = path.read_bytes()
+        validate_claude_directory(files)
     elif target in ['openai', 'openai-new-draft']:
         mcp = json.loads((root / 'mcp.json').read_text())
         mcp['mcpServers']['synter']['extensions'] = {'com.openai': {'auth': OPENAI_AUTH}}
@@ -74,6 +86,65 @@ def collect(root, target):
     return version, files
 
 
+def validate_claude_directory(files):
+    """Reject local execution capabilities in the directory-specific payload."""
+    exact = {'.claude-plugin/plugin.json', '.mcp.json', 'LICENSE', 'README.md',
+             'assets/logo.png', 'tools/directory-tools.json', 'context/brand-and-safety.md'}
+    for name, content in files.items():
+        if name not in exact and not re.fullmatch(r'skills/[a-z0-9][a-z0-9_-]*/SKILL\.md|(?:agents|output-styles)/[a-z0-9][a-z0-9_-]*\.md', name):
+            raise ValueError('Unapproved directory file: ' + name)
+        if content.startswith(b'version https://git-lfs.github.com/spec/'):
+            raise ValueError('Git LFS pointers are not package contents')
+        if name.endswith('.md'):
+            text = content.decode()
+            if re.search(r'!`|```(?:bash|sh|shell|python|javascript|js)\b|\b(?:Bash|Shell)\s*\(|(?:^|\n|`)\s*(?:bash|sh|zsh|python\d*|node|npx|curl|wget|chmod)\b|(?:allowed-tools|tools):[^\n]*(?:Bash|Shell|Terminal)', text):
+                raise ValueError('Local execution instruction in ' + name)
+    manifest = json.loads(files['.claude-plugin/plugin.json'])
+    if 'hooks' in manifest:
+        raise ValueError('Directory manifest must not declare hooks')
+    if set(manifest) - {'$schema', 'name', 'displayName', 'description', 'version', 'license',
+                        'author', 'homepage', 'repository', 'keywords'}:
+        raise ValueError('Unreviewed directory manifest capability')
+    servers = json.loads(files['.mcp.json']).get('mcpServers', {})
+    if (set(servers) != {'synter'} or set(servers['synter']) != {'type', 'url', 'description'}
+            or servers['synter']['type'] != 'http'
+            or servers['synter']['url'] != 'https://mcp.synterai.com'
+            or not isinstance(servers['synter']['description'], str)):
+        raise ValueError('Directory supports only the declared remote HTTPS MCP server')
+    if len(files['README.md'].decode().split()) < 40:
+        raise ValueError('Directory README must explain the product')
+
+
+def sync_claude_directory(root=ROOT, check=True):
+    """Materialize or verify the committed source folder without touching other packages."""
+    _, files = collect(root, 'claude-directory')
+    destination = root / 'packages/claude-directory'
+    if destination.is_symlink() or (root / 'packages').is_symlink():
+        raise ValueError('Directory destination must be a regular folder')
+    existing = {}
+    if destination.exists():
+        for path in destination.rglob('*'):
+            if path.is_symlink():
+                raise ValueError('Directory package cannot contain symlinks')
+            if path.is_file():
+                if path.stat().st_mode & 0o111:
+                    raise ValueError('Directory package cannot contain executable files')
+                existing[path.relative_to(destination).as_posix()] = path.read_bytes()
+    if check:
+        if existing != files:
+            raise ValueError('Stale directory source; run build-packages.py --write-claude-directory')
+    else:
+        # Never silently delete unexpected files from a checked-in source folder.
+        if set(existing) - set(files):
+            raise ValueError('Unexpected files in directory source; inspect before regenerating')
+        for name, content in files.items():
+            path = destination / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+            path.chmod(0o644)
+    return files
+
+
 def verify_archive(path, expected, target):
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
@@ -90,11 +161,16 @@ def verify_archive(path, expected, target):
             extension = manifest['extensions']['com.openai']
             if extension.get('hooks') or extension.get('apps') or any(n.startswith(('.claude-plugin/', 'hooks/', 'scripts/')) for n in names):
                 raise ValueError('OpenAI public package must not contain lifecycle hooks')
+        if target == 'claude-directory':
+            validate_claude_directory({name: archive.read(name) for name in names})
+            if any((info.external_attr >> 16) & 0o111 for info in archive.infolist()):
+                raise ValueError('Directory archive contains executable files')
         if archive.testzip() is not None:
             raise ValueError('Archive CRC mismatch')
 
 
 def build(root=ROOT, include_new_draft=False):
+    sync_claude_directory(root)
     subprocess.run(['node', str(root / 'scripts/validate-manifests.js')], cwd=root, check=True)
     subprocess.run(['node', str(root / 'scripts/check-directory-tools.js')], cwd=root, check=True)
     output = root / 'dist'
@@ -102,7 +178,7 @@ def build(root=ROOT, include_new_draft=False):
     source_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
     dirty = bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True).strip())
     results = []
-    for target in ['claude', 'openai'] + (['openai-new-draft'] if include_new_draft else []):
+    for target in ['claude', 'claude-directory', 'openai'] + (['openai-new-draft'] if include_new_draft else []):
         version, files = collect(root, target)
         filename = f'synter-{target}-plugin-{version}.zip'
         archive_path = output / filename
@@ -124,5 +200,11 @@ def build(root=ROOT, include_new_draft=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--include-new-draft', action='store_true', help='Also prepare a canonical synter OpenAI archive; does not register or upload a plugin')
+    parser.add_argument('--write-claude-directory', action='store_true', help='Regenerate the checked-in hook-free directory source folder')
+    parser.add_argument('--check-claude-directory', action='store_true', help='Verify the checked-in directory source without rebuilding archives')
     args = parser.parse_args()
-    print(json.dumps(build(include_new_draft=args.include_new_draft), indent=2))
+    if args.write_claude_directory or args.check_claude_directory:
+        files = sync_claude_directory(check=not args.write_claude_directory)
+        print(f'Verified directory source: {len(files)} files')
+    else:
+        print(json.dumps(build(include_new_draft=args.include_new_draft), indent=2))

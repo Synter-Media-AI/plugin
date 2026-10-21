@@ -34,6 +34,8 @@ jobs:
         run: |
           npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
           npx -y @anthropic-ai/claude-code@2.1.263 plugin validate .claude-plugin/plugin.json --strict
+          python3 scripts/build-packages.py --check-claude-directory
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate packages/claude-directory --strict
 
       - name: Verify release tag matches the package
         env:
@@ -61,6 +63,7 @@ jobs:
         with:
           files: |
             dist/synter-claude-plugin-${{ steps.version.outputs.version }}.zip
+            dist/synter-claude-directory-plugin-${{ steps.version.outputs.version }}.zip
             dist/synter-openai-plugin-${{ steps.version.outputs.version }}.zip
             dist/*.sha256
             dist/package-manifest.json
