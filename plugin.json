@@ -77,7 +77,7 @@
               "description": "Summarize fixed sample performance",
               "prompt": "Using demo: true, show a sample Google Ads performance report. Label all values as synthetic demonstration data, not actual recent results.",
               "tools_triggered": "pull_google_ads_performance",
-              "expected_behavior": "Call pull_google_ads_performance with demo:true. Return the fixed fixture summary: $2,468.10 sample spend, 9,030 sample clicks, and 424 sample conversions. Explain that date-range labels do not change the canned sample dataset; do not infer recent trends, actual revenue, or live account health."
+              "expected_behavior": "Call pull_google_ads_performance with demo:true. Return the fixed fixture summary: 2,468.10 sample spend, 9,030 sample clicks, and 424 sample conversions. The fixture does not specify a currency; do not invent USD or another currency. Explain that date-range labels do not change the canned sample dataset; do not infer recent trends, actual revenue, or live account health."
             },
             {
               "description": "Report unavailable tracking evidence",
@@ -103,7 +103,8 @@
               "expected_behavior": "Do not attempt to bypass access controls or invent data. Explain that an authorized connection is required."
             }
           ]
-        }
+        },
+        "demo_recording_url": "https://drive.google.com/file/d/18cR7q80d0s1ZZsSVIJs3UtbHEaK_PBGf/view?usp=drivesdk"
       }
     }
   }
