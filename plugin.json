@@ -56,34 +56,34 @@
         "test_cases": {
           "positive": [
             {
-              "description": "Discover connected accounts",
-              "prompt": "Show the advertising accounts connected to my Synter workspace.",
-              "tools_triggered": "get_connection_status, list_connected_accounts",
-              "expected_behavior": "Report the selected workspace and returned account names and IDs. Do not fabricate missing connections."
+              "description": "Identify reviewer sandbox accounts",
+              "prompt": "List the accounts in this review workspace. Identify sandbox entries and do not treat an ACTIVE status as proof that a live ad provider is connected.",
+              "tools_triggered": "list_connected_accounts",
+              "expected_behavior": "Return only the review workspace's two Acme Outfitters (Sandbox) entries for Google and Meta. Explain that these sandbox identifiers are not live-provider credentials; do not call a real provider report with them."
             },
             {
-              "description": "List campaigns",
-              "prompt": "List campaigns for my connected Google Ads account. Do not change them.",
-              "tools_triggered": "list_connected_accounts, list_campaigns",
-              "expected_behavior": "Use an accessible account ID and return campaign state. Report a missing connection if no Google Ads account is available."
+              "description": "Show sample connection inventory",
+              "prompt": "Show Synter's built-in sample connection inventory using demo: true. Clearly label it as demonstration data.",
+              "tools_triggered": "get_connection_status",
+              "expected_behavior": "Call get_connection_status with demo:true. Return the three DEMO_READY sample entries for Google, Meta, and LinkedIn. Distinguish this fixed sample inventory from the sandbox accounts stored in the review workspace."
             },
             {
-              "description": "Read recent performance",
-              "prompt": "Show Google Ads performance for the last seven days in my selected account.",
-              "tools_triggered": "list_connected_accounts, pull_google_ads_performance",
-              "expected_behavior": "State the date range and returned metrics, including any missing data or provider error. Do not change campaigns."
+              "description": "List sample Google campaigns",
+              "prompt": "Using demo: true, list the built-in sample Google campaigns. Do not access or change live accounts.",
+              "tools_triggered": "list_campaigns",
+              "expected_behavior": "Call list_campaigns with platform:google and demo:true. Return the three demo_google_* campaigns, preserving their sample status and identifying the result as synthetic demonstration data."
             },
             {
-              "description": "Inspect tracking health",
-              "prompt": "Check conversion tracking health for my connected accounts.",
-              "tools_triggered": "list_connected_accounts, get_pixel_health",
-              "expected_behavior": "Report available tracking diagnostics and their scope without claiming conversions or revenue not returned by the tools."
+              "description": "Summarize fixed sample performance",
+              "prompt": "Using demo: true, show a sample Google Ads performance report. Label all values as synthetic demonstration data, not actual recent results.",
+              "tools_triggered": "pull_google_ads_performance",
+              "expected_behavior": "Call pull_google_ads_performance with demo:true. Return the fixed fixture summary: $2,468.10 sample spend, 9,030 sample clicks, and 424 sample conversions. Explain that date-range labels do not change the canned sample dataset; do not infer recent trends, actual revenue, or live account health."
             },
             {
-              "description": "Prepare ad copy",
-              "prompt": "Draft three Google search ad variations for my selected advertiser using its existing brand and destination. Do not publish.",
-              "tools_triggered": "list_connected_accounts, create_ad_copy",
-              "expected_behavior": "Use the verified advertiser context, ask for missing offer or destination details, and return draft copy without launching or changing campaigns."
+              "description": "Report unavailable tracking evidence",
+              "prompt": "Check stored pixel health for this review workspace. If there are no configured sites or events, say tracking is unverified and make no changes.",
+              "tools_triggered": "get_pixel_health",
+              "expected_behavior": "Call get_pixel_health. The current reviewer workspace returns sites:[] and attribution_model:null. State that tracking is unverified because there is no site/event evidence, not that tracking is healthy or failing."
             }
           ],
           "negative": [
