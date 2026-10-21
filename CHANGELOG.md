@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.1] - Unreleased
+
+- Add a portable OpenAI package targeting the existing Synter Ads MCP draft,
+  with directory metadata, OAuth discovery, and reviewer test cases.
+- Preserve the four existing creative, page, visibility, and creator-brief skill
+  entry points with scopes limited to available tools and explicit production gaps.
+- Use canonical Synter domains in active client manifests and onboarding links.
+- Build separate Claude and OpenAI archives from explicit runtime files, verify
+  every archived byte, and emit source identity and SHA-256 checksums.
+- Keep the Claude session primer out of the public OpenAI archive.
+
+
 All notable changes to the Synter plugin are documented here. This project follows [semantic versioning](https://semver.org).
 
 ## [1.2.0] - 2026-10-02

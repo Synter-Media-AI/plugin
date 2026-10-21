@@ -32,6 +32,8 @@ const MANIFEST_PATHS = [
   '.cursor-plugin/marketplace.json',
   '.mcp.json',
   'mcp.json',
+  '.cursor-mcp.json',
+  'plugin.json',
 ];
 
 const manifests = {};
@@ -111,11 +113,10 @@ if (fs.existsSync(SKILLS_DIR)) {
   errors.push('skills/: directory not found');
 }
 
-// (d) Each client has its own OAuth-only remote URL. Claude must match the
-// connector under review; Cursor points at the Synter AI endpoint.
+// (d) Client-specific HTTP syntax remains separate from the portable MCP schema.
 for (const [configPath, expectedUrl] of [
-  ['.mcp.json', 'https://mcp.syntermedia.ai'],
-  ['mcp.json', 'https://mcp.synterai.com'],
+  ['.mcp.json', 'https://mcp.synterai.com'],
+  ['.cursor-mcp.json', 'https://mcp.synterai.com'],
 ]) {
   const config = manifests[configPath];
   const servers = config && config.mcpServers;
@@ -134,13 +135,49 @@ for (const manifestPath of ['.claude-plugin/plugin.json', '.cursor-plugin/plugin
   if (manifest.userConfig || manifest.variables || manifest.env || manifest.headers) {
     errors.push(`${manifestPath}: do not collect static credentials or declare authentication headers`);
   }
-  const expectedConfig = manifestPath.startsWith('.cursor') ? './mcp.json' : './.mcp.json';
+  const expectedConfig = manifestPath.startsWith('.cursor') ? './.cursor-mcp.json' : './.mcp.json';
   if (manifest.mcpServers !== undefined && manifest.mcpServers !== expectedConfig) {
     errors.push(`${manifestPath}: mcpServers must reference ${expectedConfig}`);
   }
   if (manifestPath.startsWith('.cursor') && manifest.mcpServers !== expectedConfig) {
     errors.push(`${manifestPath}: missing Cursor mcpServers reference`);
   }
+}
+
+// Portable Agent Plugins entry point and OpenAI directory requirements.
+const portable = manifests['plugin.json'];
+const portableMcp = manifests['mcp.json'];
+const allowedPortableKeys = ['$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions'];
+if (!portable || portable.$schema !== 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json' ||
+    portable.name !== pluginJson?.name || portable.version !== pluginJson?.version ||
+    Object.keys(portable).some(key => !allowedPortableKeys.includes(key))) {
+  errors.push('plugin.json: portable schema, identity, and version must match the canonical package');
+}
+const openai = portable?.extensions?.['com.openai'];
+const listing = openai?.interface;
+for (const [key, limit] of [['displayName', 30], ['shortDescription', 30], ['longDescription', 4000], ['developerName', 80], ['category', 100]]) {
+  if (typeof listing?.[key] !== 'string' || !listing[key].trim() || listing[key].length > limit) errors.push(`plugin.json: invalid listing ${key}`);
+}
+for (const key of ['websiteURL', 'supportURL', 'privacyPolicyURL', 'termsOfServiceURL']) {
+  try {
+    const url = new URL(listing?.[key]);
+    if (url.origin !== 'https://synterai.com' || url.username || url.password) throw new Error();
+  } catch { errors.push(`plugin.json: ${key} must use canonical Synter HTTPS URL`); }
+}
+for (const asset of ['logo', 'composerIcon']) {
+  const value = listing?.[asset];
+  if (typeof value !== 'string' || !value.startsWith('./assets/') || value.includes('..') || !fs.existsSync(path.join(REPO_ROOT, value))) errors.push(`plugin.json: missing packaged ${asset}`);
+}
+if (openai?.hooks || openai?.apps || fs.existsSync(path.join(REPO_ROOT, '.app.json'))) errors.push('plugin.json: public OpenAI package cannot declare hooks or app references');
+const portableServer = portableMcp?.mcpServers?.synter;
+if (portableMcp?.$schema !== 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json' ||
+    Object.keys(portableMcp?.mcpServers || {}).length !== 1 || portableServer?.type !== 'streamable-http' ||
+    portableServer?.url !== 'https://mcp.synterai.com' ||
+    Object.keys(portableServer || {}).some(key => !['type', 'url'].includes(key))) {
+  errors.push('mcp.json: expected portable HTTP transport and OAuth DCR without credentials');
+}
+for (const pathName of ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.cursor-plugin/plugin.json', '.cursor-plugin/marketplace.json', 'plugin.json']) {
+  if (JSON.stringify(manifests[pathName]).includes('syntermedia.ai')) errors.push(`${pathName}: obsolete public domain`);
 }
 
 // (e) Keep the shell hook Claude-only: Cursor also auto-discovers hooks/hooks.json.

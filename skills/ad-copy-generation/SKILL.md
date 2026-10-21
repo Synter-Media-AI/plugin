@@ -7,7 +7,7 @@ description: Write ad copy that fits the platform and passes policy — Google R
 
 Write copy that matches the platform's format, the searcher's intent, and the brand's voice. This is a creation task; it does not spend money.
 
-Apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md` to everything you write.
+Apply brand voice from `../../context/brand-and-safety.md` to everything you write.
 
 ## Fit the format
 

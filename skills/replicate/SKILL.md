@@ -39,7 +39,7 @@ Platforms are not identical. State the mapping and where it is lossy.
 
 `create_campaign_plan` to draft the target structure, then `upsert_plan_entity` to add each campaign → ad group / ad set → ad, carrying over the mapped keywords, negatives, geo, schedule, and budget. `forecast_campaign` for reach/CPC/CPA on the new platform — the source platform's numbers do not transfer.
 
-Creative: reuse the source ad copy where the format allows; otherwise run the **ad-copy-generation** skills to regenerate for the target platform. Apply brand voice — see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+Creative: reuse the source ad copy where the format allows; otherwise run the **ad-copy-generation** skills to regenerate for the target platform. Apply brand voice — see `../../context/brand-and-safety.md`.
 
 ## 4. Preflight — before anything goes live
 

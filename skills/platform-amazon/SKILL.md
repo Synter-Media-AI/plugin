@@ -25,7 +25,7 @@ Two motions: Sponsored ads on the retail search results, and DSP for programmati
 ## Plan and ship
 
 - Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` for projections. Run **campaign-preflight**: retail readiness, tracking, sane budgets.
-- Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without a clear go. Apply brand voice from `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+- Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without a clear go. Apply brand voice from `../../context/brand-and-safety.md`.
 - Confirm live with `list_campaigns(platform="amazon")` and report the real ID. Scale by ACOS with the **optimize** skill.
 
 Porting from another platform? Use the **replicate** skill. Search intent maps to Sponsored Products keywords; audiences map to DSP.

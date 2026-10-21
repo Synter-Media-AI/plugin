@@ -19,4 +19,4 @@ The README lists every bundled skill and agent. The supported tool directory is 
 
 The Claude package runs a SessionStart shell hook that prints static operating guidance. Cursor uses the rules file. The optional SDK runner in the repository is launched manually.
 
-[Privacy](https://syntermedia.ai/privacy) · [Support](https://syntermedia.ai/support)
+[Privacy](https://synterai.com/privacy) · [Support](https://synterai.com/contact)

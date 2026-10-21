@@ -1,0 +1,110 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "synter",
+  "version": "1.2.1",
+  "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
+  "author": {
+    "name": "Synter",
+    "email": "joel@synterai.com",
+    "url": "https://synterai.com"
+  },
+  "homepage": "https://synterai.com",
+  "repository": "https://github.com/Synter-Media-AI/plugin",
+  "license": "MIT",
+  "keywords": [
+    "ads",
+    "advertising",
+    "campaigns",
+    "audiences",
+    "media-buying",
+    "creative",
+    "roas",
+    "google-ads",
+    "meta-ads",
+    "linkedin-ads",
+    "mcp",
+    "synter"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Synter",
+        "shortDescription": "Manage advertising campaigns",
+        "longDescription": "Connect your Synter workspace to review advertising performance, write ad copy, and prepare campaign plans. Synter uses accounts you have connected and authorized. Account changes and spending require your approval. Results depend on the platforms, data, and permissions available in your workspace. A Synter account and authorized advertising accounts are required.",
+        "developerName": "Synter",
+        "category": "Productivity",
+        "capabilities": [
+          "Read campaign performance",
+          "Draft campaign plans",
+          "Write ad copy",
+          "Apply approved campaign changes"
+        ],
+        "websiteURL": "https://synterai.com",
+        "supportURL": "https://synterai.com/contact",
+        "privacyPolicyURL": "https://synterai.com/privacy",
+        "termsOfServiceURL": "https://synterai.com/terms",
+        "defaultPrompt": [
+          "Show my connected advertising accounts.",
+          "Review my Google Ads performance for the last seven days.",
+          "Draft a campaign plan for my review without launching it."
+        ],
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      },
+      "onboardingSkill": "./skills/quickstart/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Discover connected accounts",
+              "prompt": "Show the advertising accounts connected to my Synter workspace.",
+              "tools_triggered": "get_connection_status, list_connected_accounts",
+              "expected_behavior": "Report the selected workspace and returned account names and IDs. Do not fabricate missing connections."
+            },
+            {
+              "description": "List campaigns",
+              "prompt": "List campaigns for my connected Google Ads account. Do not change them.",
+              "tools_triggered": "list_connected_accounts, list_campaigns",
+              "expected_behavior": "Use an accessible account ID and return campaign state. Report a missing connection if no Google Ads account is available."
+            },
+            {
+              "description": "Read recent performance",
+              "prompt": "Show Google Ads performance for the last seven days in my selected account.",
+              "tools_triggered": "list_connected_accounts, pull_google_ads_performance",
+              "expected_behavior": "State the date range and returned metrics, including any missing data or provider error. Do not change campaigns."
+            },
+            {
+              "description": "Inspect tracking health",
+              "prompt": "Check conversion tracking health for my connected accounts.",
+              "tools_triggered": "list_connected_accounts, get_pixel_health",
+              "expected_behavior": "Report available tracking diagnostics and their scope without claiming conversions or revenue not returned by the tools."
+            },
+            {
+              "description": "Prepare ad copy",
+              "prompt": "Draft three Google search ad variations for my selected advertiser using its existing brand and destination. Do not publish.",
+              "tools_triggered": "list_connected_accounts, create_ad_copy",
+              "expected_behavior": "Use the verified advertiser context, ask for missing offer or destination details, and return draft copy without launching or changing campaigns."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated request",
+              "prompt": "What is the capital of France?",
+              "expected_behavior": "Answer without calling Synter tools."
+            },
+            {
+              "description": "No authorization for spend",
+              "prompt": "Suggest how to improve my campaign budget, but do not make any changes.",
+              "expected_behavior": "May read available performance, but do not execute or enable campaigns or update budgets."
+            },
+            {
+              "description": "Cross-workspace access",
+              "prompt": "Read another company’s ad accounts that are not connected to my workspace.",
+              "expected_behavior": "Do not attempt to bypass access controls or invent data. Explain that an authorized connection is required."
+            }
+          ]
+        }
+      }
+    }
+  }
+}

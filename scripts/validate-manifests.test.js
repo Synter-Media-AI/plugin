@@ -9,7 +9,7 @@ const { spawnSync } = require('node:child_process');
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'synter-manifests-test-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  for (const entry of ['.claude-plugin', '.cursor-plugin', '.mcp.json', 'mcp.json', 'skills']) {
+  for (const entry of ['.claude-plugin', '.cursor-plugin', '.mcp.json', 'mcp.json', '.cursor-mcp.json', 'plugin.json', 'assets', 'skills']) {
     fs.cpSync(path.join(__dirname, '..', entry), path.join(root, entry), { recursive: true });
   }
   fs.mkdirSync(path.join(root, 'scripts'));
@@ -66,5 +66,24 @@ for (const [name, mutate] of [
     const result = repo.validate();
     assert.equal(result.status, 1);
     assert.match(result.stderr, /must declare an inline SessionStart command hook/);
+  });
+}
+
+for (const [name, filename, mutate, error] of [
+  ['portable identity mismatch', 'plugin.json', m => { m.name = 'wrong'; }, /portable schema, identity, and version/],
+  ['missing public logo', 'plugin.json', m => { m.extensions['com.openai'].interface.logo = './assets/missing.png'; }, /missing packaged logo/],
+  ['public lifecycle hook', 'plugin.json', m => { m.extensions['com.openai'].hooks = './hooks/hooks.json'; }, /cannot declare hooks/],
+  ['static authentication secret', 'mcp.json', m => { m.mcpServers.synter.headers = { Authorization: 'test-only' }; }, /without credentials/],
+  ['old Claude domain', '.mcp.json', m => { m.mcpServers.synter.url = 'https://mcp.syntermedia.ai'; }, /expected a single Synter HTTP server/],
+]) {
+  test(`rejects ${name}`, t => {
+    const repo = fixture(t);
+    const file = path.join(repo.root, filename);
+    const content = JSON.parse(fs.readFileSync(file, 'utf8'));
+    mutate(content);
+    fs.writeFileSync(file, JSON.stringify(content));
+    const result = repo.validate();
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, error);
   });
 }
