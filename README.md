@@ -11,11 +11,23 @@ Plan advertising campaigns, review performance, write ad copy, and apply approve
 ### ChatGPT and Codex
 
 The OpenAI package includes Synter skills and the hosted OAuth MCP connection.
-Configure its MCP connection with OAuth and dynamic client registration in the portal; discovery provides the endpoints. For the existing directory draft, upload `dist/synter-openai-plugin-1.2.1.zip`
-as a new version of **Synter Ads MCP**. Its package identity remains
+Its generated `mcp.json` declares OAuth with dynamic client registration under
+`mcpServers.synter.extensions.com.openai.auth`; discovery provides the endpoints.
+The portal displays these settings and does not provide an advanced OAuth editor.
+The existing-draft archive is `dist/synter-openai-plugin-1.2.1.zip`, for
+**Synter Ads MCP**. Its package identity remains
 `app-6a90dc5bbc3c819199b4f1e44028fcbf`. Uploading creates a draft; directory
 approval and publication are separate steps. This archive contains no lifecycle
 hooks or local executables.
+
+The existing draft currently rejects replacement ZIPs with “Configure the existing
+MCP app before updating its plugin ZIP,” while its connection settings are
+unavailable. A valid archive does not resolve that portal state. Verify the saved
+MCP origin before updating: OpenAI does not allow an origin change between versions.
+`bash scripts/build-zip.sh --include-new-draft` also prepares
+`dist/synter-openai-new-draft-plugin-1.2.1.zip` with the canonical `synter` package
+name for a separately authorized new draft if the existing identity cannot be
+recovered. Building it does not upload, register, or publish anything.
 
 ### Claude Desktop and Cowork
 
@@ -49,7 +61,7 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 | Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
 | Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
 
-The portable OpenAI package uses `mcp.json` with the Agent Plugins schema and `streamable-http` transport. Claude and Cursor use their own HTTP configuration files. All clients connect to the canonical endpoint. Existing connector submissions may require a separate endpoint update in their review portal. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
+The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
 ## What this plugin runs
 

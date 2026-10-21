@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build isolated Claude and OpenAI ZIPs from an explicit runtime allowlist."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -9,6 +10,18 @@ import subprocess
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# OpenAI's current documented vendor extension; the portable 1.0.0 MCP
+# schema does not yet accept server extensions. Keep the base independent.
+OPENAI_AUTH = {'type': 'oauth', 'client': {'mode': 'dcr'}}
+
+
+def validate_openai_mcp(value):
+    base = json.loads((ROOT / 'mcp.json').read_text())
+    expected = json.loads(json.dumps(base))
+    expected['mcpServers']['synter']['extensions'] = {'com.openai': {'auth': OPENAI_AUTH}}
+    if value != expected:
+        raise ValueError('OpenAI MCP configuration must match the portable base plus credential-free OAuth DCR')
 
 
 def encoded(value):
@@ -40,15 +53,20 @@ def collect(root, target):
         include('.claude-plugin/plugin.json')
         include('.mcp.json')
         include('scripts/session-context.sh')
-    elif target == 'openai':
-        include('mcp.json')
+    elif target in ['openai', 'openai-new-draft']:
+        mcp = json.loads((root / 'mcp.json').read_text())
+        mcp['mcpServers']['synter']['extensions'] = {'com.openai': {'auth': OPENAI_AUTH}}
+        validate_openai_mcp(mcp)
+        files['mcp.json'] = encoded(mcp)
         portable = json.loads((root / 'plugin.json').read_text())
         submission = json.loads((root / 'config/openai-submission.json').read_text())
         if not re.fullmatch(r'app-[a-z0-9]+', submission['packageName']):
             raise ValueError('Expected existing OpenAI package identity')
-        portable['name'] = submission['packageName']
+        if target == 'openai':
+            portable['name'] = submission['packageName']
         listing = portable['extensions']['com.openai']['interface']
-        listing['displayName'] = submission['displayName']
+        if target == 'openai':
+            listing['displayName'] = submission['displayName']
         listing['developerName'] = submission['developerName']
         files['plugin.json'] = encoded(portable)
     else:
@@ -66,7 +84,8 @@ def verify_archive(path, expected, target):
                 raise ValueError('Unsafe archive path')
             if archive.read(name) != expected[name]:
                 raise ValueError('Archive content mismatch: ' + name)
-        if target == 'openai':
+        if target in ['openai', 'openai-new-draft']:
+            validate_openai_mcp(json.loads(archive.read('mcp.json')))
             manifest = json.loads(archive.read('plugin.json'))
             extension = manifest['extensions']['com.openai']
             if extension.get('hooks') or extension.get('apps') or any(n.startswith(('.claude-plugin/', 'hooks/', 'scripts/')) for n in names):
@@ -75,7 +94,7 @@ def verify_archive(path, expected, target):
             raise ValueError('Archive CRC mismatch')
 
 
-def build(root=ROOT):
+def build(root=ROOT, include_new_draft=False):
     subprocess.run(['node', str(root / 'scripts/validate-manifests.js')], cwd=root, check=True)
     subprocess.run(['node', str(root / 'scripts/check-directory-tools.js')], cwd=root, check=True)
     output = root / 'dist'
@@ -83,7 +102,7 @@ def build(root=ROOT):
     source_sha = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
     dirty = bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True).strip())
     results = []
-    for target in ['claude', 'openai']:
+    for target in ['claude', 'openai'] + (['openai-new-draft'] if include_new_draft else []):
         version, files = collect(root, target)
         filename = f'synter-{target}-plugin-{version}.zip'
         archive_path = output / filename
@@ -103,4 +122,7 @@ def build(root=ROOT):
     return results
 
 if __name__ == '__main__':
-    print(json.dumps(build(), indent=2))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--include-new-draft', action='store_true', help='Also prepare a canonical synter OpenAI archive; does not register or upload a plugin')
+    args = parser.parse_args()
+    print(json.dumps(build(include_new_draft=args.include_new_draft), indent=2))

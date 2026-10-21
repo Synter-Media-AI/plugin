@@ -1,4 +1,5 @@
 import importlib.util
+import copy
 import json
 from pathlib import Path
 import tempfile
@@ -27,6 +28,21 @@ class PackageTests(unittest.TestCase):
         self.assertIn('scripts/session-context.sh', files)
         self.assertNotIn('plugin.json', files)
         self.assertNotIn('mcp.json', files)
+
+    def test_openai_auth_and_optional_new_draft(self):
+        _, files = mod.collect(mod.ROOT, 'openai-new-draft')
+        manifest = json.loads(files['plugin.json'])
+        self.assertEqual(manifest['name'], 'synter')
+        self.assertEqual(manifest['extensions']['com.openai']['interface']['developerName'], 'JOEL SAMUEL HORWITZ')
+        mcp = json.loads(files['mcp.json'])
+        self.assertEqual(mcp['mcpServers']['synter']['extensions']['com.openai']['auth'], {'type': 'oauth', 'client': {'mode': 'dcr'}})
+        mod.validate_openai_mcp(mcp)
+        for key, value in [('clientSecret', 'not-a-real-secret'), ('type', 'none'), ('client', {'mode': 'provided', 'clientId': 'wrong'})]:
+            changed = copy.deepcopy(mcp)
+            changed['mcpServers']['synter']['extensions']['com.openai']['auth'][key] = value
+            with self.assertRaises(ValueError):
+                mod.validate_openai_mcp(changed)
+        self.assertNotIn('extensions', json.loads((mod.ROOT / 'mcp.json').read_text())['mcpServers']['synter'])
 
     def test_archive_readback_rejects_missing_or_corrupted_content(self):
         for files in ({'plugin.json': b'changed'}, {}):
