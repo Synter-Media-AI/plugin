@@ -15,17 +15,20 @@ mod = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(mod)
 
 class PackageTests(unittest.TestCase):
-    def test_directory_rsa_guidance_follows_platform_limits_without_padding(self):
-        files = mod.collect(mod.ROOT, 'claude-directory')[1]
-        for name in ['agents/media-buyer.md', 'agents/creative-director.md',
-                     'skills/ad-copy-generation/SKILL.md', 'skills/campaign-preflight/SKILL.md']:
-            text = files[name].decode()
-            self.assertIn('Ad Strength is not a launch gate', text)
-            self.assertNotRegex(text, r'11\+ headlines|15/4 recommended|11 headlines and 4 descriptions minimum|gets? throttled')
-            self.assertEqual(files[name], (mod.ROOT / 'config/claude-directory/overrides' / name).read_bytes())
-        preflight = files['skills/campaign-preflight/SKILL.md'].decode()
-        self.assertIn('MAXIMIZE_CONVERSIONS', preflight)
-        self.assertNotIn('Start on a click or traffic goal', preflight)
+    def test_all_packages_follow_rsa_and_bidding_guidance(self):
+        for target in ['claude', 'claude-directory', 'openai', 'openai-new-draft']:
+            files = mod.collect(mod.ROOT, target)[1]
+            for name in ['agents/media-buyer.md', 'agents/creative-director.md',
+                         'skills/ad-copy-generation/SKILL.md', 'skills/campaign-preflight/SKILL.md']:
+                if name not in files:
+                    continue  # OpenAI packages do not include Claude agents.
+                text = files[name].decode()
+                self.assertIn('Ad Strength is not a launch gate', text)
+                self.assertNotRegex(text, r'11\+ headlines|15/4 recommended|11 headlines and 4 descriptions minimum|gets? throttled')
+                self.assertEqual(files[name], (mod.ROOT / name).read_bytes())
+            preflight = files['skills/campaign-preflight/SKILL.md'].decode()
+            self.assertIn('MAXIMIZE_CONVERSIONS', preflight)
+            self.assertNotIn('Start on a click or traffic goal', preflight)
 
     def test_directory_source_is_reproducible_and_has_only_static_runtime(self):
         files = mod.sync_claude_directory()
@@ -94,13 +97,15 @@ class PackageTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 mod.sync_claude_directory(root)
 
-    def test_existing_archives_remain_byte_identical(self):
+    def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '2f0130c80845166173ee8d5b900711499470c11805aa26fecc5aa70772d1aad5',
-            'openai': '08f82f52e85216ce6e343ec4f1354073113cc2d451fa799f8ec39f3a50ec2eca',
-            'openai-new-draft': '40c2836cddc2c2d003bb0029e82da408d6db74bda342d901b9b792f713374b1a',
+            'claude': '72fecb572222d3725acd884f4d7f49a3f5493a2c084d4a4ee201a53a960aee73',
+            'claude-directory': 'e313a4ed69ef3e2e80d13c622d102e69d8e6c51cfeb8f0ba13f29b2e0340efc1',
+            'openai': '5ab905019791b7f0f71033e19e18042e26ba272b7b2d958aac4ff177a7c0f665',
+            'openai-new-draft': '48bbdbedbc5eb96ffacfcd18b339048139ac6f67dbca160e5fd2d13b7682cd87',
         }
-        # Baseline943fd07: independent bytes, rather than self-comparing a new build.
+        # Snapshot after the approved RSA/bidding correction across all hosts.
+        # Update deliberately when reviewed package contents change.
         for target, digest in expected.items():
             _, files = mod.collect(mod.ROOT, target)
             with tempfile.TemporaryDirectory() as tmp:

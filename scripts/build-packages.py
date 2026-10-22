@@ -58,10 +58,7 @@ def collect(root, target):
         manifest.pop('hooks', None)
         files['.claude-plugin/plugin.json'] = encoded(manifest)
         include('.mcp.json')
-        overrides = ['agents/media-buyer.md', 'agents/creative-director.md',
-                     'skills/ad-copy-generation/SKILL.md', 'skills/campaign-preflight/SKILL.md']
-        for source, destination in ([('README.md', 'README.md'), ('help.md', 'skills/help/SKILL.md')]
-                                    + [('overrides/' + name, name) for name in overrides]):
+        for source, destination in [('README.md', 'README.md'), ('help.md', 'skills/help/SKILL.md')]:
             path = root / 'config/claude-directory' / source
             relative_path = path.relative_to(root)
             if any((root / part).is_symlink() for part in [relative_path, *relative_path.parents]) or not path.is_file():

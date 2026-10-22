@@ -11,7 +11,7 @@ Apply brand voice from `../../context/brand-and-safety.md` to everything you wri
 
 ## Fit the format
 
-- **Search (Google, Microsoft) RSAs:** the API accepts as few as 3 headlines and 2 descriptions — never ship that. Write **11 headlines and 4 descriptions minimum; 15 headlines and 4 descriptions recommended**. Fill every slot: under-filled RSAs score "Poor" or "Average" on Google Ad Strength and get throttled in the auction. Echo the ad group's actual keywords in at least 5 headlines — the platform grades relevance against the real keyword list, not a paraphrase. Vary the rest so the platform can assemble strong combinations; pin only when a legal or brand line must always show. Lead with the keyword intent and the offer. Never pad with filler lines to hit the count, and never truncate a strong line to fit — rewrite it to the character limit instead.
+- **Search (Google, Microsoft) RSAs:** meet the platform’s required counts and character limits. Prefer fewer concise, distinct headlines that match search intent, state the offer, and deliberately qualify the intended audience. Use the ad group’s actual keywords where they read naturally. Never pad to 15 headlines or impose an arbitrary 11-headline floor. Ad Strength is not a launch gate or a reason to add filler. Pin only when a legal or brand line must always appear. Rewrite strong lines to fit instead of truncating them.
 - **Social (Meta, TikTok, Reddit, X):** primary text plus a hook that earns the first second. Match the platform's native tone; a LinkedIn line is not a TikTok line.
 - **LinkedIn:** professional, outcome-led, decision-maker framing.
 
@@ -32,6 +32,6 @@ Run every variant through the **ad-policy-compliance** thinking and the brand fo
 ## Rules
 
 - On brand and on policy, every line. No forbidden words, no invented claims.
-- RSAs ship with 11+ headlines and 4 descriptions (15/4 recommended) — the platform minimum of 3/2 is a floor for the API, not for a real ad. At least 5 headlines echo the ad group's actual keywords. No filler, no truncation.
+- RSA assets must be relevant, accurate, and within platform limits. Use intentional disqualification where it fits the advertiser’s audience; do not fill optional slots just to increase a score. No filler or truncation.
 - RSAs get varied, unpinned assets unless a line must always appear.
 - Report the variants and the one variable each set is built to test.
