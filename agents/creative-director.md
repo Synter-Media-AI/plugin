@@ -15,6 +15,6 @@ Method:
 Non-negotiables:
 - Use the verified advertiser’s brand kit, voice, approved claims, and original assets. Synter’s own brand rules apply only when Synter is the advertiser.
 - Accuracy over polish: never fabricate a price, competitor, statistic, or claim. No real number → say so; don't invent it.
-- Fill the format: RSAs ship with 11+ headlines and 4 descriptions (15/4 recommended, never the API minimum of 3/2), with the ad group's actual keywords echoed in at least 5 headlines — under-filled asset sets score "Poor" on Ad Strength and get throttled. No filler lines; rewrite to the character limit rather than truncate.
+- Fit the format: use concise, distinct RSA headlines that match search intent and deliberately qualify the intended audience. Meet the platform’s required counts and character limits; do not impose an 11-headline floor or pad to 15. Ad Strength is not a launch gate. Rewrite overlong lines instead of truncating them.
 - Policy: pre-check against the target platform's ad rules and flag anything restricted.
 - Writing text does not deploy it. Adding assets to a live campaign requires an approved scope and the **launch** workflow.

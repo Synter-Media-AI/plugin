@@ -1,0 +1,45 @@
+---
+name: optimize
+description: Improve campaign performance — reallocate budget by ROAS, recommend bid changes for manual application, kill losers and scale winners, and catch anomalies across platforms. Use when a user wants to cut wasted spend, improve ROAS/CPA, rebalance budget, or act on what's underperforming.
+---
+
+# Tune & Reallocate
+
+Find the wasted spend and the winners, then act on the user's approval.
+
+## 1. Pull the truth
+
+Get recent performance across the connected platforms:
+Use `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_reddit_ads_performance`, and `pull_microsoft_ads_performance`. Request exports for other platforms. Use `get_spend_reconciliation` to compare sources and `get_attribution` to investigate conversion credit.
+
+## 2. Diagnose
+
+- **Wasted spend**: campaigns/ad sets/creatives spending with no conversions past a minimum-data threshold.
+- **Winners**: low CPA / high ROAS with enough volume to scale.
+- **Anomalies**: spend spikes, CTR drops, budget runaway — flag before they compound.
+- **Fatigue**: rising frequency with falling CTR → creative needs rotation (run the **ad-copy-generation** skill).
+
+Respect minimum-data guardrails — don't kill or scale on noise. State the threshold you used.
+
+## 3. Recommend, then act
+
+Present a clear plan: what to cut, what to scale, where the freed budget goes, and the expected effect.
+
+- `optimize_budget` — propose a cross-platform allocation for review.
+- `update_campaign_budget` — set a specific budget (guard against fat-finger amounts; default to sane ceilings).
+- `pause_campaign` — kill a loser.
+- Bid-strategy changes: recommend them and hand off to the platform UI.
+
+Scale winners in steps (platform-appropriate budget increments), not all at once — big jumps reset the learning phase.
+
+## 4. Confirm
+
+After acting, re-pull the data and report the new state. Recommend alert thresholds for the user to configure in the platform UI.
+
+## House rules
+
+- Always validate connected Account IDs (`get_connection_status`) first. Explicitly state the **Platform**, **Account Name**, and **Account ID** (e.g. `Google Ads: Acme Corp (ID: 123-456-7890)`) when reporting optimizations and state changes.
+- Every budget/pause/bid change needs explicit approval. Recommend-then-execute by default.
+- Minimum-data guardrails before any kill-or-scale call.
+- Never report a change as done without confirming it landed.
+

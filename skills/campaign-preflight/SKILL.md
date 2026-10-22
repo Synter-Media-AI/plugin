@@ -23,7 +23,7 @@ If a required level is missing, do not enable. Fix it first.
 Without tracking, the spend is blind and smart bidding cannot work.
 
 - Use `ga4_get_conversions`, `ga4_get_report`, and `get_pixel_health` for available conversion evidence. A configured action does not prove that a tag is firing; mark missing verification explicitly.
-- No tracking on a conversion-optimized campaign is a stop. Start on a click or traffic goal until conversions are verified (roughly 15 to 30 conversions before smart bidding has enough signal).
+- Missing verified tracking on a conversion campaign is a stop. Once conversion goals are established, use MAXIMIZE_CONVERSIONS for Google Search conversion campaigns; do not substitute unconstrained Max Clicks. Consider Target CPA when conversion volume supports it.
 
 ## 3. UTMs on every ad (blocking)
 
@@ -44,13 +44,13 @@ A campaign with no location criteria serves everywhere, including low-quality an
 - Prefer presence-based matching (people in the location) over interest-based unless the goal truly needs it.
 - Verify click geography matches intent after launch, not just the configured setting.
 
-## 5. Creative asset completeness (blocking for Search RSAs)
+## 5. Creative assets meet platform requirements
 
-A structurally complete campaign can still launch handicapped: an RSA created with the platform-minimum 3 headlines and 2 descriptions is accepted by the API but scores "Poor" on Google Ad Strength and gets throttled in the auction.
+Read available asset details from `get_campaign_plan`, `list_creative_assets`, or a platform export. Verify the platform’s required asset counts, character limits, approved claims, and destination. Report missing evidence rather than assuming compliance.
 
-- Read asset counts from `get_campaign_plan`, `list_creative_assets`, or a platform export. Compare each RSA against the plugin’s floor of 11 headlines and 4 descriptions, with 15/4 recommended. Do not claim a count you could not inspect.
-- Check Google's Ad Strength rating where available. **POOR or AVERAGE = fix the assets before launch**, not after. Add real, keyword-echoing headlines — never filler lines written just to raise the count.
-- Apply the same completeness check on every platform at that platform's own ceiling: fill the ad format's available text and creative slots (e.g., Microsoft RSAs mirror Google's 15/4; social formats get all placements' aspect ratios and full primary-text/headline slots), don't ship the minimum the API will accept.
+- Prefer fewer concise, relevant RSA headlines that express search intent, the offer, and intentional audience qualification. Do not impose an 11-headline floor or pad to 15.
+- Ad Strength is not a launch gate. Do not claim that a lower rating proves throttling or add filler to raise the rating.
+- For each format, include its required assets and the placements in the approved plan. Optional slots are useful only when the content adds a distinct, relevant message.
 
 ## 6. Negatives, budget, and schedule (warn)
 
@@ -60,4 +60,4 @@ A structurally complete campaign can still launch handicapped: an RSA created wi
 
 ## Report
 
-Output a short table: each check as PASS, WARN, or FAIL with a one-line note, then a clear recommendation (enable, or fix these first). Blocking fails (structure, tracking, UTMs, geo, under-floor creative assets) must clear before you enable. Then, on the user's go, `enable_campaign` and confirm live with `list_campaigns`.
+Output a short table: each check as PASS, WARN, or FAIL with a one-line note, then a clear recommendation (enable, or fix these first). Blocking fails (structure, tracking, UTMs, geo, missing required creative assets) must clear before you enable. Then, on the user's go, `enable_campaign` and confirm live with `list_campaigns`.

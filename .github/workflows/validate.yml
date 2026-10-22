@@ -20,4 +20,26 @@ jobs:
         run: node scripts/validate-manifests.js
 
       - name: Run strict Claude plugin validation
-        run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+        run: |
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate .claude-plugin/plugin.json --strict
+          python3 scripts/build-packages.py --check-claude-directory
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate packages/claude-directory --strict
+
+      - name: Test package validation
+        run: |
+          node --test scripts/*.test.js
+          python3 -m unittest discover -s scripts -p 'test_*.py' -v
+          bash scripts/build-zip.sh --include-new-draft
+
+      - name: Validate extracted Claude package
+        run: |
+          VERSION=$(node -p "require('./.claude-plugin/plugin.json').version")
+          python3 -m zipfile -e "dist/synter-claude-plugin-$VERSION.zip" /tmp/synter-claude-package
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate /tmp/synter-claude-package/.claude-plugin/plugin.json --strict
+
+      - name: Save reviewable package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: synter-plugin-packages
+          path: dist/

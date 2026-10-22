@@ -1,0 +1,111 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "synter",
+  "version": "1.2.1",
+  "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
+  "author": {
+    "name": "Synter",
+    "email": "joel@synterai.com",
+    "url": "https://synterai.com"
+  },
+  "homepage": "https://synterai.com",
+  "repository": "https://github.com/Synter-Media-AI/plugin",
+  "license": "MIT",
+  "keywords": [
+    "ads",
+    "advertising",
+    "campaigns",
+    "audiences",
+    "media-buying",
+    "creative",
+    "roas",
+    "google-ads",
+    "meta-ads",
+    "linkedin-ads",
+    "mcp",
+    "synter"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Synter",
+        "shortDescription": "Manage advertising campaigns",
+        "longDescription": "Connect your Synter workspace to review advertising performance, write ad copy, and prepare campaign plans. Synter uses accounts you have connected and authorized. Account changes and spending require your approval. Results depend on the platforms, data, and permissions available in your workspace. A Synter account and authorized advertising accounts are required.",
+        "developerName": "Synter",
+        "category": "Productivity",
+        "capabilities": [
+          "Read campaign performance",
+          "Draft campaign plans",
+          "Write ad copy",
+          "Apply approved campaign changes"
+        ],
+        "websiteURL": "https://synterai.com",
+        "supportURL": "https://synterai.com/contact",
+        "privacyPolicyURL": "https://synterai.com/privacy",
+        "termsOfServiceURL": "https://synterai.com/terms",
+        "defaultPrompt": [
+          "Show my connected advertising accounts.",
+          "Review my Google Ads performance for the last seven days.",
+          "Draft a campaign plan for my review without launching it."
+        ],
+        "composerIcon": "./assets/logo.png",
+        "logo": "./assets/logo.png"
+      },
+      "onboardingSkill": "./skills/quickstart/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Identify reviewer sandbox accounts",
+              "prompt": "List the accounts in this review workspace. Identify sandbox entries and do not treat an ACTIVE status as proof that a live ad provider is connected.",
+              "tools_triggered": "list_connected_accounts",
+              "expected_behavior": "Return only the review workspace's two Acme Outfitters (Sandbox) entries for Google and Meta. Explain that these sandbox identifiers are not live-provider credentials; do not call a real provider report with them."
+            },
+            {
+              "description": "Show sample connection inventory",
+              "prompt": "Show Synter's built-in sample connection inventory using demo: true. Clearly label it as demonstration data.",
+              "tools_triggered": "get_connection_status",
+              "expected_behavior": "Call get_connection_status with demo:true. Return the three DEMO_READY sample entries for Google, Meta, and LinkedIn. Distinguish this fixed sample inventory from the sandbox accounts stored in the review workspace."
+            },
+            {
+              "description": "List sample Google campaigns",
+              "prompt": "Using demo: true, list the built-in sample Google campaigns. Do not access or change live accounts.",
+              "tools_triggered": "list_campaigns",
+              "expected_behavior": "Call list_campaigns with platform:google and demo:true. Return the three demo_google_* campaigns, preserving their sample status and identifying the result as synthetic demonstration data."
+            },
+            {
+              "description": "Summarize fixed sample performance",
+              "prompt": "Using demo: true, show a sample Google Ads performance report. Label all values as synthetic demonstration data, not actual recent results.",
+              "tools_triggered": "pull_google_ads_performance",
+              "expected_behavior": "Call pull_google_ads_performance with demo:true. Return the fixed fixture summary: 2,468.10 sample spend, 9,030 sample clicks, and 424 sample conversions. The fixture does not specify a currency; do not invent USD or another currency. Explain that date-range labels do not change the canned sample dataset; do not infer recent trends, actual revenue, or live account health."
+            },
+            {
+              "description": "Report unavailable tracking evidence",
+              "prompt": "Check stored pixel health for this review workspace. If there are no configured sites or events, say tracking is unverified and make no changes.",
+              "tools_triggered": "get_pixel_health",
+              "expected_behavior": "Call get_pixel_health. The current reviewer workspace returns sites:[] and attribution_model:null. State that tracking is unverified because there is no site/event evidence, not that tracking is healthy or failing."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated request",
+              "prompt": "What is the capital of France?",
+              "expected_behavior": "Answer without calling Synter tools."
+            },
+            {
+              "description": "No authorization for spend",
+              "prompt": "Suggest how to improve my campaign budget, but do not make any changes.",
+              "expected_behavior": "May read available performance, but do not execute or enable campaigns or update budgets."
+            },
+            {
+              "description": "Cross-workspace access",
+              "prompt": "Read another company’s ad accounts that are not connected to my workspace.",
+              "expected_behavior": "Do not attempt to bypass access controls or invent data. Explain that an authorized connection is required."
+            }
+          ]
+        },
+        "demo_recording_url": "https://drive.google.com/file/d/18cR7q80d0s1ZZsSVIJs3UtbHEaK_PBGf/view?usp=drivesdk"
+      }
+    }
+  }
+}

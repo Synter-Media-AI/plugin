@@ -31,15 +31,28 @@ jobs:
         run: node --test scripts/*.test.js
 
       - name: Run strict Claude plugin validation
-        run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
-
-      - name: Ensure zip/rsync are available
         run: |
-          command -v zip >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq zip
-          command -v rsync >/dev/null || sudo apt-get update -qq && sudo apt-get install -y -qq rsync
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate .claude-plugin/plugin.json --strict
+          python3 scripts/build-packages.py --check-claude-directory
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate packages/claude-directory --strict
+
+      - name: Verify release tag matches the package
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node -e 'if (process.env.RELEASE_TAG !== "synter--v" + require("./.claude-plugin/plugin.json").version) process.exit(1)'
+
+      - name: Test archive packaging
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
 
       - name: Build plugin zip
         run: bash scripts/build-zip.sh
+
+      - name: Validate extracted Claude package
+        run: |
+          VERSION=$(node -p "require('./.claude-plugin/plugin.json').version")
+          python3 -m zipfile -e "dist/synter-claude-plugin-$VERSION.zip" /tmp/synter-claude-package
+          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate /tmp/synter-claude-package/.claude-plugin/plugin.json --strict
 
       - name: Resolve version
         id: version
@@ -48,5 +61,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/synter-plugin-${{ steps.version.outputs.version }}.zip
+          files: |
+            dist/synter-claude-plugin-${{ steps.version.outputs.version }}.zip
+            dist/synter-claude-directory-plugin-${{ steps.version.outputs.version }}.zip
+            dist/synter-openai-plugin-${{ steps.version.outputs.version }}.zip
+            dist/*.sha256
+            dist/package-manifest.json
           generate_release_notes: true

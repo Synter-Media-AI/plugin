@@ -23,7 +23,7 @@ Confirm the account with `list_connected_accounts`. Check conversion evidence wi
 
 Use `create_campaign_plan` to draft structure (campaigns → ad sets → ads), add supported entities with `upsert_plan_entity`, then `forecast_campaign` for reach/CPM/CPC/CPA projections. For the channel mix and budget split, lean on platform cost benchmarks and a clear rationale.
 
-Write text with `create_ad_copy` and select existing approved assets with `list_creative_assets`. Use the verified advertiser’s voice, logos, colors, and destination; see `${CLAUDE_PLUGIN_ROOT}/context/brand-and-safety.md`.
+Write text with `create_ad_copy` and select existing approved assets with `list_creative_assets`. Use the verified advertiser’s voice, logos, colors, and destination; see `../../context/brand-and-safety.md`.
 
 ## 3. Preflight — before anything goes live
 

@@ -2,13 +2,13 @@
   "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
   "name": "synter",
   "displayName": "Synter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
   "author": {
     "name": "Synter",
     "email": "joel@synterai.com"
   },
-  "homepage": "https://syntermedia.ai",
+  "homepage": "https://synterai.com",
   "repository": "https://github.com/Synter-Media-AI/plugin",
   "license": "MIT",
   "logo": "assets/logo.png",
@@ -29,5 +29,5 @@
   "skills": "./skills/",
   "agents": "./agents/",
   "rules": "./rules/",
-  "mcpServers": "./mcp.json"
+  "mcpServers": "./.cursor-mcp.json"
 }
