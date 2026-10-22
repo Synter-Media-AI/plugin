@@ -15,6 +15,18 @@ mod = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(mod)
 
 class PackageTests(unittest.TestCase):
+    def test_directory_rsa_guidance_follows_platform_limits_without_padding(self):
+        files = mod.collect(mod.ROOT, 'claude-directory')[1]
+        for name in ['agents/media-buyer.md', 'agents/creative-director.md',
+                     'skills/ad-copy-generation/SKILL.md', 'skills/campaign-preflight/SKILL.md']:
+            text = files[name].decode()
+            self.assertIn('Ad Strength is not a launch gate', text)
+            self.assertNotRegex(text, r'11\+ headlines|15/4 recommended|11 headlines and 4 descriptions minimum|gets? throttled')
+            self.assertEqual(files[name], (mod.ROOT / 'config/claude-directory/overrides' / name).read_bytes())
+        preflight = files['skills/campaign-preflight/SKILL.md'].decode()
+        self.assertIn('MAXIMIZE_CONVERSIONS', preflight)
+        self.assertNotIn('Start on a click or traffic goal', preflight)
+
     def test_directory_source_is_reproducible_and_has_only_static_runtime(self):
         files = mod.sync_claude_directory()
         self.assertEqual(files, mod.collect(mod.ROOT, 'claude-directory')[1])
