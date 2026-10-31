@@ -11,7 +11,7 @@ Start with `measure_incrementality` where the platform and data support it; desi
 
 ## 1. Define the question
 
-Pick one testable claim: channel incrementality ("does Display drive anything?"), budget incrementality ("does doubling spend double conversions?"), or tactic incrementality ("is retargeting real?"). One variable per test. Pull the baseline first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for spend and attributed conversions, `ga4_get_report` for a platform-neutral conversion count.
+Pick one testable claim: channel incrementality ("does Display drive anything?"), budget incrementality ("does doubling spend double conversions?"), or tactic incrementality ("is retargeting real?"). One variable per test. Pull the baseline first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for spend and attributed conversions, `get_attribution` for a cross-platform conversion view.
 
 ## 2. Choose the method
 

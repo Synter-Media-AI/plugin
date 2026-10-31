@@ -59,13 +59,13 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 | Client | Configuration | Hosted MCP URL |
 | --- | --- | --- |
 | Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
-| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
+| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com/mcp` |
 
 The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
 ## What this plugin runs
 
-The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 34 supported tool names.
+The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 31 supported tool names.
 
 Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 
@@ -112,7 +112,7 @@ npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
 bash scripts/build-zip.sh
 ```
 
-The directory check scans every file under `skills/`, `commands/` (when present), `rules/`, and `agents/`, including prose, tables, and code fences. Spell out exact tool names; dynamic tool-name templates fail validation. Snake-case data fields are recognized separately, but calling them as functions still counts as a tool reference. For a tool name without underscores, use explicit `tool:name` or its MCP-qualified name.
+The directory check scans every file under `skills/`, `commands/` (when present), `rules/`, `agents/`, `context/`, `output-styles/`, and the SessionStart hook, including prose, tables, and code fences. It also fails on `ga4_*` and `generate_*` tool names, which the hosted Claude connector does not expose, on pricing wording in instructions, the README, and Claude manifests, and on any `.mcp.json` that is not the OAuth-only `https://mcp.synterai.com/mcp` server. The checked-in `packages/claude-directory` bundle is held to the same rules. Spell out exact tool names; dynamic tool-name templates fail validation. Snake-case data fields are recognized separately, but calling them as functions still counts as a tool reference. For a tool name without underscores, use explicit `tool:name` or its MCP-qualified name.
 
 The check runs offline in CI. To also compare the directory against live MCP `tools/list`, supply an OAuth access token through `SYNTER_MCP_TOKEN` in your environment and run the same script. It initializes an MCP session and follows paginated results. `--live` requires the token instead of silently running offline. `SYNTER_MCP_URL` optionally selects either hosted URL in the table; it defaults to the Cursor endpoint. The token is for this development check only and is never written to plugin configuration. Extra live tools do not expand the checked-in directory.
 

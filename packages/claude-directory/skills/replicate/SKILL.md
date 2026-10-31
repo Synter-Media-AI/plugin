@@ -47,7 +47,7 @@ Run the **campaign-preflight** checklist and report pass/fail:
 
 - Geo/location criteria copied and correct (a "US" name with no location criteria is the classic miss).
 - Negatives carried over — porting keywords without negatives burns budget fast.
-- Check target-side evidence with `ga4_get_conversions` and `get_pixel_health`. Resolve missing tracking verification before launch.
+- Check target-side evidence with `get_pixel_health`. Resolve missing tracking verification before launch.
 - Budget and bid caps sane — guard against a fat-finger daily budget 10–100x intended.
 - Match types preserved; final URLs resolve and match the ad's promise.
 

@@ -23,7 +23,7 @@ A newer surface: ads that appear alongside AI answers. Structure is campaign →
 
 ## Plan and ship
 
-- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` where projections are available. Run **campaign-preflight**: tracking attached (`get_pixel_health` / `ga4_get_conversions`), sane budgets.
+- Build with `create_campaign_plan` + `upsert_plan_entity`; `forecast_campaign` where projections are available. Run **campaign-preflight**: tracking attached (`get_pixel_health`), sane budgets.
 - Ship only on explicit approval: `execute_campaign_plan`, then `enable_campaign`. Nothing that spends money goes live without a clear go.
 - Confirm live with `list_campaigns(platform="openai_ads")` and report the real ID. Start conservative; read results before scaling with the **optimize** skill.
 

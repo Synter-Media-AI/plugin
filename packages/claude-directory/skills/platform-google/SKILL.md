@@ -28,7 +28,7 @@ Use `create_campaign_plan` and `upsert_plan_entity` for the supported campaign s
 
 - Keep match types deliberate. Broad without good negatives and conversion tracking wastes budget fast.
 - Geo is the classic miss: a "US" campaign with no location criteria serves everywhere. Verify location criteria exist and match intent.
-- Conversion tracking must exist and be attached before scaling: `ga4_get_conversions`, `get_pixel_health`. Blind spend is worse than no spend.
+- Conversion tracking must exist and be attached before scaling: `get_pixel_health`, `run_launch_preflight`. Blind spend is worse than no spend.
 - Guard budgets against a fat-finger daily amount 10 to 100x intended.
 - Adjust budgets with `update_campaign_budget`; pause with `pause_campaign`. Start conservative; scale winners with the **optimize** skill.
 - "Created" is not "live and spending." Confirm with `list_campaigns` and report the real IDs.

@@ -39,6 +39,7 @@ test('checks nested files in every instruction surface, including optional comma
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   fs.mkdirSync(path.join(root, 'tools'));
   fs.copyFileSync(path.join(__dirname, '../tools/directory-tools.json'), path.join(root, 'tools/directory-tools.json'));
+  fs.copyFileSync(path.join(__dirname, '../.mcp.json'), path.join(root, '.mcp.json'));
   for (const surface of ['skills', 'commands', 'rules', 'agents']) {
     fs.mkdirSync(path.join(root, surface, 'nested'), { recursive: true });
     fs.writeFileSync(path.join(root, surface, 'nested/instructions.md'), `Use list_campaigns and unknown_${surface}.`);
@@ -56,7 +57,72 @@ test('checks nested files in every instruction surface, including optional comma
   assert.equal(cli.status, 1);
   assert.match(cli.stderr, /unlisted tool unknown_commands/);
   fs.writeFileSync(path.join(root, 'tools/directory-tools.json'), '["list_campaigns", "list_campaigns"]');
-  assert.throws(() => scan(root), /34 unique tool names/);
+  assert.throws(() => scan(root), /31 unique tool names/);
+});
+
+function fixtureRoot(t) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'synter-directory-test-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  fs.mkdirSync(path.join(root, 'tools'));
+  fs.mkdirSync(path.join(root, 'skills/example'), { recursive: true });
+  fs.copyFileSync(path.join(__dirname, '../tools/directory-tools.json'), path.join(root, 'tools/directory-tools.json'));
+  fs.copyFileSync(path.join(__dirname, '../.mcp.json'), path.join(root, '.mcp.json'));
+  fs.writeFileSync(path.join(root, 'skills/example/SKILL.md'), 'Use list_campaigns.');
+  return root;
+}
+
+test('a clean fixture passes, so the failures below come from the injected defect', t => {
+  assert.deepEqual(scan(fixtureRoot(t)).errors, []);
+});
+
+test('ga4_* and generate_* tools fail in instructions, hooks, README, and the allowlist', t => {
+  const root = fixtureRoot(t);
+  fs.writeFileSync(path.join(root, 'skills/example/SKILL.md'), 'Use list_campaigns, then `ga4_get_report`.\nCall generate_image.');
+  fs.mkdirSync(path.join(root, 'scripts'));
+  fs.writeFileSync(path.join(root, 'scripts/session-context.sh'), 'echo "Run ga4_get_properties first"');
+  fs.writeFileSync(path.join(root, 'README.md'), '```bash\nnode test_*.py\n```\nCall `generate_video_ad`.');
+  const errors = scan(root).errors;
+  assert.deepEqual(errors, [
+    'skills/example/SKILL.md:1: tool ga4_get_report is not available on the hosted Claude connector',
+    'skills/example/SKILL.md:2: tool generate_image is not available on the hosted Claude connector',
+    'scripts/session-context.sh:1: tool ga4_get_properties is not available on the hosted Claude connector',
+    'README.md:4: tool generate_video_ad is not available on the hosted Claude connector',
+  ]);
+  const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
+  names[0] = 'ga4_get_report';
+  fs.writeFileSync(path.join(root, 'tools/directory-tools.json'), JSON.stringify(names));
+  assert.throws(() => scan(root), /does not expose: ga4_get_report/);
+});
+
+test('"free" wording fails in instructions, README, and manifests; compounds pass', t => {
+  const root = fixtureRoot(t);
+  fs.writeFileSync(path.join(root, 'skills/example/SKILL.md'), 'Use list_campaigns.\nStart your Free trial.\nKeep it credential-free; reuse freed budget.');
+  fs.writeFileSync(path.join(root, 'README.md'), 'Install the plugin for free.');
+  fs.mkdirSync(path.join(root, '.claude-plugin'));
+  fs.writeFileSync(path.join(root, '.claude-plugin/plugin.json'), '{"description": "FREE ad operator"}');
+  assert.deepEqual(scan(root).errors, [
+    'skills/example/SKILL.md:2: banned phrase "Free"',
+    'README.md:1: banned phrase "free"',
+    '.claude-plugin/plugin.json:1: banned phrase "FREE"',
+  ]);
+});
+
+test('.mcp.json must be the OAuth-only hosted connector URL', t => {
+  const root = fixtureRoot(t);
+  const write = server => fs.writeFileSync(path.join(root, '.mcp.json'), JSON.stringify({ mcpServers: { synter: server } }));
+  for (const server of [
+    { type: 'http', url: 'https://mcp.synterai.com' },
+    { type: 'http', url: 'https://mcp.syntermedia.ai/mcp' },
+    { type: 'http', url: 'https://mcp.synterai.com/mcp', headers: { 'X-Synter-Key': '${SYNTER_API_KEY}' } },
+    { type: 'sse', url: 'https://mcp.synterai.com/mcp' },
+  ]) {
+    write(server);
+    assert.match(scan(root).errors.join('\n'), /\.mcp\.json: expected one OAuth-only Synter HTTP server at https:\/\/mcp\.synterai\.com\/mcp/, JSON.stringify(server));
+  }
+  write({ type: 'http', url: 'https://mcp.synterai.com/mcp', description: 'Synter' });
+  assert.deepEqual(scan(root).errors, []);
+  fs.rmSync(path.join(root, '.mcp.json'));
+  assert.deepEqual(scan(root).errors, ['.mcp.json: missing or invalid JSON']);
 });
 
 function response(id, result, { sse = false, session = false } = {}) {
@@ -74,7 +140,7 @@ test('live check initializes, passes session headers, parses JSON/SSE, and pagin
   const names = await readLiveTools({ token: 'test-oauth-token', fetchImpl: async (url, options) => {
     const body = JSON.parse(options.body);
     calls.push(body);
-    assert.equal(url, 'https://mcp.synterai.com');
+    assert.equal(url, 'https://mcp.synterai.com/mcp');
     assert.equal(options.headers.Authorization, 'Bearer test-oauth-token');
     assert.equal(options.redirect, 'error');
     if (body.method === 'initialize') return response(body.id, { protocolVersion: '2025-03-26' }, { session: true });

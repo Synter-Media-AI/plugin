@@ -11,7 +11,7 @@ Confirm the account: `list_connected_accounts`.
 
 ## 1. Is the data even real
 
-- Confirm conversion tracking is firing and attached to the right action (`ga4_get_conversions`, `get_pixel_health`). A campaign with broken tracking looks dead when it may be converting. See the **conversion-tracking** skill.
+- Confirm conversion tracking is firing and attached to the right action (`get_pixel_health`). A campaign with broken tracking looks dead when it may be converting. See the **conversion-tracking** skill.
 - Check the destination: does the final URL resolve and match the ad's promise. A broken or mismatched landing page kills conversion rate independent of the campaign.
 
 ## 2. Has it had enough time and volume

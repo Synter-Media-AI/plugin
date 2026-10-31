@@ -29,7 +29,7 @@ Use `create_campaign_plan` and `upsert_plan_entity` for the supported campaign s
 - Expect higher CPL than other platforms. Judge LinkedIn on pipeline quality and downstream conversion, not raw CPC.
 - Keep targeting to decision makers where the offer warrants it; do not spray a broad seniority range on an expensive platform.
 - Give campaigns room before judging; B2B conversion windows are long. Follow **pre-pause-analysis** before cutting.
-- Conversion tracking (Insight Tag and offline/CRM conversions) must be attached before scaling: `get_pixel_health`, `ga4_get_conversions`. Measure with `get_attribution`.
+- Conversion tracking (Insight Tag and offline/CRM conversions) must be attached before scaling: `get_pixel_health`. Measure with `get_attribution`.
 - Guard against a fat-finger daily budget 10 to 100x intended. Adjust with `update_campaign_budget`, pause with `pause_campaign`.
 - "Created" is not "live and spending." Confirm with `list_campaigns` and report the real IDs. Build an audience first with the **audience** skill when one does not exist yet.
 

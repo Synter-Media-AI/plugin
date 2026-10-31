@@ -108,7 +108,7 @@ def validate_claude_directory(files):
     servers = json.loads(files['.mcp.json']).get('mcpServers', {})
     if (set(servers) != {'synter'} or set(servers['synter']) != {'type', 'url', 'description'}
             or servers['synter']['type'] != 'http'
-            or servers['synter']['url'] != 'https://mcp.synterai.com'
+            or servers['synter']['url'] != 'https://mcp.synterai.com/mcp'
             or not isinstance(servers['synter']['description'], str)):
         raise ValueError('Directory supports only the declared remote HTTPS MCP server')
     if len(files['README.md'].decode().split()) < 40:

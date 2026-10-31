@@ -9,11 +9,11 @@ Pull every connected platform the tools support, reconcile, and tell the story s
 
 ## 1. Gather
 
-Pull the period the user wants across all connected platforms using the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`). Add analytics ground truth: `ga4_get_report` for sessions/conversions, `get_attribution` for conversion paths.
+Pull the period the user wants across all connected platforms using the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`). Add analytics context: `get_attribution` for conversion paths.
 
 ## 2. Reconcile
 
-Use `get_spend_reconciliation` to compare spend records. Compare conversion counts separately with `ga4_get_report` and `get_attribution`, stating the attribution model and window. Flag deduplication uncertainty and access failures rather than treating them as verified tracking defects.
+Use `get_spend_reconciliation` to compare spend records. Compare conversion counts separately with `get_attribution`, stating the attribution model and window. Flag deduplication uncertainty and access failures rather than treating them as verified tracking defects.
 
 ## 3. Tell the story
 

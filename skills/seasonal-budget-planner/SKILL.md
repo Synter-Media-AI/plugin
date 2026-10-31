@@ -7,7 +7,7 @@ description: Plan ad budgets around seasonal peaks — holiday scaling, CPM infl
 
 Peak season punishes flat budgets twice: CPMs inflate 50-150% while unprepared accounts pay them with untested creative and cold audiences. Plan in phases, not in a panic the week before.
 
-Ground the plan in your own history first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) over last year's season and `ga4_get_report` with a date dimension to see your real demand curve.
+Ground the plan in your own history first: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) over last year's season to see your real demand curve.
 
 ## 1. Plan in four phases
 

@@ -5,7 +5,7 @@ description: Verify available conversion and pixel diagnostics before launch; ha
 
 # Conversion tracking
 
-Confirm the account with `list_connected_accounts` and `verify_platform_accounts`. Use `ga4_get_properties` to select the right property, `ga4_get_conversions` to inspect configured conversions, and `ga4_get_report` to check recorded events over a stated period. Read `get_pixel_health` for available pixel diagnostics.
+Confirm the account with `list_connected_accounts` and `verify_platform_accounts`. Read `get_pixel_health` for available pixel and conversion diagnostics, and `get_attribution` to check recorded conversions over a stated period. For GA4 property or event detail, request an export from the GA4 UI.
 
 A configured conversion is not proof that the right event fires or that the campaign optimizes toward it. Compare the intended business action with the evidence returned. Use `run_launch_preflight` for a campaign plan. Mark fields and checks unavailable from the tools as unverified.
 

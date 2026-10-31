@@ -22,7 +22,7 @@ If a required level is missing, do not enable. Fix it first.
 
 Without tracking, the spend is blind and smart bidding cannot work.
 
-- Use `ga4_get_conversions`, `ga4_get_report`, and `get_pixel_health` for available conversion evidence. A configured action does not prove that a tag is firing; mark missing verification explicitly.
+- Use `get_pixel_health` and `run_launch_preflight` for available conversion evidence. A configured action does not prove that a tag is firing; mark missing verification explicitly.
 - Missing verified tracking on a conversion campaign is a stop. Once conversion goals are established, use MAXIMIZE_CONVERSIONS for Google Search conversion campaigns; do not substitute unconstrained Max Clicks. Consider Target CPA when conversion volume supports it.
 
 ## 3. UTMs on every ad (blocking)

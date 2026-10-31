@@ -36,7 +36,7 @@ Failure signatures:
 
 - Conversions roughly double the true count: event ID missing on one side.
 - Counts too low: IDs present but formatted differently on each side, or event names mismatched.
-- Platform reports far more conversions than GA4 shows (`ga4_get_report` on the conversion event): dedup broken — this is the most common finding.
+- Platform reports far more conversions than GA4 shows (compare with `get_attribution` or a GA4 export of the conversion event): dedup broken — this is the most common finding.
 
 ## 4. Raise match quality
 
@@ -44,7 +44,7 @@ Match quality (Meta EMQ 0-10; TikTok match rate) decides how many conversions at
 
 ## 5. Reconcile across platforms
 
-Platforms can claim overlapping conversions. Compare platform results with `ga4_get_report` and inspect attribution with `get_attribution`, using consistent periods and stated attribution windows. Use `get_spend_reconciliation` for spend discrepancies; it does not establish conversion deduplication.
+Platforms can claim overlapping conversions. Compare platform results and inspect attribution with `get_attribution`, using consistent periods and stated attribution windows. Use `get_spend_reconciliation` for spend discrepancies; it does not establish conversion deduplication.
 
 ## 6. Report and fix in priority order
 

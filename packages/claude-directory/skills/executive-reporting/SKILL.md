@@ -7,7 +7,7 @@ description: Build C-suite and board ad reports — blended ROAS, month-over-mon
 
 Write for a reader who does not live in the ad accounts. Lead with the result and the decision, not the dashboard. Reads only; this produces a report, it does not change spend.
 
-Confirm the account: `list_connected_accounts`, then pull real numbers across platforms: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`), `get_attribution` for the cross-platform view, `ga4_get_report` for outcomes. Reconcile platform self-reports before quoting a total (see **attribution**).
+Confirm the account: `list_connected_accounts`, then pull real numbers across platforms: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`), `get_attribution` for the cross-platform view and outcomes. Reconcile platform self-reports before quoting a total (see **attribution**).
 
 ## What an exec report says
 
