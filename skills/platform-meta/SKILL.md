@@ -30,7 +30,7 @@ Use `create_campaign_plan` and `upsert_plan_entity` for the supported campaign s
 - **Learning Phase:** a new ad set needs enough conversions to exit learning. Do not judge or kill it early, and do not edit it constantly; each significant edit resets learning. See the **pre-pause-analysis** discipline before cutting anything.
 - **Creative fatigue:** rising frequency with falling CTR means the creative is spent. Watch it with the **creative-fatigue-detector** skill and rotate before performance collapses.
 - Keep audience overlap in check; ad sets competing against each other inflate CPM.
-- Conversion tracking (pixel and CAPI) must be firing and attached: `get_pixel_health`, `ga4_get_conversions`. Blind spend is worse than no spend.
+- Conversion tracking (pixel and CAPI) must be firing and attached: `get_pixel_health`. Blind spend is worse than no spend.
 - Guard against a fat-finger daily budget 10 to 100x intended. Adjust with `update_campaign_budget`, pause with `pause_campaign`. Start conservative; scale winners with the **optimize** skill.
 - "Created" is not "live and spending." Confirm with `list_campaigns` and report the real IDs.
 

@@ -14,8 +14,19 @@ const DATA_IDENTIFIERS = new Set([
   'utm_content', 'utm_medium', 'utm_source', 'utm_term',
 ]);
 const ROOT = path.resolve(__dirname, '..');
-const SURFACES = ['skills', 'commands', 'rules', 'agents'];
-const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+const SURFACES = ['skills', 'commands', 'rules', 'agents', 'context', 'output-styles', 'scripts/session-context.sh'];
+// Docs mix tool names with shell commands, so they are checked only for
+// unavailable tool families and banned phrases, not against the allowlist.
+const DOCS = ['README.md'];
+// Hosted Claude connector: OAuth only, so the config carries no headers or keys.
+const MCP_URL = 'https://mcp.synterai.com/mcp';
+const ENDPOINTS = new Set([MCP_URL, 'https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+// Tool families the hosted Claude connector does not expose.
+const UNAVAILABLE_TOOL = /^(?:ga4|generate)_/;
+// Pricing language is not allowed in listing or instruction copy. Hyphenated
+// compounds such as "credential-free" and words such as "freed" are fine.
+const BANNED_PHRASES = [/(?<![\w-])free(?![\w-])/i];
+const MANIFESTS = ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json'];
 
 function extractReferences(source) {
   const refs = [];
@@ -42,6 +53,7 @@ function extractReferences(source) {
 
 function listFiles(dir) {
   if (!fs.existsSync(dir)) return [];
+  if (fs.lstatSync(dir).isFile()) return [dir];
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
     const filename = path.join(dir, entry.name);
     if (entry.isSymbolicLink()) throw new Error(`Instruction symlinks are not supported: ${filename}`);
@@ -51,10 +63,12 @@ function listFiles(dir) {
 
 function readAllowlist(root) {
   const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
-  if (!Array.isArray(names) || names.length !== 34 || new Set(names).size !== 34 ||
+  if (!Array.isArray(names) || names.length !== 31 || new Set(names).size !== 31 ||
       names.some(name => typeof name !== 'string' || !/^[a-z][a-z0-9_]+$/.test(name))) {
-    throw new Error('tools/directory-tools.json must contain 34 unique tool names.');
+    throw new Error('tools/directory-tools.json must contain 31 unique tool names.');
   }
+  const unavailable = names.filter(name => UNAVAILABLE_TOOL.test(name));
+  if (unavailable.length) throw new Error(`tools/directory-tools.json lists tools the hosted connector does not expose: ${unavailable.join(', ')}`);
   return new Set(names);
 }
 
@@ -65,15 +79,62 @@ function scan(root = ROOT) {
   const files = SURFACES.flatMap(surface => listFiles(path.join(root, surface)));
   if (!files.length) throw new Error('No instruction files found.');
   for (const filename of files) {
-    for (const ref of extractReferences(fs.readFileSync(filename, 'utf8'))) {
+    const source = fs.readFileSync(filename, 'utf8');
+    const relative = path.relative(root, filename);
+    for (const ref of extractReferences(source)) {
       references.add(ref.name);
-      if (!allowed.has(ref.name)) errors.push(`${path.relative(root, filename)}:${ref.line}: unlisted tool ${ref.name}`);
+      if (UNAVAILABLE_TOOL.test(ref.name)) errors.push(`${relative}:${ref.line}: tool ${ref.name} is not available on the hosted Claude connector`);
+      else if (!allowed.has(ref.name)) errors.push(`${relative}:${ref.line}: unlisted tool ${ref.name}`);
     }
+    errors.push(...findBannedPhrases(source, relative));
   }
+  for (const doc of DOCS) {
+    const filename = path.join(root, doc);
+    if (!fs.existsSync(filename)) continue;
+    const source = fs.readFileSync(filename, 'utf8');
+    source.split(/\r?\n/).forEach((line, index) => {
+      for (const match of line.matchAll(/\b(?:ga4|generate)_[a-z0-9_]+/g)) {
+        errors.push(`${doc}:${index + 1}: tool ${match[0]} is not available on the hosted Claude connector`);
+      }
+    });
+    errors.push(...findBannedPhrases(source, doc));
+  }
+  for (const manifest of MANIFESTS) {
+    const filename = path.join(root, manifest);
+    if (fs.existsSync(filename)) errors.push(...findBannedPhrases(fs.readFileSync(filename, 'utf8'), manifest));
+  }
+  errors.push(...checkMcpConfig(root));
   return { allowed, references, errors, fileCount: files.length };
 }
 
-async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImpl = fetch }) {
+function findBannedPhrases(source, relative) {
+  const errors = [];
+  source.split(/\r?\n/).forEach((line, index) => {
+    for (const pattern of BANNED_PHRASES) {
+      const match = line.match(pattern);
+      if (match) errors.push(`${relative}:${index + 1}: banned phrase "${match[0]}"`);
+    }
+  });
+  return errors;
+}
+
+function checkMcpConfig(root) {
+  let server;
+  let servers;
+  try {
+    servers = JSON.parse(fs.readFileSync(path.join(root, '.mcp.json'), 'utf8')).mcpServers;
+    server = servers && servers.synter;
+  } catch {
+    return ['.mcp.json: missing or invalid JSON'];
+  }
+  if (!server || Object.keys(servers).length !== 1 || server.type !== 'http' || server.url !== MCP_URL ||
+      Object.keys(server).some(key => !['type', 'url', 'description'].includes(key))) {
+    return [`.mcp.json: expected one OAuth-only Synter HTTP server at ${MCP_URL} with no headers or credentials`];
+  }
+  return [];
+}
+
+async function readLiveTools({ token, url = MCP_URL, fetchImpl = fetch }) {
   if (!token) throw new Error('Live check requires SYNTER_MCP_TOKEN (an OAuth access token).');
   if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the two production Synter MCP endpoints.');
   let session;
@@ -150,6 +211,9 @@ async function main() {
   const args = process.argv.slice(2);
   if (args.some(arg => arg !== '--live')) throw new Error('Usage: node scripts/check-directory-tools.js [--live]');
   const result = scan();
+  // The checked-in Claude directory bundle ships separately; hold it to the same rules.
+  const bundle = path.join(ROOT, 'packages/claude-directory');
+  if (fs.existsSync(bundle)) result.errors.push(...scan(bundle).errors.map(error => `packages/claude-directory/${error}`));
   if (result.errors.length) throw new Error(result.errors.join('\n'));
   if (args.includes('--live') || process.env.SYNTER_MCP_TOKEN) {
     const live = await readLiveTools({ token: process.env.SYNTER_MCP_TOKEN, url: process.env.SYNTER_MCP_URL });

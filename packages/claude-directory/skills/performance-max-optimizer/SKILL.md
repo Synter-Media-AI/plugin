@@ -36,7 +36,7 @@ Signals guide initial learning; PMax expands beyond them. Stack them by strength
 
 - Review customer and high-value purchaser lists with `list_audiences`. Have the account owner create or refresh lists in the platform UI before using them in supported campaign-plan fields.
 - Custom segments from high-intent search terms and competitor URLs (50-100 entries each).
-- Site visitors and cart abandoners from GA4 (`ga4_get_report` to size them).
+- Site visitors and cart abandoners from GA4 (check available lists with `list_audiences`).
 - Interests and demographics last, as seasoning only.
 
 After 30 days, check which segments convert and whether expansion aligns with them. Deeper audience work lives in **audience**.

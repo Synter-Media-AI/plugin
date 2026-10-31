@@ -2,6 +2,11 @@
 
 ## [1.2.1] - Unreleased
 
+- Remove `ga4_*` tool references from skills, agents, the SDK runner, and the
+  tool directory (now 31 tools); the hosted Claude connector does not expose them.
+- Point the Claude `.mcp.json` at the hosted OAuth connector `https://mcp.synterai.com/mcp`.
+- `check-directory-tools.js` now fails on `ga4_*`/`generate_*` tool references,
+  "free" wording, or a non-canonical `.mcp.json`, for the repo and the directory bundle.
 - Add a portable OpenAI package targeting the existing Synter Ads MCP draft,
   with directory metadata, OAuth discovery, and reviewer test cases.
 - Preserve the four existing creative, page, visibility, and creator-brief skill

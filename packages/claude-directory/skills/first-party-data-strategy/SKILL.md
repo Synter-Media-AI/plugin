@@ -11,7 +11,7 @@ Confirm the workspace with `list_connected_accounts` and `get_connection_status`
 
 ## 1. Audit what you collect today
 
-Inventory every point where you capture an identifier: forms, signups, purchases, email lists, CRM records, in-app events. For each, note the identifier (email, phone, address), consent status, and freshness. Check what conversion data actually reaches the platforms: `ga4_get_conversions` and `ga4_get_report` for the site side, the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for what each platform claims. Big gaps between GA4 and platform numbers usually mean tracking loss, not attribution magic — see **conversion-tracking**.
+Inventory every point where you capture an identifier: forms, signups, purchases, email lists, CRM records, in-app events. For each, note the identifier (email, phone, address), consent status, and freshness. Check what conversion data actually reaches the platforms: `get_pixel_health` and `get_attribution` for the site side, the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) for what each platform claims. Big gaps between GA4 and platform numbers usually mean tracking loss, not attribution magic — see **conversion-tracking**.
 
 ## 2. Set up Enhanced Conversions and CAPI
 
@@ -51,7 +51,7 @@ Collected data earns its keep in audiences:
 
 ## 7. Verify the pipeline end to end
 
-After changes, compare site events with `ga4_get_report` and available platform performance results, then inspect attribution differences with `get_attribution`. Use `get_spend_reconciliation` for spend records separately. Mark unsupported event-level checks as unverified.
+After changes, compare site events from `get_pixel_health` (or a GA4 export the user provides) with available platform performance results, then inspect attribution differences with `get_attribution`. Use `get_spend_reconciliation` for spend records separately. Mark unsupported event-level checks as unverified.
 
 ## Rules
 

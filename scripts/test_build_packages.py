@@ -58,7 +58,8 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
-                       {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
+                       {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test'},
+                       {'type': 'http', 'url': 'https://mcp.synterai.com/mcp', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
             with self.subTest(server=server), self.assertRaises(ValueError):
                 mod.validate_claude_directory({**files, '.mcp.json': mod.encoded({'mcpServers': {'synter': server}})})
 
@@ -99,12 +100,12 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '72fecb572222d3725acd884f4d7f49a3f5493a2c084d4a4ee201a53a960aee73',
-            'claude-directory': 'e313a4ed69ef3e2e80d13c622d102e69d8e6c51cfeb8f0ba13f29b2e0340efc1',
-            'openai': '5ab905019791b7f0f71033e19e18042e26ba272b7b2d958aac4ff177a7c0f665',
-            'openai-new-draft': '48bbdbedbc5eb96ffacfcd18b339048139ac6f67dbca160e5fd2d13b7682cd87',
+            'claude': 'db3ff6f763b55df338d20464d615ca2512ee6c089f3e7afb61b9fed376beadf7',
+            'claude-directory': '503b3fa379822b6eaa3476fd456bc110c473d8615c26735f817fe9fbd76e8109',
+            'openai': '273cd2584b0f7e49799fabbb61c37c56d899be4c7f4ab12dd893ca69da99cc3e',
+            'openai-new-draft': '5110ecac864a3c2f143a17c38f98d8a468bce5ad1166335238a44587690062cf',
         }
-        # Snapshot after the approved RSA/bidding correction across all hosts.
+        # Snapshot after removing ga4_* references and moving Claude to the /mcp endpoint.
         # Update deliberately when reviewed package contents change.
         for target, digest in expected.items():
             _, files = mod.collect(mod.ROOT, target)

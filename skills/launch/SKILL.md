@@ -17,7 +17,7 @@ Get the brief in plain English, then pin down what you need:
 - **Budget** — daily/total, and the **target CPA/ROAS**.
 - **Landing page / final URL** and the offer.
 
-Confirm the account with `list_connected_accounts`. Check conversion evidence with `ga4_get_conversions`, `ga4_get_report`, and `get_pixel_health`. Resolve missing verification before launching.
+Confirm the account with `list_connected_accounts`. Check conversion evidence with `get_pixel_health` and `run_launch_preflight`. Resolve missing verification before launching.
 
 ## 2. Plan it
 

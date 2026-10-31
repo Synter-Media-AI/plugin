@@ -36,7 +36,7 @@ Use `create_campaign_plan` and `upsert_plan_entity` for the supported campaign s
 - Enabling a campaign does not serve its ad groups if those stay paused. After enabling, re-pull and confirm the children actually serve; never trust the campaign status alone.
 - Carry negatives across, not just keywords. Keywords without negatives burn budget.
 - Verify geo/location criteria exist and match intent.
-- Conversion tracking must exist and be attached before scaling: `ga4_get_conversions`, `get_pixel_health`.
+- Conversion tracking must exist and be attached before scaling: `get_pixel_health`, `run_launch_preflight`.
 - Guard against a fat-finger daily budget 10 to 100x intended. Adjust with `update_campaign_budget`, pause with `pause_campaign`.
 - "Created" is not "live and spending." Confirm with `list_campaigns` and report the real IDs.
 

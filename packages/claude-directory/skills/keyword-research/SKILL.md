@@ -28,7 +28,7 @@ Use `research_campaign_opportunity` and available `pull_google_ads_performance` 
 
 ## 4. Add on approval
 
-Draft supported keyword entities with `upsert_plan_entity` and follow **launch** for review, preflight, approval, execution, and verification. Use the platform UI if keyword edits are unsupported. Pair expansions with exclusions and verify tracking with `ga4_get_conversions` and **conversion-tracking**.
+Draft supported keyword entities with `upsert_plan_entity` and follow **launch** for review, preflight, approval, execution, and verification. Use the platform UI if keyword edits are unsupported. Pair expansions with exclusions and verify tracking with `get_pixel_health` and **conversion-tracking**.
 
 ## Rules
 
