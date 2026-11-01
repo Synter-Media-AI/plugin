@@ -3,7 +3,7 @@
   "name": "synter",
   "displayName": "Synter",
   "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "license": "MIT",
   "author": {
     "name": "Synter",

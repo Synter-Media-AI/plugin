@@ -15,7 +15,7 @@ const DATA_IDENTIFIERS = new Set([
 ]);
 const ROOT = path.resolve(__dirname, '..');
 const SURFACES = ['skills', 'commands', 'rules', 'agents'];
-const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+const ENDPOINTS = new Set(['https://mcp.synterai.com']);
 
 function extractReferences(source) {
   const refs = [];
@@ -75,7 +75,7 @@ function scan(root = ROOT) {
 
 async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImpl = fetch }) {
   if (!token) throw new Error('Live check requires SYNTER_MCP_TOKEN (an OAuth access token).');
-  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the two production Synter MCP endpoints.');
+  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be the production Synter MCP endpoint (https://mcp.synterai.com).');
   let session;
   let protocol = '2025-03-26';
   let requestId = 0;

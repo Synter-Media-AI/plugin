@@ -25,14 +25,14 @@ complementary catalogs. Do not treat connector review as plugin publication.
 | Public repository | `https://github.com/Synter-Media-AI/plugin` |
 | Plugin name | `synter` |
 | Publisher | Synter |
-| Website | `https://syntermedia.ai` |
+| Website | `https://synterai.com` |
 | License | MIT |
 | Category | Marketing and advertising |
 | Short description | Operate cross-channel advertising with approval-gated Synter agents, skills, and MCP tools. |
 | Brand icon | `assets/logo.png` — canonical transparent 1024×1024 Synter mark |
-| Support | `https://syntermedia.ai/support` |
-| Privacy policy | `https://syntermedia.ai/privacy` |
-| Terms | `https://syntermedia.ai/terms` |
+| Support | `https://synterai.com/support` |
+| Privacy policy | `https://synterai.com/privacy` |
+| Terms | `https://synterai.com/terms` |
 
 Suggested long description:
 
@@ -105,7 +105,7 @@ Direct installation is not public-directory discovery.
 ## Security and data-use evidence
 
 - Claude invokes a Bash session hook that prints static guidance through `cat`. Cursor declares no hook. The repository also contains a manually invoked Node SDK runner and development scripts; no compiled binaries are bundled.
-- Claude uses `https://mcp.syntermedia.ai` to match the connector under review. Cursor separately uses `https://mcp.synterai.com`. Both plugin configurations use browser OAuth without static credentials or headers.
+- Claude and Cursor use `https://mcp.synterai.com`. Both plugin configurations use browser OAuth without static credentials or headers.
 - The session hook prints a static operating and approval-safety primer into
   session context; it does not read or transmit credentials.
 - Advertising writes are approval-gated. The bundled guidance does not turn a
@@ -133,9 +133,9 @@ boundary before any external spend-changing action.
 | Requirement | Evidence |
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
-| OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.syntermedia.ai` |
+| OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.synterai.com` |
 | Tool directory | 34 checked-in tool names; live annotations require a fresh authenticated review |
-| Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/support` |
+| Privacy and support | `https://synterai.com/privacy`; `https://synterai.com/support` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
 | Approval boundary | Spend-changing operations require explicit approval; a model response is not approval |
 | Test account | Must be supplied privately by Synter in the submission form |
