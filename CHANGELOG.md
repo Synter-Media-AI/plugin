@@ -2,6 +2,12 @@
 
 ## [1.2.1] - Unreleased
 
+- Canonicalize MCP server URL to `https://mcp.syntermedia.ai/mcp` across Claude,
+  Cursor, and portable OpenAI configurations with browser OAuth.
+- Add `scripts/check-skill-tools.mjs` CI validation to verify skill tool references
+  against the hosted tools allowlist (`scripts/hosted-tools.json`).
+- Document pricing line ($0.25 per verified write, 0% of ad spend; Plans: Solo, Scale and Custom)
+  and 30+ ad platforms support across documentation and metadata.
 - Add a portable OpenAI package targeting the existing Synter Ads MCP draft,
   with directory metadata, OAuth discovery, and reviewer test cases.
 - Preserve the four existing creative, page, visibility, and creator-brief skill

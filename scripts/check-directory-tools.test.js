@@ -74,7 +74,7 @@ test('live check initializes, passes session headers, parses JSON/SSE, and pagin
   const names = await readLiveTools({ token: 'test-oauth-token', fetchImpl: async (url, options) => {
     const body = JSON.parse(options.body);
     calls.push(body);
-    assert.equal(url, 'https://mcp.synterai.com');
+    assert.equal(url, 'https://mcp.syntermedia.ai/mcp');
     assert.equal(options.headers.Authorization, 'Bearer test-oauth-token');
     assert.equal(options.redirect, 'error');
     if (body.method === 'initialize') return response(body.id, { protocolVersion: '2025-03-26' }, { session: true });

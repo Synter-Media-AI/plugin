@@ -30,7 +30,7 @@
       "interface": {
         "displayName": "Synter",
         "shortDescription": "Manage advertising campaigns",
-        "longDescription": "Connect your Synter workspace to review advertising performance, write ad copy, and prepare campaign plans. Synter uses accounts you have connected and authorized. Account changes and spending require your approval. Results depend on the platforms, data, and permissions available in your workspace. A Synter account and authorized advertising accounts are required.",
+        "longDescription": "Connect your Synter workspace to review advertising performance, write ad copy, and prepare campaign plans across 30+ ad platforms. Synter uses accounts you have connected and authorized. Account changes and spending require your approval. Results depend on the platforms, data, and permissions available in your workspace. A Synter account and authorized advertising accounts are required.",
         "developerName": "Synter",
         "category": "Productivity",
         "capabilities": [

@@ -4,7 +4,7 @@
 
 # Synter plugin
 
-Plan advertising campaigns, review performance, write ad copy, and apply approved campaign changes through Synter. This plugin is a no-cost client for the paid Synter service. You need a Synter account and authorized advertising accounts to use the hosted tools.
+Plan advertising campaigns across 30+ ad platforms, review performance, write ad copy, and apply approved campaign changes through Synter. Pricing: $0.25 per verified write, 0% of ad spend. Plans: Solo, Scale and Custom. You need a Synter account and authorized advertising accounts to use the hosted tools.
 
 ## Install and sign in
 
@@ -58,8 +58,8 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 
 | Client | Configuration | Hosted MCP URL |
 | --- | --- | --- |
-| Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
-| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
+| Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.syntermedia.ai/mcp` |
+| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.syntermedia.ai/mcp` |
 
 The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 

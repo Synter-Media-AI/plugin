@@ -74,7 +74,7 @@ for (const [name, filename, mutate, error] of [
   ['missing public logo', 'plugin.json', m => { m.extensions['com.openai'].interface.logo = './assets/missing.png'; }, /missing packaged logo/],
   ['public lifecycle hook', 'plugin.json', m => { m.extensions['com.openai'].hooks = './hooks/hooks.json'; }, /cannot declare hooks/],
   ['static authentication secret', 'mcp.json', m => { m.mcpServers.synter.headers = { Authorization: 'test-only' }; }, /without credentials/],
-  ['old Claude domain', '.mcp.json', m => { m.mcpServers.synter.url = 'https://mcp.syntermedia.ai'; }, /expected a single Synter HTTP server/],
+  ['wrong MCP url', '.mcp.json', m => { m.mcpServers.synter.url = 'https://mcp.synterai.com'; }, /expected a single Synter HTTP server/],
 ]) {
   test(`rejects ${name}`, t => {
     const repo = fixture(t);

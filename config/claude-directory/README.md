@@ -1,6 +1,6 @@
 # Synter
 
-Synter helps you review advertising performance, prepare campaign plans, write ad copy, and approve changes through its hosted MCP service. Start with the quickstart skill, sign in through the browser OAuth prompt, and verify the connected workspace and advertising account before using account data.
+Synter helps you review advertising performance, prepare campaign plans, write ad copy, and approve changes across 30+ ad platforms through its hosted MCP service. Start with the quickstart skill, sign in through the browser OAuth prompt, and verify the connected workspace and advertising account before using account data.
 
 This directory package includes 56 Markdown skills, six agent instructions, an output style, and static [brand and safety guidance](context/brand-and-safety.md). Its only service connection is the remote HTTPS MCP server declared in `.mcp.json`. It contains no local lifecycle hooks, executable scripts, or SDK runner. Tool availability follows the bundled [tool directory](tools/directory-tools.json) and the live server schema.
 
