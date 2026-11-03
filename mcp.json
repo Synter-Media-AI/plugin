@@ -3,7 +3,7 @@
   "mcpServers": {
     "synter": {
       "type": "streamable-http",
-      "url": "https://mcp.syntermedia.ai/mcp"
+      "url": "https://mcp.synterai.com/mcp"
     }
   }
 }

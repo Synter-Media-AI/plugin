@@ -115,8 +115,8 @@ if (fs.existsSync(SKILLS_DIR)) {
 
 // (d) Client-specific HTTP syntax remains separate from the portable MCP schema.
 for (const [configPath, expectedUrl] of [
-  ['.mcp.json', 'https://mcp.syntermedia.ai/mcp'],
-  ['.cursor-mcp.json', 'https://mcp.syntermedia.ai/mcp'],
+  ['.mcp.json', 'https://mcp.synterai.com/mcp'],
+  ['.cursor-mcp.json', 'https://mcp.synterai.com/mcp'],
 ]) {
   const config = manifests[configPath];
   const servers = config && config.mcpServers;
@@ -172,7 +172,7 @@ if (openai?.hooks || openai?.apps || fs.existsSync(path.join(REPO_ROOT, '.app.js
 const portableServer = portableMcp?.mcpServers?.synter;
 if (portableMcp?.$schema !== 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json' ||
     Object.keys(portableMcp?.mcpServers || {}).length !== 1 || portableServer?.type !== 'streamable-http' ||
-    portableServer?.url !== 'https://mcp.syntermedia.ai/mcp' ||
+    portableServer?.url !== 'https://mcp.synterai.com/mcp' ||
     Object.keys(portableServer || {}).some(key => !['type', 'url'].includes(key))) {
   errors.push('mcp.json: expected portable HTTP transport and OAuth DCR without credentials');
 }

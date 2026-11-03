@@ -58,7 +58,7 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
-                       {'type': 'http', 'url': 'https://mcp.syntermedia.ai/mcp', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
+                       {'type': 'http', 'url': 'https://mcp.synterai.com/mcp', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
             with self.subTest(server=server), self.assertRaises(ValueError):
                 mod.validate_claude_directory({**files, '.mcp.json': mod.encoded({'mcpServers': {'synter': server}})})
 
@@ -99,10 +99,10 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '9a15f7c09a26e88fccaca04cfd90f0bb124854d2c880bbf23682b7a919463eb1',
-            'claude-directory': '2aec9e6a6c5814cd72cab38b3078f6a31731e013b7376fe96bc6e026e0c623b0',
-            'openai': 'da30dd604f66ed579741ab7798018cd6f8b8cb09ff5cd8c2094cdf3d28611257',
-            'openai-new-draft': '7045f252e7251a357b09dd3c8b5e67550c8c7527865406cd1673a46e1b22e1b8',
+            'claude': '09e02d46831992bbfe9b0fbbf162382a7f86afdbea87e94ee47a96d8788f5ddb',
+            'claude-directory': '59bf4933b3759a73dc5c67e550a0531954c320c31b2f329216e61e426effec0e',
+            'openai': '65e8c79639195e4b42b6d2edebf674fc6934ef151fe9813ed24a8fed1653c222',
+            'openai-new-draft': '1b611b4a4ddf6299fc89b357809a3d4136f05f070c355dbe6d8d1b16815a47b5',
         }
         # Snapshot after the approved RSA/bidding correction across all hosts.
         # Update deliberately when reviewed package contents change.

@@ -2,8 +2,9 @@
 
 ## [1.2.1] - Unreleased
 
-- Canonicalize MCP server URL to `https://mcp.syntermedia.ai/mcp` across Claude,
-  Cursor, and portable OpenAI configurations with browser OAuth.
+- Canonicalize MCP server URL to `https://mcp.synterai.com/mcp` across Claude,
+  Cursor, and portable OpenAI configurations with browser OAuth (retaining
+  `https://mcp.syntermedia.ai/mcp` as a documented legacy alias).
 - Add `scripts/check-skill-tools.mjs` CI validation to verify skill tool references
   against the hosted tools allowlist (`scripts/hosted-tools.json`).
 - Document pricing line ($0.25 per verified write, 0% of ad spend; Plans: Solo, Scale and Custom)

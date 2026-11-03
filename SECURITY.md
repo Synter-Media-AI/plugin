@@ -6,7 +6,7 @@ Email **joel@synterai.com** with the subject "Security: Synter plugin". Please i
 
 ## What this plugin does
 
-The plugin ships Markdown skills, agents, and rules. ChatGPT, Codex, Claude, and Cursor connect to `https://mcp.syntermedia.ai/mcp` with browser OAuth without static credential headers or secret environment configuration.
+The plugin ships Markdown skills, agents, and rules. ChatGPT, Codex, Claude, and Cursor connect to `https://mcp.synterai.com/mcp` (with `https://mcp.syntermedia.ai/mcp` supported as a documented legacy alias) with browser OAuth without static credential headers or secret environment configuration.
 
 Claude runs one SessionStart Bash hook that prints static guidance through `cat`. It does not read credentials or make network requests. Cursor declares no executable hooks. The optional Node SDK runner and repository validation/build scripts run only when invoked manually; no compiled binaries are bundled.
 

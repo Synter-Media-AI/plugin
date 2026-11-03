@@ -105,7 +105,7 @@ Direct installation is not public-directory discovery.
 ## Security and data-use evidence
 
 - Claude invokes a Bash session hook that prints static guidance through `cat`. Cursor declares no hook. The repository also contains a manually invoked Node SDK runner and development scripts; no compiled binaries are bundled.
-- Claude and Cursor connect to `https://mcp.syntermedia.ai/mcp`. Both plugin configurations use browser OAuth without static credentials or headers.
+- Claude and Cursor connect to `https://mcp.synterai.com/mcp` (`https://mcp.syntermedia.ai/mcp` is retained as a documented legacy alias). Both plugin configurations use browser OAuth without static credentials or headers.
 - The session hook prints a static operating and approval-safety primer into
   session context; it does not read or transmit credentials.
 - Advertising writes are approval-gated. The bundled guidance does not turn a
@@ -133,7 +133,7 @@ boundary before any external spend-changing action.
 | Requirement | Evidence |
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
-| OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.syntermedia.ai/mcp` |
+| OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.synterai.com/mcp` (legacy alias: `https://mcp.syntermedia.ai/mcp`) |
 | Tool directory | 34 checked-in tool names; live annotations require a fresh authenticated review |
 | Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/support` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
