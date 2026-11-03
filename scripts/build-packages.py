@@ -15,6 +15,12 @@ ROOT = Path(__file__).resolve().parents[1]
 # schema does not yet accept server extensions. Keep the base independent.
 OPENAI_AUTH = {'type': 'oauth', 'client': {'mode': 'dcr'}}
 
+# The directory bundle points at Synter's curated directory endpoint, which
+# serves only the reviewed connector tool surface to every client (claude.ai,
+# Desktop, Claude Code). It is the same URL submitted as the MCP connector.
+DIRECTORY_MCP_URL = 'https://mcp.synterai.com/mcp/directory'
+DIRECTORY_PRIVACY_URL = 'https://synterai.com/privacy'
+
 
 def validate_openai_mcp(value):
     base = json.loads((ROOT / 'mcp.json').read_text())
@@ -56,8 +62,11 @@ def collect(root, target):
         include('scripts/session-context.sh')
     elif target == 'claude-directory':
         manifest.pop('hooks', None)
+        manifest['privacyPolicyUrl'] = DIRECTORY_PRIVACY_URL
         files['.claude-plugin/plugin.json'] = encoded(manifest)
-        include('.mcp.json')
+        directory_mcp = json.loads((root / '.mcp.json').read_text())
+        directory_mcp['mcpServers']['synter']['url'] = DIRECTORY_MCP_URL
+        files['.mcp.json'] = encoded(directory_mcp)
         for source, destination in [('README.md', 'README.md'), ('help.md', 'skills/help/SKILL.md')]:
             path = root / 'config/claude-directory' / source
             relative_path = path.relative_to(root)
@@ -102,13 +111,15 @@ def validate_claude_directory(files):
     manifest = json.loads(files['.claude-plugin/plugin.json'])
     if 'hooks' in manifest:
         raise ValueError('Directory manifest must not declare hooks')
+    if manifest.get('privacyPolicyUrl') != DIRECTORY_PRIVACY_URL:
+        raise ValueError('Directory manifest must declare the Synter privacy policy URL')
     if set(manifest) - {'$schema', 'name', 'displayName', 'description', 'version', 'license',
-                        'author', 'homepage', 'repository', 'keywords'}:
+                        'author', 'homepage', 'repository', 'keywords', 'privacyPolicyUrl'}:
         raise ValueError('Unreviewed directory manifest capability')
     servers = json.loads(files['.mcp.json']).get('mcpServers', {})
     if (set(servers) != {'synter'} or set(servers['synter']) != {'type', 'url', 'description'}
             or servers['synter']['type'] != 'http'
-            or servers['synter']['url'] != 'https://mcp.synterai.com'
+            or servers['synter']['url'] != DIRECTORY_MCP_URL
             or not isinstance(servers['synter']['description'], str)):
         raise ValueError('Directory supports only the declared remote HTTPS MCP server')
     if len(files['README.md'].decode().split()) < 40:

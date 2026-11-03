@@ -57,7 +57,10 @@ class PackageTests(unittest.TestCase):
         changed['.claude-plugin/plugin.json'] = mod.encoded(manifest)
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
+        self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], mod.DIRECTORY_MCP_URL)
+        self.assertEqual(mod.DIRECTORY_MCP_URL, 'https://mcp.synterai.com/mcp/directory')
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
+                       {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'full catalog, not the directory surface'},
                        {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
             with self.subTest(server=server), self.assertRaises(ValueError):
                 mod.validate_claude_directory({**files, '.mcp.json': mod.encoded({'mcpServers': {'synter': server}})})
@@ -99,12 +102,13 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '72fecb572222d3725acd884f4d7f49a3f5493a2c084d4a4ee201a53a960aee73',
-            'claude-directory': 'e313a4ed69ef3e2e80d13c622d102e69d8e6c51cfeb8f0ba13f29b2e0340efc1',
+            'claude': '258e638fc31d338aebb3b9057ccd32f8aaf35572175993ad7c68ce42d4aff64b',
+            'claude-directory': '36f363157d4502a28df5b70a4c241f148595e674db9036f74f29d7a1527b23d9',
             'openai': '5ab905019791b7f0f71033e19e18042e26ba272b7b2d958aac4ff177a7c0f665',
             'openai-new-draft': '48bbdbedbc5eb96ffacfcd18b339048139ac6f67dbca160e5fd2d13b7682cd87',
         }
-        # Snapshot after the approved RSA/bidding correction across all hosts.
+        # Snapshot after the approved RSA/bidding correction across all hosts,
+        # then the 30+ description and /mcp/directory endpoint (2026-11-03).
         # Update deliberately when reviewed package contents change.
         for target, digest in expected.items():
             _, files = mod.collect(mod.ROOT, target)
