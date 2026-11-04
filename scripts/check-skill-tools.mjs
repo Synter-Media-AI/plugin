@@ -32,17 +32,35 @@ export function extractToolReferences(content) {
   const refs = [];
   const lines = content.split(/\r?\n/);
   lines.forEach((line, index) => {
+    const names = new Set();
     // Match explicit syntax: mcp__synter__<tool> or tool:<tool>
-    for (const match of line.matchAll(/\bmcp__[a-zA-Z0-9_-]+?__([a-z][a-z0-9_]+)|\btool:([a-z][a-z0-9_]+)/g)) {
-      const toolName = match[1] || match[2];
-      refs.push({ name: toolName, line: index + 1 });
+    for (const match of line.matchAll(/\bmcp__[a-zA-Z0-9_-]+?__([a-zA-Z0-9_-]+)|\btool:([a-zA-Z0-9_-]+)/g)) {
+      names.add(match[1] || match[2]);
     }
-    // Match backticked snake_case identifiers
-    for (const match of line.matchAll(/`([a-z][a-z0-9]*(?:_[a-z0-9]+)+)`/g)) {
-      const name = match[1];
-      if (!DATA_IDENTIFIERS.has(name)) {
-        refs.push({ name, line: index + 1 });
+    // Clean explicit MCP calls, URLs, link destinations, HTML tags/comments, and file names with extensions
+    // to avoid false positives from snake_case paths/URLs/files.
+    const clean = line
+      .replace(/\bmcp__[a-zA-Z0-9_-]+?__[a-zA-Z0-9_-]+/g, '')
+      .replace(/<!--.*?-->/g, '')
+      .replace(/<[a-zA-Z][^>]*>/g, '')
+      .replace(/https?:\/\/[^\s\)]+/g, '')
+      .replace(/\]\([^\)]*\)/g, ']')
+      .replace(/\b[a-zA-Z0-9_.-]+\.(?:md|json|png|jpg|jpeg|gif|svg|webp|js|mjs|ts|py|sh|yml|yaml|css|html)\b/g, '');
+
+    // Match snake_case identifiers (bare in prose, backticks, bullet lists, tables, etc.)
+    for (const match of clean.matchAll(/\b[a-z][a-z0-9]*(?:_[a-z0-9]+)+\b/g)) {
+      const name = match[0];
+      const invoked = /^(?:\s*\(|`\()/.test(clean.slice(match.index + name.length));
+      if (!DATA_IDENTIFIERS.has(name) || invoked) {
+        names.add(name);
       }
+    }
+    // Dynamic tool templates cannot be verified against an exact-name allowlist.
+    if (/\b(?:[a-z]+_)*(?:<[^>]+>|\*)_[a-z_]+\b|\b[a-z]+_\*/.test(line)) {
+      names.add('[dynamic tool template: spell out exact tool names]');
+    }
+    for (const name of names) {
+      refs.push({ name, line: index + 1 });
     }
   });
   return refs;
@@ -71,6 +89,11 @@ export function checkSkillTools({ root = ROOT, allowlistPath } = {}) {
   ].filter(d => fs.existsSync(d));
 
   const skillFiles = skillDirs.flatMap(d => findSkillFiles(d));
+  const helpFile = path.join(root, 'config/claude-directory/help.md');
+  if (fs.existsSync(helpFile) && !skillFiles.includes(helpFile)) {
+    skillFiles.push(helpFile);
+  }
+
   if (skillFiles.length === 0) {
     throw new Error('No skill files found to check.');
   }
