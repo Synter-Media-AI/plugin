@@ -3,7 +3,7 @@
   "name": "synter",
   "displayName": "Synter: Google Ads, Meta, LinkedIn, Reddit, X, TikTok & Microsoft Ads",
   "version": "1.3.0",
-  "description": "Report on and plan ad campaigns across Google Ads, Meta (Facebook & Instagram), LinkedIn, Reddit, X (Twitter), TikTok, Microsoft (Bing) Ads, Snapchat and StackAdapt from one browser OAuth connection. Read-only reporting is free; campaign changes require a paid plan and your approval, and nothing spends without it.",
+  "description": "Report on and plan ad campaigns across 9 verified platforms: Google Ads, Meta (Facebook & Instagram), LinkedIn, Microsoft (Bing) Ads, Reddit, Snapchat, StackAdapt, TikTok, and X (Twitter; performance reporting on X and TikTok may require platform exports) from one browser OAuth connection. Reads cost credits; campaign changes require a paid plan and your approval, and nothing spends without it.",
   "author": {
     "name": "Synter",
     "email": "joel@synterai.com"

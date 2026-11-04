@@ -3,6 +3,7 @@
 ## [1.3.0] - Unreleased
 
 - Update Cursor Marketplace manifest with verified platform coverage across Google Ads, Meta, LinkedIn, Reddit, X, TikTok, Microsoft Ads, Snapchat, and StackAdapt.
+- Clarify in Cursor Marketplace manifest that reads cost credits and that performance reporting on X and TikTok may require platform exports.
 - Add `assets/logo-opaque.png` (1024x1024 solid #070806 dark background) for the Cursor Marketplace listing while preserving canonical `assets/logo.png`.
 - Replace legacy syntermedia.ai domain references with synterai.com across user-facing documentation, submission evidence, and endpoint configuration.
 - Align MCP HTTP client configurations across Cursor and Claude to the canonical `https://mcp.synterai.com` endpoint.

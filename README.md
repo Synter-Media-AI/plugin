@@ -114,7 +114,7 @@ bash scripts/build-zip.sh
 
 The directory check scans every file under `skills/`, `commands/` (when present), `rules/`, and `agents/`, including prose, tables, and code fences. Spell out exact tool names; dynamic tool-name templates fail validation. Snake-case data fields are recognized separately, but calling them as functions still counts as a tool reference. For a tool name without underscores, use explicit `tool:name` or its MCP-qualified name.
 
-The check runs offline in CI. To also compare the directory against live MCP `tools/list`, supply an OAuth access token through `SYNTER_MCP_TOKEN` in your environment and run the same script. It initializes an MCP session and follows paginated results. `--live` requires the token instead of silently running offline. `SYNTER_MCP_URL` optionally overrides the hosted URL; it defaults to `https://mcp.synterai.com`. The token is for this development check only and is never written to plugin configuration. Extra live tools do not expand the checked-in directory.
+The check runs offline in CI. To also compare the directory against live MCP `tools/list`, supply an OAuth access token through `SYNTER_MCP_TOKEN` in your environment and run the same script. It initializes an MCP session and follows paginated results. `--live` requires the token instead of silently running offline. If set, `SYNTER_MCP_URL` must match the allow-listed endpoint (`https://mcp.synterai.com`, which is also the default); untrusted endpoints are rejected. The token is for this development check only and is never written to plugin configuration. Extra live tools do not expand the checked-in directory.
 
 [Terms](https://synterai.com/terms) · [MIT license](LICENSE)
 
