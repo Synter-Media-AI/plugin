@@ -62,7 +62,7 @@ def collect(root, target):
         include('scripts/session-context.sh')
     elif target == 'claude-directory':
         manifest.pop('hooks', None)
-        manifest['privacyPolicyUrl'] = DIRECTORY_PRIVACY_URL
+        manifest.pop('privacyPolicyUrl', None)
         files['.claude-plugin/plugin.json'] = encoded(manifest)
         directory_mcp = json.loads((root / '.mcp.json').read_text())
         directory_mcp['mcpServers']['synter']['url'] = DIRECTORY_MCP_URL
@@ -111,10 +111,10 @@ def validate_claude_directory(files):
     manifest = json.loads(files['.claude-plugin/plugin.json'])
     if 'hooks' in manifest:
         raise ValueError('Directory manifest must not declare hooks')
-    if manifest.get('privacyPolicyUrl') != DIRECTORY_PRIVACY_URL:
-        raise ValueError('Directory manifest must declare the Synter privacy policy URL')
+    if 'privacyPolicyUrl' in manifest:
+        raise ValueError('Directory manifest must not declare privacyPolicyUrl; provide in listing form')
     if set(manifest) - {'$schema', 'name', 'displayName', 'description', 'version', 'license',
-                        'author', 'homepage', 'repository', 'keywords', 'privacyPolicyUrl'}:
+                        'author', 'homepage', 'repository', 'keywords'}:
         raise ValueError('Unreviewed directory manifest capability')
     servers = json.loads(files['.mcp.json']).get('mcpServers', {})
     if (set(servers) != {'synter'} or set(servers['synter']) != {'type', 'url', 'description'}

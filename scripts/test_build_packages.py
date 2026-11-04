@@ -36,6 +36,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 56)
         self.assertEqual(sum(name.startswith('agents/') for name in files), 6)
         self.assertNotIn('hooks', json.loads(files['.claude-plugin/plugin.json']))
+        self.assertNotIn('privacyPolicyUrl', json.loads(files['.claude-plugin/plugin.json']))
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
         self.assertNotIn(b'SessionStart shell hook', files['skills/help/SKILL.md'])
         for name in files:
@@ -57,6 +58,12 @@ class PackageTests(unittest.TestCase):
         changed['.claude-plugin/plugin.json'] = mod.encoded(manifest)
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
+        changed_privacy = dict(files)
+        manifest_privacy = json.loads(files['.claude-plugin/plugin.json'])
+        manifest_privacy['privacyPolicyUrl'] = 'https://synterai.com/privacy'
+        changed_privacy['.claude-plugin/plugin.json'] = mod.encoded(manifest_privacy)
+        with self.assertRaises(ValueError):
+            mod.validate_claude_directory(changed_privacy)
         self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], mod.DIRECTORY_MCP_URL)
         self.assertEqual(mod.DIRECTORY_MCP_URL, 'https://mcp.synterai.com/mcp/directory')
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
@@ -103,7 +110,7 @@ class PackageTests(unittest.TestCase):
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
             'claude': '258e638fc31d338aebb3b9057ccd32f8aaf35572175993ad7c68ce42d4aff64b',
-            'claude-directory': '36f363157d4502a28df5b70a4c241f148595e674db9036f74f29d7a1527b23d9',
+            'claude-directory': '22daffe7aa0de8710718e9766d2c7341890196d537120bfc74dbcaa4600c44a6',
             'openai': '5ab905019791b7f0f71033e19e18042e26ba272b7b2d958aac4ff177a7c0f665',
             'openai-new-draft': '48bbdbedbc5eb96ffacfcd18b339048139ac6f67dbca160e5fd2d13b7682cd87',
         }
