@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { extractReferences, scan, readLiveTools } = require('./check-directory-tools');
+const { extractReferences, scan, readLiveTools, assertCuratedDirectoryTools, DIRECTORY_EXTRAS } = require('./check-directory-tools');
 
 test('extracts tools from prose, tables, functions, fences, and MCP qualification', () => {
   const source = [
@@ -111,4 +111,13 @@ test('live check rejects malformed results and looping cursors', async () => {
     };
     await assert.rejects(readLiveTools({ token: 'secret', fetchImpl }), /missing tools|repeated pagination|JSON-RPC response|duplicate tool/);
   }
+});
+
+test('curated directory surface is the 34-tool allowlist plus the packet eight', () => {
+  const curated = assertCuratedDirectoryTools();
+  assert.equal(curated.size, 42);
+  for (const name of DIRECTORY_EXTRAS) assert.equal(curated.has(name), true);
+  const base = JSON.parse(fs.readFileSync(path.join(__dirname, '../tools/directory-tools.json'), 'utf8'));
+  assert.equal(base.length, 34);
+  for (const name of base) assert.equal(curated.has(name), true);
 });

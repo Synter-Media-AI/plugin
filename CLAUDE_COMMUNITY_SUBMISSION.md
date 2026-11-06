@@ -149,7 +149,7 @@ boundary before any external spend-changing action.
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
 | OAuth for authenticated remote MCP | New packages: OAuth metadata, DCR, PKCE, and a protected-tool `401` at `https://mcp.synterai.com` (directory bundle: `https://mcp.synterai.com/mcp/directory`). Pending connector: the same class of challenge at `https://mcp.syntermedia.ai`, which stays the submitted origin. |
-| Tool directory | 34 checked-in tool names; live annotations require a fresh authenticated review |
+| Tool directory | Full-plugin instruction allowlist: 34 names in `tools/directory-tools.json`. Claude directory bundle: those 34 plus `get_workspaces`, `update_active_workspace`, `google_ads_manage_custom_goals`, `angstrom_verify_output`, `run_gaql_query`, `add_negative_keywords`, `add_keywords`, and `get_ad_readback` (42), in `config/claude-directory/directory-tools.json`. Live annotations still need a fresh authenticated review. |
 | Privacy and support | `https://synterai.com/privacy`; `https://synterai.com/support` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
 | Approval boundary | Spend-changing operations require explicit approval; a model response is not approval |

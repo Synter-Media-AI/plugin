@@ -19,6 +19,18 @@ OPENAI_AUTH = {'type': 'oauth', 'client': {'mode': 'dcr'}}
 # stay on https://mcp.synterai.com. The connector already in review remains on
 # https://mcp.syntermedia.ai; this package URL does not retarget that submission.
 DIRECTORY_MCP_URL = 'https://mcp.synterai.com/mcp/directory'
+# Submission-packet additions to the 34-name full-plugin instruction allowlist.
+# Together they are the 42-tool curated surface for mcp_directory_client.
+DIRECTORY_EXTRA_TOOLS = (
+    'get_workspaces',
+    'update_active_workspace',
+    'google_ads_manage_custom_goals',
+    'angstrom_verify_output',
+    'run_gaql_query',
+    'add_negative_keywords',
+    'add_keywords',
+    'get_ad_readback',
+)
 
 
 def validate_openai_mcp(value):
@@ -31,6 +43,20 @@ def validate_openai_mcp(value):
 
 def encoded(value):
     return (json.dumps(value, indent=2, ensure_ascii=False) + '\n').encode()
+
+
+def curated_directory_tools(root):
+    """42-tool directory surface: the full-plugin 34 plus the packet's eight."""
+    base = json.loads((root / 'tools/directory-tools.json').read_text())
+    curated_path = root / 'config/claude-directory/directory-tools.json'
+    curated = json.loads(curated_path.read_text())
+    expected = list(base) + list(DIRECTORY_EXTRA_TOOLS)
+    if base != list(dict.fromkeys(base)) or len(base) != 34 or curated != expected:
+        raise ValueError(
+            'Directory tool list must be the 34-name full-plugin allowlist plus '
+            'the eight submission-packet tools'
+        )
+    return curated
 
 
 def collect(root, target):
@@ -66,6 +92,7 @@ def collect(root, target):
         directory_mcp = json.loads((root / '.mcp.json').read_text())
         directory_mcp['mcpServers']['synter']['url'] = DIRECTORY_MCP_URL
         files['.mcp.json'] = encoded(directory_mcp)
+        files['tools/directory-tools.json'] = encoded(curated_directory_tools(root))
         for source, destination in [('README.md', 'README.md'), ('help.md', 'skills/help/SKILL.md')]:
             path = root / 'config/claude-directory' / source
             relative_path = path.relative_to(root)
@@ -123,6 +150,12 @@ def validate_claude_directory(files):
         raise ValueError('Directory supports only the declared remote HTTPS MCP server')
     if len(files['README.md'].decode().split()) < 40:
         raise ValueError('Directory README must explain the product')
+    directory_tools = json.loads(files['tools/directory-tools.json'])
+    if directory_tools != curated_directory_tools(ROOT):
+        raise ValueError('Directory bundle must ship the 42-tool curated surface')
+    readme = files['README.md'].decode()
+    if re.search(r'\$\s?\d|\bSolo\b', readme):
+        raise ValueError('Directory listing must not state plan prices')
 
 
 def sync_claude_directory(root=ROOT, check=True):

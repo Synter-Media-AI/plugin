@@ -2,7 +2,7 @@
 
 Synter executes approval-gated advertising campaigns on 30+ ad platforms. This plugin helps you review performance, prepare campaign plans, write ad copy, and approve changes through Synter's hosted MCP service. Start with the quickstart skill, sign in through the browser OAuth prompt, and verify the connected workspace and advertising account before using account data.
 
-This directory package includes 56 Markdown skills, six agent instructions, an output style, and static [brand and safety guidance](context/brand-and-safety.md). Its only service connection is the remote HTTPS MCP server declared in `.mcp.json` (`https://mcp.synterai.com/mcp/directory`, the curated directory profile). It contains no local lifecycle hooks, executable scripts, or SDK runner. Tool availability follows the bundled [tool directory](tools/directory-tools.json) and the live server schema.
+This directory package includes 56 Markdown skills, six agent instructions, an output style, and static [brand and safety guidance](context/brand-and-safety.md). Its only service connection is the remote HTTPS MCP server declared in `.mcp.json` (`https://mcp.synterai.com/mcp/directory`, the curated directory profile). It contains no local lifecycle hooks, executable scripts, or SDK runner. Tool availability follows the bundled [tool directory](tools/directory-tools.json), which lists the 42-tool curated surface, and the live server schema.
 
 Read-only account lookups and reports can run directly. Before any campaign creation, activation, pause, budget adjustment, or other spend-changing action, review the proposed account, scope, and amounts and give explicit approval. After execution, check the provider readback before treating a change as complete. Use the verified advertiser's brand and original assets; do not substitute Synter's branding for another advertiser.
 
@@ -27,7 +27,7 @@ In Claude Code, add Synter's marketplace and install the plugin, then complete t
 
 ## Pricing
 
-Performance reporting uses credits. Actions start at $0.25. Audiences, creative and other add-ons are priced per use. $20/month minimum. You need a Synter account at [synterai.com](https://synterai.com) and at least one connected advertising account.
+Current prices are on the [Synter pricing page](https://synterai.com/pricing). You need a Synter account at [synterai.com](https://synterai.com) and at least one connected advertising account. Campaign changes require your approval.
 
 ## Support and security
 

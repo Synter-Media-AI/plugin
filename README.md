@@ -66,7 +66,7 @@ The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http`
 
 ## What this plugin runs
 
-The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 34 supported tool names.
+The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) is the 34-name instruction allowlist for this full plugin. The Claude directory bundle ships a separate 42-name list, [config/claude-directory/directory-tools.json](config/claude-directory/directory-tools.json): those 34 names plus `get_workspaces`, `update_active_workspace`, `google_ads_manage_custom_goals`, `angstrom_verify_output`, `run_gaql_query`, `add_negative_keywords`, `add_keywords`, and `get_ad_readback`.
 
 Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 

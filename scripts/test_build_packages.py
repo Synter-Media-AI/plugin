@@ -66,6 +66,13 @@ class PackageTests(unittest.TestCase):
             mod.validate_claude_directory(changed_privacy)
         self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], mod.DIRECTORY_MCP_URL)
         self.assertEqual(mod.DIRECTORY_MCP_URL, 'https://mcp.synterai.com/mcp/directory')
+        directory_tools = json.loads(files['tools/directory-tools.json'])
+        full_plugin_tools = json.loads((mod.ROOT / 'tools/directory-tools.json').read_text())
+        self.assertEqual(len(full_plugin_tools), 34)
+        self.assertEqual(directory_tools, full_plugin_tools + list(mod.DIRECTORY_EXTRA_TOOLS))
+        self.assertEqual(len(directory_tools), 42)
+        self.assertEqual(json.loads(mod.collect(mod.ROOT, 'claude')[1]['tools/directory-tools.json']), full_plugin_tools)
+        self.assertNotRegex(files['README.md'].decode(), r'\$\s?\d|\bSolo\b')
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
                        {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'full catalog, not the directory surface'},
                        {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
@@ -110,11 +117,11 @@ class PackageTests(unittest.TestCase):
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
             'claude': '8f3af5857f50198fd4a3ed57cbb33381c64a1387ffe1b9e52c087db4c76ec8e9',
-            'claude-directory': 'f4311d739124a4c0454740e0da4820035775009f7730b50a96140d1145a7ffad',
+            'claude-directory': 'efac3bfa5b75f6e347a4e12d98a475b5ea0aae78a3c2d4ed7f653b21d2490be4',
             'openai': '624ee7d437798142d5bc89905f3cde031c2184ba58cadd2254fae9a4f5fae058',
             'openai-new-draft': '10265c56b3d4616470fb71626120b508c6c51b4bd21128532488003cf376a629',
         }
-        # Snapshot after the 1.3.0 listing, 30+ copy, and /mcp/directory bundle.
+        # Snapshot after the 42-tool directory surface and pricing-neutral listing copy.
         # Update deliberately when reviewed package contents change.
         for target, digest in expected.items():
             _, files = mod.collect(mod.ROOT, target)
