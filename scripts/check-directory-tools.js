@@ -15,7 +15,14 @@ const DATA_IDENTIFIERS = new Set([
 ]);
 const ROOT = path.resolve(__dirname, '..');
 const SURFACES = ['skills', 'commands', 'rules', 'agents'];
-const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+// New packages use mcp.synterai.com. /mcp/directory is the curated directory
+// profile. mcp.syntermedia.ai stays allow-listed so a reviewer can still check
+// the pending connector origin; it is not written into new package files.
+const ENDPOINTS = new Set([
+  'https://mcp.synterai.com',
+  'https://mcp.synterai.com/mcp/directory',
+  'https://mcp.syntermedia.ai',
+]);
 
 function extractReferences(source) {
   const refs = [];
@@ -49,6 +56,30 @@ function listFiles(dir) {
   });
 }
 
+// Eight tools the 34-name full-plugin file omits. The directory bundle lists both.
+const DIRECTORY_EXTRAS = [
+  'get_workspaces',
+  'update_active_workspace',
+  'google_ads_manage_custom_goals',
+  'angstrom_verify_output',
+  'run_gaql_query',
+  'add_negative_keywords',
+  'add_keywords',
+  'get_ad_readback',
+];
+
+function assertCuratedDirectoryTools(root = ROOT) {
+  const curatedPath = path.join(root, 'config/claude-directory/directory-tools.json');
+  if (!fs.existsSync(curatedPath)) return null;
+  const base = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
+  const curated = JSON.parse(fs.readFileSync(curatedPath, 'utf8'));
+  const expected = base.concat(DIRECTORY_EXTRAS);
+  if (JSON.stringify(curated) !== JSON.stringify(expected)) {
+    throw new Error('config/claude-directory/directory-tools.json must be the 34-tool full-plugin allowlist plus the eight submission-packet tools.');
+  }
+  return new Set(curated);
+}
+
 function readAllowlist(root) {
   const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
   if (!Array.isArray(names) || names.length !== 34 || new Set(names).size !== 34 ||
@@ -75,7 +106,7 @@ function scan(root = ROOT) {
 
 async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImpl = fetch }) {
   if (!token) throw new Error('Live check requires SYNTER_MCP_TOKEN (an OAuth access token).');
-  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the two production Synter MCP endpoints.');
+  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be an allow-listed production Synter MCP endpoint.');
   let session;
   let protocol = '2025-03-26';
   let requestId = 0;
@@ -149,18 +180,23 @@ async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImp
 async function main() {
   const args = process.argv.slice(2);
   if (args.some(arg => arg !== '--live')) throw new Error('Usage: node scripts/check-directory-tools.js [--live]');
+  const curated = assertCuratedDirectoryTools();
   const result = scan();
   if (result.errors.length) throw new Error(result.errors.join('\n'));
+  const liveUrl = process.env.SYNTER_MCP_URL;
   if (args.includes('--live') || process.env.SYNTER_MCP_TOKEN) {
-    const live = await readLiveTools({ token: process.env.SYNTER_MCP_TOKEN, url: process.env.SYNTER_MCP_URL });
-    const missing = [...result.allowed].filter(name => !live.has(name));
+    const expectCurated = liveUrl === 'https://mcp.synterai.com/mcp/directory';
+    const allowed = expectCurated && curated ? curated : result.allowed;
+    const live = await readLiveTools({ token: process.env.SYNTER_MCP_TOKEN, url: liveUrl });
+    const missing = [...allowed].filter(name => !live.has(name));
     if (missing.length) throw new Error(`Live server is missing directory tools: ${missing.join(', ')}`);
-    console.log(`Live tools/list contains all ${result.allowed.size} directory tools.`);
+    console.log(`Live tools/list contains all ${allowed.size} directory tools.`);
   }
-  console.log(`Checked ${result.fileCount} instruction files: ${result.references.size} referenced tools, all in the ${result.allowed.size}-tool directory.`);
+  const curatedCount = curated ? curated.size : 0;
+  console.log(`Checked ${result.fileCount} instruction files: ${result.references.size} referenced tools, all in the ${result.allowed.size}-tool full-plugin allowlist. Curated directory surface: ${curatedCount} tools.`);
 }
 
-module.exports = { extractReferences, scan, readLiveTools };
+module.exports = { extractReferences, scan, readLiveTools, assertCuratedDirectoryTools, DIRECTORY_EXTRAS };
 if (require.main === module) main().catch(error => {
   // Mask the OAuth token even if a lower-level library includes it in an error.
   const message = process.env.SYNTER_MCP_TOKEN

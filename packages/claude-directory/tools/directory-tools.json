@@ -32,5 +32,13 @@
   "enable_campaign",
   "pause_campaign",
   "update_campaign_budget",
-  "get_job_status"
+  "get_job_status",
+  "get_workspaces",
+  "update_active_workspace",
+  "google_ads_manage_custom_goals",
+  "angstrom_verify_output",
+  "run_gaql_query",
+  "add_negative_keywords",
+  "add_keywords",
+  "get_ad_readback"
 ]

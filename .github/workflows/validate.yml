@@ -19,6 +19,9 @@ jobs:
       - name: Run manifest validation
         run: node scripts/validate-manifests.js
 
+      - name: Check skill tool references against hosted tools
+        run: node scripts/check-skill-tools.mjs
+
       - name: Run strict Claude plugin validation
         run: |
           npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict

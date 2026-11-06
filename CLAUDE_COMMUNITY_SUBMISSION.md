@@ -1,19 +1,33 @@
 # Claude plugin directory submission
 
-Prepared: 2026-09-06
+Prepared: 2026-09-06. URL and submission record updated: 2026-11-06.
 
 This is the reviewer-ready package for the public Synter plugin repository.
 Synter's separate remote MCP connector submission is in review; that does not
-submit or publish this plugin in Anthropic's plugin directory.
+submit or publish this plugin in Anthropic's plugin directory. This document
+does not submit either listing.
 
 ## Current directory status
 
-- **Connector Directory:** submitted 2026-09-05 from the Synter Team
-  organization; slug `synter`; status **In review** at
+- **Connector Directory:** submitted 2026-09-04 from the Synter Team
+  organization. Plugin ID `f802a044-fa2c-4a98-8c82-26a2870ca6b3`. Slug `synter`.
+  Status **In review** at
   `https://claude.ai/admin-settings/directory/submissions/synter`.
+  The origin on that submission is `https://mcp.syntermedia.ai`. That host is
+  still live. Leave it in place for the review already underway. This
+  repository does not redirect it, take it down, or edit that submission.
+- **New package endpoints:** Claude, Cursor, and the portable package use
+  `https://mcp.synterai.com`. The Claude directory bundle at
+  `packages/claude-directory` uses `https://mcp.synterai.com/mcp/directory`
+  for the curated directory profile. Those URLs are for new package files.
+  They are not a change to the connector already in review. On 2026-11-06 an
+  unauthenticated request to `https://mcp.synterai.com/mcp/directory` returned
+  the same `401` challenge as `https://mcp.synterai.com` and named
+  `https://mcp.synterai.com` as `mcp_endpoint`. Confirm that path serves the
+  curated tool list before anyone submits the bundle.
 - **Plugin Directory:** no submission ID or published listing has been
-  verified. This public repository remains directly installable while the
-  separate plugin submission is completed.
+  verified. This reconciliation does not submit the bundle. The public
+  repository remains directly installable.
 
 Anthropic documents the Connector Directory and Plugin Directory as separate,
 complementary catalogs. Do not treat connector review as plugin publication.
@@ -25,14 +39,14 @@ complementary catalogs. Do not treat connector review as plugin publication.
 | Public repository | `https://github.com/Synter-Media-AI/plugin` |
 | Plugin name | `synter` |
 | Publisher | Synter |
-| Website | `https://syntermedia.ai` |
+| Website | `https://synterai.com` |
 | License | MIT |
 | Category | Marketing and advertising |
 | Short description | Operate cross-channel advertising with approval-gated Synter agents, skills, and MCP tools. |
 | Brand icon | `assets/logo.png` — canonical transparent 1024×1024 Synter mark |
-| Support | `https://syntermedia.ai/support` |
-| Privacy policy | `https://syntermedia.ai/privacy` |
-| Terms | `https://syntermedia.ai/terms` |
+| Support | `https://synterai.com/support` |
+| Privacy policy | `https://synterai.com/privacy` |
+| Terms | `https://synterai.com/terms` |
 
 Suggested long description:
 
@@ -86,8 +100,9 @@ Direct installation is not public-directory discovery.
 - [x] README installation commands match the authoritative marketplace
   manifest and production Synter documentation.
 - [x] `node scripts/validate-manifests.js` passes.
-- [x] `npx -y @anthropic-ai/claude-code plugin validate . --strict` prints
-  `✔ Validation passed` on 2026-09-06.
+- [x] `npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict`,
+  `.claude-plugin/plugin.json`, and `packages/claude-directory` print
+  `✔ Validation passed` on 2026-11-06.
 - [x] Production OAuth protected-resource and authorization-server metadata
   return `200`; a protected tool call returns `401` with a
   `WWW-Authenticate` resource-metadata challenge.
@@ -105,7 +120,7 @@ Direct installation is not public-directory discovery.
 ## Security and data-use evidence
 
 - Claude invokes a Bash session hook that prints static guidance through `cat`. Cursor declares no hook. The repository also contains a manually invoked Node SDK runner and development scripts; no compiled binaries are bundled.
-- Claude uses `https://mcp.syntermedia.ai` to match the connector under review. Cursor separately uses `https://mcp.synterai.com`. Both plugin configurations use browser OAuth without static credentials or headers.
+- New Claude and Cursor package files use `https://mcp.synterai.com` with browser OAuth and no static credentials or headers. The directory bundle uses `https://mcp.synterai.com/mcp/directory`. The connector submitted on 2026-09-04 remains on `https://mcp.syntermedia.ai`. That pending origin stays as submitted.
 - The session hook prints a static operating and approval-safety primer into
   session context; it does not read or transmit credentials.
 - Advertising writes are approval-gated. The bundled guidance does not turn a
@@ -133,9 +148,9 @@ boundary before any external spend-changing action.
 | Requirement | Evidence |
 | --- | --- |
 | Public source and license | Public GitHub repository; MIT `LICENSE` |
-| OAuth for authenticated remote MCP | OAuth metadata, DCR, PKCE, and protected-tool `401` challenge at `https://mcp.syntermedia.ai` |
-| Tool directory | 34 checked-in tool names; live annotations require a fresh authenticated review |
-| Privacy and support | `https://syntermedia.ai/privacy`; `https://syntermedia.ai/support` |
+| OAuth for authenticated remote MCP | New packages: OAuth metadata, DCR, PKCE, and a protected-tool `401` at `https://mcp.synterai.com` (directory bundle: `https://mcp.synterai.com/mcp/directory`). Pending connector: the same class of challenge at `https://mcp.syntermedia.ai`, which stays the submitted origin. |
+| Tool directory | Full-plugin instruction allowlist: 34 names in `tools/directory-tools.json`. Claude directory bundle: those 34 plus `get_workspaces`, `update_active_workspace`, `google_ads_manage_custom_goals`, `angstrom_verify_output`, `run_gaql_query`, `add_negative_keywords`, `add_keywords`, and `get_ad_readback` (42), in `config/claude-directory/directory-tools.json`. Live annotations still need a fresh authenticated review. |
+| Privacy and support | `https://synterai.com/privacy`; `https://synterai.com/support` |
 | Narrow, visible instructions | Human-readable skills and agents in this repository; no encoded or remotely loaded behavioral instructions |
 | Approval boundary | Spend-changing operations require explicit approval; a model response is not approval |
 | Test account | Must be supplied privately by Synter in the submission form |
@@ -147,10 +162,13 @@ the directory.
 
 ## Provider-side plugin action still required
 
-The remote MCP connector is already in review. Publishing this plugin still
-requires an authenticated Synter representative with the required Claude.ai
-directory-management access or Console Developer/Admin/Owner role and a
-private reviewer test account. Use one of:
+The remote MCP connector is already in review at `https://mcp.syntermedia.ai`
+(plugin ID `f802a044-fa2c-4a98-8c82-26a2870ca6b3`, submitted 2026-09-04). Do not
+replace that origin while Anthropic is reviewing it. Publishing this plugin
+still requires an authenticated Synter representative with the required
+Claude.ai directory-management access or Console Developer/Admin/Owner role
+and a private reviewer test account. This change does not perform that
+submission. When an owner later submits the plugin, use one of:
 
 - `https://claude.ai/admin-settings/directory/submissions/plugins/new`
 - `https://platform.claude.com/plugins/submit`

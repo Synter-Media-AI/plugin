@@ -14,7 +14,7 @@ The OpenAI package includes Synter skills and the hosted OAuth MCP connection.
 Its generated `mcp.json` declares OAuth with dynamic client registration under
 `mcpServers.synter.extensions.com.openai.auth`; discovery provides the endpoints.
 The portal displays these settings and does not provide an advanced OAuth editor.
-The existing-draft archive is `dist/synter-openai-plugin-1.2.1.zip`, for
+The existing-draft archive is `dist/synter-openai-plugin-1.3.0.zip`, for
 **Synter Ads MCP**. Its package identity remains
 `app-6a90dc5bbc3c819199b4f1e44028fcbf`. Uploading creates a draft; directory
 approval and publication are separate steps. This archive contains no lifecycle
@@ -25,14 +25,14 @@ MCP app before updating its plugin ZIP,” while its connection settings are
 unavailable. A valid archive does not resolve that portal state. Verify the saved
 MCP origin before updating: OpenAI does not allow an origin change between versions.
 `bash scripts/build-zip.sh --include-new-draft` also prepares
-`dist/synter-openai-new-draft-plugin-1.2.1.zip` with the canonical `synter` package
+`dist/synter-openai-new-draft-plugin-1.3.0.zip` with the canonical `synter` package
 name for a separately authorized new draft if the existing identity cannot be
 recovered. Building it does not upload, register, or publish anything.
 
 ### Claude Desktop and Cowork
 
 Build the archives with `bash scripts/build-zip.sh`, then use Claude Desktop's
-plugin upload to select `dist/synter-claude-plugin-1.2.1.zip`. The archive contains
+plugin upload to select `dist/synter-claude-plugin-1.3.0.zip`. The archive contains
 the `.claude-plugin` manifest, OAuth configuration, skills, agents, and static
 session primer. Start a new conversation after updating and complete browser
 OAuth when prompted. Uploading a ZIP does not enable automatic GitHub updates. You can also add
@@ -60,12 +60,13 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 | --- | --- | --- |
 | Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
 | Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
+| Claude directory bundle | `packages/claude-directory/.mcp.json` | `https://mcp.synterai.com/mcp/directory` |
 
-The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
+The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. New Claude, Cursor, and portable packages connect to `https://mcp.synterai.com`. The directory bundle uses the curated profile at `https://mcp.synterai.com/mcp/directory`. `https://mcp.syntermedia.ai` remains the live origin of the connector submission already in review; new package files do not use it, and this repository does not redirect that host. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
 ## What this plugin runs
 
-The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 34 supported tool names.
+The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) is the 34-name instruction allowlist for this full plugin. The Claude directory bundle ships a separate 42-name list, [config/claude-directory/directory-tools.json](config/claude-directory/directory-tools.json): those 34 names plus `get_workspaces`, `update_active_workspace`, `google_ads_manage_custom_goals`, `angstrom_verify_output`, `run_gaql_query`, `add_negative_keywords`, `add_keywords`, and `get_ad_readback`.
 
 Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 
@@ -106,6 +107,7 @@ Text ads use `create_ad_copy`; existing assets use `list_creative_assets`. The p
 ```bash
 node scripts/validate-manifests.js
 node scripts/check-directory-tools.js
+node scripts/check-skill-tools.mjs
 node --test scripts/*.test.js
 python3 -m unittest discover -s scripts -p 'test_*.py' -v
 npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
@@ -114,7 +116,7 @@ bash scripts/build-zip.sh
 
 The directory check scans every file under `skills/`, `commands/` (when present), `rules/`, and `agents/`, including prose, tables, and code fences. Spell out exact tool names; dynamic tool-name templates fail validation. Snake-case data fields are recognized separately, but calling them as functions still counts as a tool reference. For a tool name without underscores, use explicit `tool:name` or its MCP-qualified name.
 
-The check runs offline in CI. To also compare the directory against live MCP `tools/list`, supply an OAuth access token through `SYNTER_MCP_TOKEN` in your environment and run the same script. It initializes an MCP session and follows paginated results. `--live` requires the token instead of silently running offline. `SYNTER_MCP_URL` optionally selects either hosted URL in the table; it defaults to the Cursor endpoint. The token is for this development check only and is never written to plugin configuration. Extra live tools do not expand the checked-in directory.
+The check runs offline in CI. To also compare the directory against live MCP `tools/list`, supply an OAuth access token through `SYNTER_MCP_TOKEN` in your environment and run the same script. It initializes an MCP session and follows paginated results. `--live` requires the token instead of silently running offline. If set, `SYNTER_MCP_URL` must be an allow-listed endpoint: `https://mcp.synterai.com` (the default for new packages), `https://mcp.synterai.com/mcp/directory` (the curated directory profile), or `https://mcp.syntermedia.ai` (the live origin of the pending connector submission, for a check only). Untrusted endpoints are rejected. The token is for this development check only and is never written to plugin configuration. Extra live tools do not expand the checked-in directory.
 
 [Terms](https://synterai.com/terms) · [MIT license](LICENSE)
 
