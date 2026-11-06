@@ -36,6 +36,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 56)
         self.assertEqual(sum(name.startswith('agents/') for name in files), 6)
         self.assertNotIn('hooks', json.loads(files['.claude-plugin/plugin.json']))
+        self.assertNotIn('privacyPolicyUrl', json.loads(files['.claude-plugin/plugin.json']))
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
         self.assertNotIn(b'SessionStart shell hook', files['skills/help/SKILL.md'])
         for name in files:
@@ -57,7 +58,16 @@ class PackageTests(unittest.TestCase):
         changed['.claude-plugin/plugin.json'] = mod.encoded(manifest)
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
+        changed_privacy = dict(files)
+        manifest_privacy = json.loads(files['.claude-plugin/plugin.json'])
+        manifest_privacy['privacyPolicyUrl'] = 'https://synterai.com/privacy'
+        changed_privacy['.claude-plugin/plugin.json'] = mod.encoded(manifest_privacy)
+        with self.assertRaises(ValueError):
+            mod.validate_claude_directory(changed_privacy)
+        self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], mod.DIRECTORY_MCP_URL)
+        self.assertEqual(mod.DIRECTORY_MCP_URL, 'https://mcp.synterai.com/mcp/directory')
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
+                       {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'full catalog, not the directory surface'},
                        {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
             with self.subTest(server=server), self.assertRaises(ValueError):
                 mod.validate_claude_directory({**files, '.mcp.json': mod.encoded({'mcpServers': {'synter': server}})})
@@ -99,12 +109,12 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '72fecb572222d3725acd884f4d7f49a3f5493a2c084d4a4ee201a53a960aee73',
-            'claude-directory': 'e313a4ed69ef3e2e80d13c622d102e69d8e6c51cfeb8f0ba13f29b2e0340efc1',
-            'openai': '5ab905019791b7f0f71033e19e18042e26ba272b7b2d958aac4ff177a7c0f665',
-            'openai-new-draft': '48bbdbedbc5eb96ffacfcd18b339048139ac6f67dbca160e5fd2d13b7682cd87',
+            'claude': '8f3af5857f50198fd4a3ed57cbb33381c64a1387ffe1b9e52c087db4c76ec8e9',
+            'claude-directory': 'f4311d739124a4c0454740e0da4820035775009f7730b50a96140d1145a7ffad',
+            'openai': '624ee7d437798142d5bc89905f3cde031c2184ba58cadd2254fae9a4f5fae058',
+            'openai-new-draft': '10265c56b3d4616470fb71626120b508c6c51b4bd21128532488003cf376a629',
         }
-        # Snapshot after the approved RSA/bidding correction across all hosts.
+        # Snapshot after the 1.3.0 listing, 30+ copy, and /mcp/directory bundle.
         # Update deliberately when reviewed package contents change.
         for target, digest in expected.items():
             _, files = mod.collect(mod.ROOT, target)

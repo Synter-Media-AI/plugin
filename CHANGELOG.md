@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0] - Unreleased
+
+- Update the Cursor Marketplace manifest to 1.3.0 with a verified nine-platform description, category, and keywords. Add `assets/logo-opaque.png` for that listing and keep the canonical transparent `assets/logo.png`.
+- Point the Claude directory bundle at `https://mcp.synterai.com/mcp/directory`. Claude, Cursor, and portable packages stay on `https://mcp.synterai.com`.
+- Record the connector submitted 2026-09-04, plugin ID `f802a044-fa2c-4a98-8c82-26a2870ca6b3`. `https://mcp.syntermedia.ai` remains the live origin of that pending submission.
+- Describe Claude listings as 30+ ad platforms, and add directory install, pricing, and support copy.
+- Check skill tool names against `scripts/hosted-tools.json` in CI.
+
 ## [1.2.1] - Unreleased
 
 - Add a portable OpenAI package targeting the existing Synter Ads MCP draft,

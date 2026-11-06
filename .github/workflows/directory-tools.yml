@@ -19,5 +19,7 @@ jobs:
           node-version: '20'
       - name: Check instruction tool references
         run: node scripts/check-directory-tools.js
+      - name: Check skill tool references against hosted tools
+        run: node scripts/check-skill-tools.mjs
       - name: Test repository validators
         run: node --test scripts/*.test.js

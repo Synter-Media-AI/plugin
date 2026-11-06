@@ -15,7 +15,14 @@ const DATA_IDENTIFIERS = new Set([
 ]);
 const ROOT = path.resolve(__dirname, '..');
 const SURFACES = ['skills', 'commands', 'rules', 'agents'];
-const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+// New packages use mcp.synterai.com. /mcp/directory is the curated directory
+// profile. mcp.syntermedia.ai stays allow-listed so a reviewer can still check
+// the pending connector origin; it is not written into new package files.
+const ENDPOINTS = new Set([
+  'https://mcp.synterai.com',
+  'https://mcp.synterai.com/mcp/directory',
+  'https://mcp.syntermedia.ai',
+]);
 
 function extractReferences(source) {
   const refs = [];
@@ -75,7 +82,7 @@ function scan(root = ROOT) {
 
 async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImpl = fetch }) {
   if (!token) throw new Error('Live check requires SYNTER_MCP_TOKEN (an OAuth access token).');
-  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the two production Synter MCP endpoints.');
+  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be an allow-listed production Synter MCP endpoint.');
   let session;
   let protocol = '2025-03-26';
   let requestId = 0;
