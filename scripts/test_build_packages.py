@@ -26,16 +26,19 @@ class PackageTests(unittest.TestCase):
                 self.assertIn('Ad Strength is not a launch gate', text)
                 self.assertNotRegex(text, r'11\+ headlines|15/4 recommended|11 headlines and 4 descriptions minimum|gets? throttled')
                 self.assertEqual(files[name], (mod.ROOT / name).read_bytes())
-            preflight = files['skills/campaign-preflight/SKILL.md'].decode()
-            self.assertIn('MAXIMIZE_CONVERSIONS', preflight)
-            self.assertNotIn('Start on a click or traffic goal', preflight)
+            if 'skills/campaign-preflight/SKILL.md' in files:
+                preflight = files['skills/campaign-preflight/SKILL.md'].decode()
+                self.assertIn('MAXIMIZE_CONVERSIONS', preflight)
+                self.assertNotIn('Start on a click or traffic goal', preflight)
 
     def test_directory_source_is_reproducible_and_has_only_static_runtime(self):
         files = mod.sync_claude_directory()
         self.assertEqual(files, mod.collect(mod.ROOT, 'claude-directory')[1])
-        self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 56)
-        self.assertEqual(sum(name.startswith('agents/') for name in files), 6)
+        self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 27)
+        self.assertEqual(sum(name.startswith('agents/') for name in files), 3)
         self.assertNotIn('hooks', json.loads(files['.claude-plugin/plugin.json']))
+        self.assertEqual(json.loads(files['.claude-plugin/plugin.json'])['privacyPolicyUrl'], 'https://synterai.com/privacy')
+        self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], 'https://mcp.synterai.com/mcp/directory')
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
         self.assertNotIn(b'SessionStart shell hook', files['skills/help/SKILL.md'])
         for name in files:
@@ -99,8 +102,8 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '2eb552f3f6a43651190949c44eab52c38496fe688a97bc249a9cd14ac3ceb2e3',
-            'claude-directory': '782acb9377633d383387ede78ee5817df701e1875fc20e153286cf34dfb21aa8',
+            'claude': '19bb9de532579f71baf9155a1247055b41daec87766bb6f3e674f142271d1b75',
+            'claude-directory': '8320edc8f8ab074b97c1d8e2f977f13d35befbfef0bfb0153de617ad75117c99',
             'openai': '5cc8eac259294beed15f329cbc155afaab91bdeb3f564916f73517a8801216a0',
             'openai-new-draft': '554a7cdd3c8785932e15b876a6c2f0fe2da249d3ce10d4a68a45f318771ed3dd',
         }

@@ -59,7 +59,7 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 | Client | Configuration | Hosted MCP URL |
 | --- | --- | --- |
 | Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
-| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
+| Claude | `.mcp.json` / `packages/claude-directory` | `https://mcp.synterai.com/mcp/directory` |
 
 The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
@@ -158,5 +158,5 @@ This Marketplace build is free and read-only:
 - MCP URL (Cursor): `https://mcp.synterai.com` (canonical production OAuth host; unauthenticated calls return `401` with `WWW-Authenticate` and PRM at `/.well-known/oauth-protected-resource`).
 - Tool surface for this listing: `tools/readonly-tools.json` (26 read/observe tools). Write, launch, and spend tools are out of scope here.
 - Enforcement: plugin allowlist + CI guard + Cursor rule. Server tools remain classified with `@readonly_tool` / OAuth `tools:read`. A stricter server-side read-only profile is owned separately; when it ships on staging this listing can point at it without changing the canonical host.
-- Claude directory bundle (separate package) uses the curated profile at `https://mcp.synterai.com/mcp/directory`. The Claude connector already in review keeps `https://mcp.syntermedia.ai`.
+- Claude directory bundle (`packages/claude-directory`, marketplace source) is a slim free read-only skill/agent set with `privacyPolicyUrl` `https://synterai.com/privacy` and connector `https://mcp.synterai.com/mcp/directory`. The Claude connector already in review keeps `https://mcp.syntermedia.ai`.
 

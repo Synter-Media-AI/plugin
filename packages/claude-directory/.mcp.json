@@ -3,7 +3,7 @@
     "synter": {
       "type": "http",
       "url": "https://mcp.synterai.com/mcp/directory",
-      "description": "Synter Advertising Platform MCP curated directory profile. Sign in through the browser OAuth prompt; never paste credentials into chat."
+      "description": "Synter free read-only MCP profile for Claude Directory. Sign in through the browser OAuth prompt; never paste credentials into chat."
     }
   }
 }

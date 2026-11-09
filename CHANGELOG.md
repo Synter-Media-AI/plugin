@@ -1,6 +1,11 @@
 # Changelog
 
-## [1.3.0] — 2026-11-09
+## [1.3.0]
+
+### Fixed
+- Claude Directory package is slimmed to free read-only skills/agents, declares `privacyPolicyUrl`, and points the connector at `https://mcp.synterai.com/mcp/directory`. Marketplace source is `packages/claude-directory`. Removed non-text GIF asset that blocked directory scanners.
+
+ — 2026-11-09
 
 ### Cursor Marketplace (free, read-only)
 - Bump to 1.3.0 for a free, read-only Cursor Marketplace listing.
