@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1] — 2026-11-09
+
+### Changed
+- Root `skills/` and `agents/` trimmed to the free read-only allowlist (27 skills, 3 agents). Removed write-flavored skills including `launch` and `optimize`, and agents `budget-optimizer`, `creative-director`, `media-buyer`.
+- README no longer lists write skills or describes the launch/write workflow.
+- CI (`scripts/check-readonly-tools.js`) fails if any non-allowlisted skill/agent ships.
+- Cursor MCP URL remains `https://mcp.synterai.com` until prod path-PRM for `/mcp/directory` matches staging (see PR notes).
+
 ## [1.3.0]
 
 ### Fixed

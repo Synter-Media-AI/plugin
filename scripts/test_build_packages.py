@@ -102,10 +102,10 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '19bb9de532579f71baf9155a1247055b41daec87766bb6f3e674f142271d1b75',
-            'claude-directory': '8320edc8f8ab074b97c1d8e2f977f13d35befbfef0bfb0153de617ad75117c99',
-            'openai': '5cc8eac259294beed15f329cbc155afaab91bdeb3f564916f73517a8801216a0',
-            'openai-new-draft': '554a7cdd3c8785932e15b876a6c2f0fe2da249d3ce10d4a68a45f318771ed3dd',
+            'claude': '0cb7a407899bd9593f9c14fbda786656fc85e786594afe36d5465e50459ec3ff',
+            'claude-directory': '6287957db5cae87857b2f01177f25fd47990fdf41883fddf0fb7d3f98d47de2d',
+            'openai': '3b5313edba57d9e24422d9f39d264b9ebfed15b63ba8d0dad37864e17712d04b',
+            'openai-new-draft': '3998eddad1a726fabf916dcc0ab5e531ecaaa7d8d4d035b2dbc9fdfa6eb20435',
         }
         # Snapshot after the approved RSA/bidding correction across all hosts.
         # Update deliberately when reviewed package contents change.
@@ -130,7 +130,7 @@ class PackageTests(unittest.TestCase):
         self.assertFalse(any(name.startswith(('scripts/', '.claude-plugin/', '.git/', 'hooks/')) for name in files))
         self.assertNotIn('.env', files)
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
-        self.assertEqual(len([n for n in files if n.endswith('/SKILL.md')]), 56)
+        self.assertEqual(len([n for n in files if n.endswith('/SKILL.md')]), 27)
 
     def test_claude_identity_and_executable_present(self):
         _, files = mod.collect(mod.ROOT, 'claude')
