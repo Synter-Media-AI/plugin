@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.3.1] — 2026-11-09
+
+### Changed
+- Root `skills/` and `agents/` trimmed to the free read-only allowlist (27 skills, 3 agents). Removed write-flavored skills including `launch` and `optimize`, and agents `budget-optimizer`, `creative-director`, `media-buyer`.
+- README no longer lists write skills or describes the launch/write workflow.
+- CI (`scripts/check-readonly-tools.js`) fails if any non-allowlisted skill/agent ships.
+- Cursor MCP URL remains `https://mcp.synterai.com` until prod path-PRM for `/mcp/directory` matches staging (see PR notes).
+
+## [1.3.0]
+
+### Fixed
+- Claude Directory package is slimmed to free read-only skills/agents, declares `privacyPolicyUrl`, and points the connector at `https://mcp.synterai.com/mcp/directory`. Marketplace source is `packages/claude-directory`. Removed non-text GIF asset that blocked directory scanners.
+
+ — 2026-11-09
+
+### Cursor Marketplace (free, read-only)
+- Bump to 1.3.0 for a free, read-only Cursor Marketplace listing.
+- Canonical MCP URL stays `https://mcp.synterai.com` across `.cursor-mcp.json`, `mcp.json`, `.mcp.json`, and docs.
+- Add `tools/readonly-tools.json` (26 read/observe tools) and a Cursor rule that forbids write/launch/spend tools in this listing.
+- README states the listing is free and read-only; paid write capabilities point at https://synterai.com/pricing without plan prices.
+- Claude directory bundle uses `https://mcp.synterai.com/mcp/directory`; the in-review Claude connector keeps `https://mcp.syntermedia.ai`.
+- Supersedes open Cursor prep PRs #20, #24, and #28 for listing purposes.
+
 ## [1.2.1] - Unreleased
 
 - Add a portable OpenAI package targeting the existing Synter Ads MCP draft,

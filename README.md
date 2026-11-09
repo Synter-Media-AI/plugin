@@ -4,7 +4,7 @@
 
 # Synter plugin
 
-Plan advertising campaigns, review performance, write ad copy, and apply approved campaign changes through Synter. This plugin is a no-cost client for the paid Synter service. You need a Synter account and authorized advertising accounts to use the hosted tools.
+This Cursor Marketplace listing is a **free, read-only** Synter plugin. It connects to Synter's hosted MCP over browser OAuth so you can review ad performance and account health across 30+ ad platforms. It does **not** create, update, launch, or spend. Paid write and launch tools live in the full Synter product — see https://synterai.com/pricing (no plan prices in this listing).
 
 ## Install and sign in
 
@@ -59,47 +59,39 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 | Client | Configuration | Hosted MCP URL |
 | --- | --- | --- |
 | Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
-| Claude | `.mcp.json`, discovered by the Claude plugin | `https://mcp.synterai.com` |
+| Claude | `.mcp.json` / `packages/claude-directory` | `https://mcp.synterai.com/mcp/directory` |
 
 The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
 ## What this plugin runs
 
-The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [tool directory](tools/directory-tools.json) contains the 34 supported tool names.
+The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [read-only tool allowlist](tools/readonly-tools.json) is the Cursor listing surface; [directory-tools.json](tools/directory-tools.json) remains the broader curated catalog reference.
 
 Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 
 There is no local MCP server or bundled compiled binary. The repository includes an optional [Node SDK runner](sdk/README.md), invoked manually, and development scripts for validation and packaging. Both distribution archives exclude the SDK, local configuration, and development scripts. Agent definitions may delegate work when the host client supports them.
 
-Bundled skills (invoke as `/synter:<name>`):
+Bundled skills (invoke as `/synter:<name>`; free read-only set):
 
-- [`creative`](skills/creative/SKILL.md) · [`landing-page-creation`](skills/landing-page-creation/SKILL.md) · [`llm-visibility-audit`](skills/llm-visibility-audit/SKILL.md) · [`ugc-creative-brief`](skills/ugc-creative-brief/SKILL.md)
-
-- [`ad-copy-generation`](skills/ad-copy-generation/SKILL.md) · [`ad-policy-compliance`](skills/ad-policy-compliance/SKILL.md) · [`anomaly-detector`](skills/anomaly-detector/SKILL.md) · [`attribution`](skills/attribution/SKILL.md)
-- [`audience`](skills/audience/SKILL.md) · [`audience-expansion-strategy`](skills/audience-expansion-strategy/SKILL.md) · [`bid-optimization`](skills/bid-optimization/SKILL.md) · [`campaign-preflight`](skills/campaign-preflight/SKILL.md)
+- [`ad-policy-compliance`](skills/ad-policy-compliance/SKILL.md) · [`anomaly-detector`](skills/anomaly-detector/SKILL.md) · [`attribution`](skills/attribution/SKILL.md) · [`audience-expansion-strategy`](skills/audience-expansion-strategy/SKILL.md)
 - [`campaign-structure-auditor`](skills/campaign-structure-auditor/SKILL.md) · [`competitor-analysis`](skills/competitor-analysis/SKILL.md) · [`connect`](skills/connect/SKILL.md) · [`conversion-tracking`](skills/conversion-tracking/SKILL.md)
-- [`creative-fatigue-detector`](skills/creative-fatigue-detector/SKILL.md) · [`creative-testing`](skills/creative-testing/SKILL.md) · [`dayparting`](skills/dayparting/SKILL.md) · [`executive-reporting`](skills/executive-reporting/SKILL.md)
-- [`first-party-data-strategy`](skills/first-party-data-strategy/SKILL.md) · [`geo-integrity-audit`](skills/geo-integrity-audit/SKILL.md) · [`google-ads-quality-score`](skills/google-ads-quality-score/SKILL.md) · [`google-shopping-optimizer`](skills/google-shopping-optimizer/SKILL.md)
-- [`help`](skills/help/SKILL.md) · [`incrementality-testing`](skills/incrementality-testing/SKILL.md) · [`keyword-research`](skills/keyword-research/SKILL.md) · [`kill-scale-rules`](skills/kill-scale-rules/SKILL.md)
-- [`launch`](skills/launch/SKILL.md) · [`linkedin-ads-targeting`](skills/linkedin-ads-targeting/SKILL.md) · [`media-plan`](skills/media-plan/SKILL.md) · [`meta-ads-diagnostics`](skills/meta-ads-diagnostics/SKILL.md)
-- [`mmm-budget-planner`](skills/mmm-budget-planner/SKILL.md) · [`negative-keywords`](skills/negative-keywords/SKILL.md) · [`optimize`](skills/optimize/SKILL.md) · [`performance-max-optimizer`](skills/performance-max-optimizer/SKILL.md)
-- [`pixel-capi-auditor`](skills/pixel-capi-auditor/SKILL.md) · [`platform-amazon`](skills/platform-amazon/SKILL.md) · [`platform-benchmarks`](skills/platform-benchmarks/SKILL.md) · [`platform-google`](skills/platform-google/SKILL.md)
-- [`platform-linkedin`](skills/platform-linkedin/SKILL.md) · [`platform-meta`](skills/platform-meta/SKILL.md) · [`platform-microsoft`](skills/platform-microsoft/SKILL.md) · [`platform-openai`](skills/platform-openai/SKILL.md)
-- [`platform-reddit`](skills/platform-reddit/SKILL.md) · [`platform-tiktok`](skills/platform-tiktok/SKILL.md) · [`platform-x`](skills/platform-x/SKILL.md) · [`pre-pause-analysis`](skills/pre-pause-analysis/SKILL.md)
-- [`quickstart`](skills/quickstart/SKILL.md) · [`replicate`](skills/replicate/SKILL.md) · [`report`](skills/report/SKILL.md) · [`retargeting-sequence-designer`](skills/retargeting-sequence-designer/SKILL.md)
-- [`roas-calculator`](skills/roas-calculator/SKILL.md) · [`seasonal-budget-planner`](skills/seasonal-budget-planner/SKILL.md) · [`utm-builder`](skills/utm-builder/SKILL.md) · [`video-ad-scriptwriter`](skills/video-ad-scriptwriter/SKILL.md)
+- [`creative-fatigue-detector`](skills/creative-fatigue-detector/SKILL.md) · [`dayparting`](skills/dayparting/SKILL.md) · [`executive-reporting`](skills/executive-reporting/SKILL.md) · [`first-party-data-strategy`](skills/first-party-data-strategy/SKILL.md)
+- [`geo-integrity-audit`](skills/geo-integrity-audit/SKILL.md) · [`help`](skills/help/SKILL.md) · [`landing-page-creation`](skills/landing-page-creation/SKILL.md) · [`linkedin-ads-targeting`](skills/linkedin-ads-targeting/SKILL.md)
+- [`llm-visibility-audit`](skills/llm-visibility-audit/SKILL.md) · [`media-plan`](skills/media-plan/SKILL.md) · [`negative-keywords`](skills/negative-keywords/SKILL.md) · [`pixel-capi-auditor`](skills/pixel-capi-auditor/SKILL.md)
+- [`platform-benchmarks`](skills/platform-benchmarks/SKILL.md) · [`quickstart`](skills/quickstart/SKILL.md) · [`report`](skills/report/SKILL.md) · [`roas-calculator`](skills/roas-calculator/SKILL.md)
+- [`ugc-creative-brief`](skills/ugc-creative-brief/SKILL.md) · [`utm-builder`](skills/utm-builder/SKILL.md) · [`video-ad-scriptwriter`](skills/video-ad-scriptwriter/SKILL.md)
 
-Bundled agents: [`audience-builder`](agents/audience-builder.md) · [`budget-optimizer`](agents/budget-optimizer.md) · [`campaign-strategist`](agents/campaign-strategist.md) · [`creative-director`](agents/creative-director.md) · [`media-buyer`](agents/media-buyer.md) · [`performance-analyst`](agents/performance-analyst.md).
+Bundled agents: [`audience-builder`](agents/audience-builder.md) · [`campaign-strategist`](agents/campaign-strategist.md) · [`performance-analyst`](agents/performance-analyst.md).
 
 [Privacy policy](https://synterai.com/privacy) · [Support](https://synterai.com/contact)
 
 ## Campaign safety and scope
 
-Confirm the workspace, account name, and account ID before account actions. Use the advertiser’s verified brand and original assets. Writes require an explicit approved scope; a tool’s plan-approval record is not a substitute for the user’s approval.
+This listing is **free and read-only**. Confirm the workspace, account name, and account ID before account reads. Use the advertiser’s verified brand and original assets.
 
-The launch workflow reads the final plan, runs preflight, records approval, executes, and verifies the returned campaign state. Creating a campaign does not prove it is live or spending. Unsupported operations, including tag publishing and audience synchronization, require a manual handoff to the platform UI.
+Skills and MCP tools here list, pull, audit, forecast, and report. They do not create, pause, enable, approve, or execute campaigns. Unsupported operations, including writes, tag publishing, and audience synchronization, require Synter’s full product or a manual handoff to the platform UI.
 
-Text ads use `create_ad_copy`; existing assets use `list_creative_assets`. The plugin reports missing capabilities and data rather than inventing tool names or results.
+Existing creative assets use `list_creative_assets`. The plugin reports missing capabilities and data rather than inventing tool names or results.
 
 ## Develop and validate
 
@@ -150,3 +142,13 @@ are review instructions, not claims that those live checks already passed.
 Format references: [OpenAI package guide](https://developers.openai.com/plugins/build/plugins),
 [OpenAI submission guide](https://developers.openai.com/plugins/deploy/submission),
 and [Claude manifest reference](https://code.claude.com/docs/en/plugins-reference).
+
+## Free read-only Cursor listing
+
+This Marketplace build is free and read-only:
+
+- MCP URL (Cursor): `https://mcp.synterai.com` (canonical production OAuth host; unauthenticated calls return `401` with `WWW-Authenticate` and PRM at `/.well-known/oauth-protected-resource`).
+- Tool surface for this listing: `tools/readonly-tools.json` (26 read/observe tools). Write, launch, and spend tools are out of scope here.
+- Enforcement: plugin allowlist + CI guard + Cursor rule. Server tools remain classified with `@readonly_tool` / OAuth `tools:read`. A stricter server-side read-only profile is owned separately; when it ships on staging this listing can point at it without changing the canonical host.
+- Claude directory bundle (`packages/claude-directory`, marketplace source) is a slim free read-only skill/agent set with `privacyPolicyUrl` `https://synterai.com/privacy` and connector `https://mcp.synterai.com/mcp/directory`. The Claude connector already in review keeps `https://mcp.syntermedia.ai`.
+

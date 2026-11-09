@@ -115,7 +115,7 @@ if (fs.existsSync(SKILLS_DIR)) {
 
 // (d) Client-specific HTTP syntax remains separate from the portable MCP schema.
 for (const [configPath, expectedUrl] of [
-  ['.mcp.json', 'https://mcp.synterai.com'],
+  ['.mcp.json', 'https://mcp.synterai.com/mcp/directory'],
   ['.cursor-mcp.json', 'https://mcp.synterai.com'],
 ]) {
   const config = manifests[configPath];
