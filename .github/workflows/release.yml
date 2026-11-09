@@ -26,6 +26,8 @@ jobs:
 
       - name: Validate directory tool references
         run: node scripts/check-directory-tools.js
+      - name: Check Cursor readonly listing
+        run: node scripts/check-readonly-tools.js
 
       - name: Test repository validators
         run: node --test scripts/*.test.js

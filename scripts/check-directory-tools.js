@@ -15,7 +15,7 @@ const DATA_IDENTIFIERS = new Set([
 ]);
 const ROOT = path.resolve(__dirname, '..');
 const SURFACES = ['skills', 'commands', 'rules', 'agents'];
-const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.syntermedia.ai']);
+const ENDPOINTS = new Set(['https://mcp.synterai.com', 'https://mcp.synterai.com/mcp/directory', 'https://mcp.syntermedia.ai']);
 
 function extractReferences(source) {
   const refs = [];

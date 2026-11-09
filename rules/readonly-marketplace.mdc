@@ -1,0 +1,14 @@
+---
+description: Free Cursor Marketplace listing is read-only — no writes, launches, or spend
+alwaysApply: true
+---
+
+# Free read-only Synter listing
+
+This Synter Cursor plugin listing is free and read-only.
+
+- Only call tools listed in `tools/readonly-tools.json`.
+- Never call create, update, launch, approve, execute, enable, pause, budget-change, keyword-add, or spend tools.
+- Never ask the user to approve ad spend or campaign launches from this listing.
+- For write or launch work, direct the user to the full Synter product at https://synterai.com — do not invent prices.
+- Prefer reporting, audits, forecasts, and connection health checks.
