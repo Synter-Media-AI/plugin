@@ -10,7 +10,7 @@
     {
       "name": "synter",
       "source": "./",
-      "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution."
+      "description": "Plan and operate advertising campaigns through Synter\u2019s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution."
     }
   ]
 }

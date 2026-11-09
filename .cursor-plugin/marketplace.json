@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Synter's official plugin marketplace. The AI Agent Operator for Ads.",
-    "version": "1.2.1"
+    "version": "1.3.0"
   },
   "plugins": [
     {
       "name": "synter",
       "source": ".",
       "logo": "assets/logo.png",
-      "description": "Plan and operate advertising campaigns through Synter’s hosted MCP server over OAuth. Review performance, write ad copy, and approve campaign changes before execution."
+      "description": "Free, read-only Synter MCP plugin for Cursor. Review ad performance and account health across 30+ ad platforms over OAuth. No create, update, launch, or spend tools in this listing."
     }
   ]
 }

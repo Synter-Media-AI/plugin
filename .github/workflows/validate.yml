@@ -18,6 +18,8 @@ jobs:
 
       - name: Run manifest validation
         run: node scripts/validate-manifests.js
+      - name: Check Cursor readonly listing
+        run: node scripts/check-readonly-tools.js
 
       - name: Run strict Claude plugin validation
         run: |
