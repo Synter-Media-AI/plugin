@@ -10,7 +10,7 @@
     {
       "name": "synter",
       "source": "./packages/claude-directory",
-      "description": "Free read-only Synter advertising skills and MCP connector. Review performance, audiences, and plans across 30+ ad platforms over OAuth."
+      "description": "Free read-only Synter advertising skills and MCP connector. Review performance, audiences, and plans across 43 ad platforms over OAuth."
     }
   ]
 }

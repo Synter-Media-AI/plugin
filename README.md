@@ -4,7 +4,7 @@
 
 # Synter plugin
 
-This Cursor Marketplace listing is a **free, read-only** Synter plugin. It connects to Synter's hosted MCP over browser OAuth so you can review ad performance and account health across 30+ ad platforms. It does **not** create, update, launch, or spend. Paid write and launch tools live in the full Synter product — see https://synterai.com/pricing (no plan prices in this listing).
+This Cursor Marketplace listing is a **free, read-only** Synter plugin. It connects to Synter's hosted MCP over browser OAuth so you can review ad performance and account health across 43 ad platforms. It does **not** create, update, launch, or spend. Paid write and launch tools live in the full Synter product — see https://synterai.com/pricing (no plan prices in this listing).
 
 ## Install and sign in
 
