@@ -24,5 +24,11 @@
   "get_campaign_plan",
   "run_launch_preflight",
   "get_plan_execution",
-  "get_job_status"
+  "get_job_status",
+  "company_intel_search_people",
+  "company_intel_get_profile",
+  "company_intel_get_signals",
+  "enrich_contacts",
+  "get_crm_contacts",
+  "render_card_preview"
 ]

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.3.2] - 2026-11-13
+
+### Added
+- Added consolidated `outbound`, `outbound-research`, and `outbound-replies` skills under Synter.
+- Added prospect discovery, contact enrichment, and CRM directory tools.
+
 ## [1.3.1] — 2026-11-09
 
 ### Changed

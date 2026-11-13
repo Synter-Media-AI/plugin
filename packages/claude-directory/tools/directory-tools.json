@@ -32,5 +32,13 @@
   "enable_campaign",
   "pause_campaign",
   "update_campaign_budget",
-  "get_job_status"
+  "get_job_status",
+  "company_intel_search_people",
+  "company_intel_get_profile",
+  "company_intel_get_signals",
+  "enrich_contacts",
+  "synter_audience",
+  "get_crm_contacts",
+  "render_card_preview",
+  "action_card"
 ]
