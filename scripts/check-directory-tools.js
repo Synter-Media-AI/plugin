@@ -11,7 +11,7 @@ const DATA_IDENTIFIERS = new Set([
   'conversion_id', 'custom_label', 'event_id', 'google_product_category',
   'identifier_exists', 'li_fat_id', 'openai_ads', 'order_id', 'paid_social',
   'product_type', 'rdt_cid', 'sale_price', 'transaction_id', 'utm_campaign',
-  'utm_content', 'utm_medium', 'utm_source', 'utm_term',
+  'utm_content', 'utm_medium', 'utm_source', 'utm_term', 'c_suite', 'job_functions', 'job_levels', 'job_title', 'linkedin_url', 'linkedin_urls', 'reply_rate_pct', 'total_interested', 'total_replied_including_automated', 'work_email',
 ]);
 const ROOT = path.resolve(__dirname, '..');
 const SURFACES = ['skills', 'commands', 'rules', 'agents'];
@@ -51,9 +51,9 @@ function listFiles(dir) {
 
 function readAllowlist(root) {
   const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
-  if (!Array.isArray(names) || names.length !== 34 || new Set(names).size !== 34 ||
+  if (!Array.isArray(names) || names.length !== 42 || new Set(names).size !== 42 ||
       names.some(name => typeof name !== 'string' || !/^[a-z][a-z0-9_]+$/.test(name))) {
-    throw new Error('tools/directory-tools.json must contain 34 unique tool names.');
+    throw new Error('tools/directory-tools.json must contain 42 unique tool names.');
   }
   return new Set(names);
 }

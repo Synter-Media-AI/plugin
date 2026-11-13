@@ -56,7 +56,7 @@ test('checks nested files in every instruction surface, including optional comma
   assert.equal(cli.status, 1);
   assert.match(cli.stderr, /unlisted tool unknown_commands/);
   fs.writeFileSync(path.join(root, 'tools/directory-tools.json'), '["list_campaigns", "list_campaigns"]');
-  assert.throws(() => scan(root), /34 unique tool names/);
+  assert.throws(() => scan(root), /42 unique tool names/);
 });
 
 function response(id, result, { sse = false, session = false } = {}) {
