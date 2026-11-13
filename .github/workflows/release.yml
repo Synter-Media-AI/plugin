@@ -34,10 +34,10 @@ jobs:
 
       - name: Run strict Claude plugin validation
         run: |
-          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
-          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate .claude-plugin/plugin.json --strict
+          bash scripts/validate-claude-plugin.sh .
+          bash scripts/validate-claude-plugin.sh .claude-plugin/plugin.json
           python3 scripts/build-packages.py --check-claude-directory
-          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate packages/claude-directory --strict
+          bash scripts/validate-claude-plugin.sh packages/claude-directory
 
       - name: Verify release tag matches the package
         env:
@@ -54,7 +54,7 @@ jobs:
         run: |
           VERSION=$(node -p "require('./.claude-plugin/plugin.json').version")
           python3 -m zipfile -e "dist/synter-claude-plugin-$VERSION.zip" /tmp/synter-claude-package
-          npx -y @anthropic-ai/claude-code@2.1.263 plugin validate /tmp/synter-claude-package/.claude-plugin/plugin.json --strict
+          bash scripts/validate-claude-plugin.sh /tmp/synter-claude-package/.claude-plugin/plugin.json
 
       - name: Resolve version
         id: version
