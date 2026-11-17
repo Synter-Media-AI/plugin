@@ -5,7 +5,7 @@ description: Check intended geography against available campaign settings and de
 
 # Geo integrity audit
 
-Confirm the workspace with `list_connected_accounts`, then read `list_campaigns` and `audit_account_structure`. For a planned campaign, use `get_campaign_plan` and `run_launch_preflight`.
+Confirm the workspace with `list_connected_accounts`, then read `list_campaigns` and `audit_account_structure`. For a planned campaign, use `get_campaign_plan`.
 
 Compare the intended geography with the location criteria, exclusions, and presence settings actually returned. A campaign name is not targeting evidence. Check every ad set or ad group when the data is available. Missing fields mean UNVERIFIED, not worldwide delivery or a passed check.
 

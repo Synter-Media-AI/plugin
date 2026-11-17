@@ -2,6 +2,13 @@
 
 ## [1.3.3] - Unreleased
 
+### Changed
+- Claude Directory tool list now matches the read-only `/mcp/directory` profile (83 tools). Write tools such as `execute_campaign_plan`, `enable_campaign`, and `action_card` are no longer listed.
+- Skills no longer mention write tools that the directory surface does not serve.
+- Marketplace and plugin copy now uses the official “30+ ad platforms” claim, and the Claude Directory README, help skill, and root plugin.json no longer describe write, approval, or spend-changing actions.
+- `check-directory-tools.js --live` defaults to `https://mcp.synterai.com/mcp/directory` and fails on unexpected tools or tools missing `title` / `readOnlyHint` / `destructiveHint`.
+- Removed `optimize_budget` (`@destructive_tool`) from `tools/readonly-tools.json`.
+
 ### Fixed
 - Moved `outbound`, `outbound-research`, and `outbound-replies` out of the
   shipped `skills/` tree (now under `skills-write/`) so the Cursor Marketplace

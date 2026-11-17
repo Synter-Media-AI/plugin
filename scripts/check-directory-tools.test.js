@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const { extractReferences, scan, readLiveTools } = require('./check-directory-tools');
+const { extractReferences, scan, readLiveTools, assertLiveDirectory, DIRECTORY_LIVE_URL } = require('./check-directory-tools');
 
 test('extracts tools from prose, tables, functions, fences, and MCP qualification', () => {
   const source = [
@@ -56,7 +56,7 @@ test('checks nested files in every instruction surface, including optional comma
   assert.equal(cli.status, 1);
   assert.match(cli.stderr, /unlisted tool unknown_commands/);
   fs.writeFileSync(path.join(root, 'tools/directory-tools.json'), '["list_campaigns", "list_campaigns"]');
-  assert.throws(() => scan(root), /42 unique tool names/);
+  assert.throws(() => scan(root), /83 unique tool names/);
 });
 
 function response(id, result, { sse = false, session = false } = {}) {
@@ -71,10 +71,10 @@ function response(id, result, { sse = false, session = false } = {}) {
 
 test('live check initializes, passes session headers, parses JSON/SSE, and paginates', async () => {
   const calls = [];
-  const names = await readLiveTools({ token: 'test-oauth-token', fetchImpl: async (url, options) => {
+  const live = await readLiveTools({ token: 'test-oauth-token', fetchImpl: async (url, options) => {
     const body = JSON.parse(options.body);
     calls.push(body);
-    assert.equal(url, 'https://mcp.synterai.com');
+    assert.equal(url, DIRECTORY_LIVE_URL);
     assert.equal(options.headers.Authorization, 'Bearer test-oauth-token');
     assert.equal(options.redirect, 'error');
     if (body.method === 'initialize') return response(body.id, { protocolVersion: '2025-03-26' }, { session: true });
@@ -88,7 +88,9 @@ test('live check initializes, passes session headers, parses JSON/SSE, and pagin
     assert.equal(body.params.cursor, 'page-2');
     return response(body.id, { tools: [{ name: 'get_connection_status' }] });
   } });
-  assert.deepEqual([...names], ['list_campaigns', 'get_connection_status']);
+  assert.equal(DIRECTORY_LIVE_URL, 'https://mcp.synterai.com/mcp/directory');
+  assert.deepEqual([...live.names], ['list_campaigns', 'get_connection_status']);
+  assert.deepEqual(live.tools.map((tool) => tool.name), ['list_campaigns', 'get_connection_status']);
   assert.equal(calls.length, 4);
 });
 
@@ -111,4 +113,68 @@ test('live check rejects malformed results and looping cursors', async () => {
     };
     await assert.rejects(readLiveTools({ token: 'secret', fetchImpl }), /missing tools|repeated pagination|JSON-RPC response|duplicate tool/);
   }
+});
+
+function annotated(name) {
+  return {
+    name,
+    title: name.replace(/_/g, ' '),
+    annotations: { readOnlyHint: true, destructiveHint: false },
+  };
+}
+
+test('live check defaults to the directory MCP path', async () => {
+  const urls = [];
+  await readLiveTools({
+    token: 'secret',
+    fetchImpl: async (url, options) => {
+      urls.push(url);
+      const { method, id } = JSON.parse(options.body);
+      if (method === 'initialize') return response(id, { protocolVersion: '2025-03-26' });
+      if (method === 'notifications/initialized') return new Response(null, { status: 202 });
+      return response(id, { tools: [annotated('list_campaigns')] });
+    },
+  });
+  assert.deepEqual(urls, [DIRECTORY_LIVE_URL, DIRECTORY_LIVE_URL, DIRECTORY_LIVE_URL]);
+});
+
+test('live directory check rejects unexpected tools and missing annotations', () => {
+  const allowed = new Set(['list_campaigns', 'get_connection_status']);
+  const complete = [annotated('list_campaigns'), annotated('get_connection_status')];
+  assertLiveDirectory(allowed, { names: new Set(complete.map((tool) => tool.name)), tools: complete });
+
+  assert.throws(
+    () => assertLiveDirectory(allowed, {
+      names: new Set(['list_campaigns', 'get_connection_status', 'enable_campaign']),
+      tools: [...complete, annotated('enable_campaign')],
+    }),
+    /unexpected tools: enable_campaign/,
+  );
+
+  assert.throws(
+    () => assertLiveDirectory(allowed, {
+      names: new Set(['list_campaigns']),
+      tools: [annotated('list_campaigns')],
+    }),
+    /missing directory tools: get_connection_status/,
+  );
+
+  assert.throws(
+    () => assertLiveDirectory(allowed, {
+      names: new Set(['list_campaigns', 'get_connection_status']),
+      tools: [annotated('list_campaigns'), { name: 'get_connection_status' }],
+    }),
+    /missing title|missing readOnlyHint\/destructiveHint/,
+  );
+
+  assert.throws(
+    () => assertLiveDirectory(allowed, {
+      names: new Set(['list_campaigns', 'get_connection_status']),
+      tools: [
+        annotated('list_campaigns'),
+        { name: 'get_connection_status', title: 'Get connection status', annotations: { readOnlyHint: false, destructiveHint: false } },
+      ],
+    }),
+    /must be read-only/,
+  );
 });

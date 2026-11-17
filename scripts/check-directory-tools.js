@@ -51,9 +51,9 @@ function listFiles(dir) {
 
 function readAllowlist(root) {
   const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
-  if (!Array.isArray(names) || names.length !== 42 || new Set(names).size !== 42 ||
+  if (!Array.isArray(names) || names.length !== 83 || new Set(names).size !== 83 ||
       names.some(name => typeof name !== 'string' || !/^[a-z][a-z0-9_]+$/.test(name))) {
-    throw new Error('tools/directory-tools.json must contain 42 unique tool names.');
+    throw new Error('tools/directory-tools.json must contain 83 unique tool names.');
   }
   return new Set(names);
 }
@@ -73,9 +73,11 @@ function scan(root = ROOT) {
   return { allowed, references, errors, fileCount: files.length };
 }
 
-async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImpl = fetch }) {
+const DIRECTORY_LIVE_URL = 'https://mcp.synterai.com/mcp/directory';
+
+async function readLiveTools({ token, url = DIRECTORY_LIVE_URL, fetchImpl = fetch }) {
   if (!token) throw new Error('Live check requires SYNTER_MCP_TOKEN (an OAuth access token).');
-  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the two production Synter MCP endpoints.');
+  if (!ENDPOINTS.has(url)) throw new Error('Live check URL must be one of the production Synter MCP endpoints.');
   let session;
   let protocol = '2025-03-26';
   let requestId = 0;
@@ -125,6 +127,7 @@ async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImp
   protocol = init.protocolVersion;
   await rpc('notifications/initialized', {}, true);
   const names = new Set();
+  const tools = [];
   const cursors = new Set();
   let cursor;
   do {
@@ -135,6 +138,7 @@ async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImp
         throw new Error('tools/list: missing or duplicate tool name');
       }
       names.add(tool.name);
+      tools.push(tool);
     }
     cursor = result.nextCursor;
     if (cursor !== undefined && (typeof cursor !== 'string' || !cursor || cursors.has(cursor))) {
@@ -143,7 +147,31 @@ async function readLiveTools({ token, url = 'https://mcp.synterai.com', fetchImp
     if (cursor) cursors.add(cursor);
     if (cursors.size > 100) throw new Error('tools/list: pagination limit exceeded');
   } while (cursor);
-  return names;
+  return { names, tools };
+}
+
+function assertLiveDirectory(allowed, live) {
+  const names = live.names;
+  const missing = [...allowed].filter(name => !names.has(name));
+  if (missing.length) throw new Error(`Live server is missing directory tools: ${missing.join(', ')}`);
+  const unexpected = [...names].filter(name => !allowed.has(name));
+  if (unexpected.length) throw new Error(`Live server returned unexpected tools: ${unexpected.join(', ')}`);
+  const annotationErrors = [];
+  for (const tool of live.tools) {
+    const title = tool.title;
+    const annotations = tool.annotations && typeof tool.annotations === 'object' ? tool.annotations : null;
+    if (typeof title !== 'string' || !title.trim()) {
+      annotationErrors.push(`${tool.name}: missing title`);
+    }
+    if (!annotations || typeof annotations.readOnlyHint !== 'boolean' || typeof annotations.destructiveHint !== 'boolean') {
+      annotationErrors.push(`${tool.name}: missing readOnlyHint/destructiveHint annotations`);
+    } else if (annotations.readOnlyHint !== true || annotations.destructiveHint !== false) {
+      annotationErrors.push(`${tool.name}: annotations must be read-only (readOnlyHint=true, destructiveHint=false)`);
+    }
+  }
+  if (annotationErrors.length) {
+    throw new Error(`Live tools missing or invalid annotations: ${annotationErrors.join('; ')}`);
+  }
 }
 
 async function main() {
@@ -152,15 +180,17 @@ async function main() {
   const result = scan();
   if (result.errors.length) throw new Error(result.errors.join('\n'));
   if (args.includes('--live') || process.env.SYNTER_MCP_TOKEN) {
-    const live = await readLiveTools({ token: process.env.SYNTER_MCP_TOKEN, url: process.env.SYNTER_MCP_URL });
-    const missing = [...result.allowed].filter(name => !live.has(name));
-    if (missing.length) throw new Error(`Live server is missing directory tools: ${missing.join(', ')}`);
-    console.log(`Live tools/list contains all ${result.allowed.size} directory tools.`);
+    const live = await readLiveTools({
+      token: process.env.SYNTER_MCP_TOKEN,
+      url: process.env.SYNTER_MCP_URL || DIRECTORY_LIVE_URL,
+    });
+    assertLiveDirectory(result.allowed, live);
+    console.log(`Live tools/list matches the ${result.allowed.size}-tool directory with required annotations.`);
   }
   console.log(`Checked ${result.fileCount} instruction files: ${result.references.size} referenced tools, all in the ${result.allowed.size}-tool directory.`);
 }
 
-module.exports = { extractReferences, scan, readLiveTools };
+module.exports = { extractReferences, scan, readLiveTools, assertLiveDirectory, DIRECTORY_LIVE_URL };
 if (require.main === module) main().catch(error => {
   // Mask the OAuth token even if a lower-level library includes it in an error.
   const message = process.env.SYNTER_MCP_TOKEN
