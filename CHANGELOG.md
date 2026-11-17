@@ -2,6 +2,10 @@
 
 ## [1.3.3] - Unreleased
 
+### Changed
+- Claude Directory tool list now matches the read-only `/mcp/directory` profile (83 tools). Write tools such as `execute_campaign_plan`, `enable_campaign`, and `action_card` are no longer listed.
+- Skills no longer mention write tools that the directory surface does not serve.
+
 ### Fixed
 - Moved `outbound`, `outbound-research`, and `outbound-replies` out of the
   shipped `skills/` tree (now under `skills-write/`) so the Cursor Marketplace

@@ -48,7 +48,7 @@ Meta Advantage+ audiences and Google Optimized Targeting treat your audiences as
 
 ## 6. Monitor and rebalance
 
-Weekly: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) per audience tier. Scale rungs beating target, refresh creative on fatiguing ones, and rebalance spend across tiers with `optimize_budget`. When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
+Weekly: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) per audience tier. Scale rungs beating target, refresh creative on fatiguing ones, and recommend spend rebalances across tiers from that evidence (write tools are not available on this read-only surface). When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
 
 ## Rules
 
