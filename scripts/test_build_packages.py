@@ -102,10 +102,10 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': '073d219a6ef35d2de21289f53d89ce33fd002c37519b433faa987fa3acfeb28b',
-            'claude-directory': '6e0134cd68c652b0dea99401de5a9ef8809d997597fd3886acb76c59aa60404c',
-            'openai': '9a731d4194846cfa2e01d1b3db16d92381bd0f0de4be39b7aa63c13c016c924d',
-            'openai-new-draft': '1d7b1aa251b550e7b5c9c329a174c7076ea49aa7e389633f24a3fa80a6424154',
+            'claude': 'd9f5d6c18ba0cf4f261e5d91e72611cc956e85f7acc263c4063cef7a32a3326d',
+            'claude-directory': '575ec39744650f00e59dda89b437619de05e01a16488b9a1fe75c942b69da55c',
+            'openai': '0b2bd0e326d1eeba360a59df8f8efb8b3a7138a71492a6e70e6d34f1efc36bb4',
+            'openai-new-draft': '7c00028456423fe99d307ef432e285a2b3f9550904d5a53b1a378855e97f75f9',
         }
         # Snapshot after the approved RSA/bidding correction across all hosts.
         # Update deliberately when reviewed package contents change.

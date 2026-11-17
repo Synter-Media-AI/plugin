@@ -7,7 +7,7 @@ const WRITE_TOOLS = new Set([
   'create_campaign_plan', 'upsert_plan_entity', 'approve_campaign_plan',
   'execute_campaign_plan', 'enable_campaign', 'pause_campaign',
   'update_campaign_budget', 'add_keywords', 'add_negative_keywords',
-  'create_ad_copy', 'action_card', 'synter_audience',
+  'create_ad_copy', 'action_card', 'synter_audience', 'optimize_budget',
 ]);
 const CANONICAL = 'https://mcp.synterai.com';
 
