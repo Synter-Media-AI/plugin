@@ -34,7 +34,7 @@ class PackageTests(unittest.TestCase):
     def test_directory_source_is_reproducible_and_has_only_static_runtime(self):
         files = mod.sync_claude_directory()
         self.assertEqual(files, mod.collect(mod.ROOT, 'claude-directory')[1])
-        self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 30)
+        self.assertEqual(sum(name.endswith('/SKILL.md') for name in files), 27)
         self.assertEqual(sum(name.startswith('agents/') for name in files), 3)
         self.assertNotIn('hooks', json.loads(files['.claude-plugin/plugin.json']))
         self.assertEqual(json.loads(files['.claude-plugin/plugin.json'])['privacyPolicyUrl'], 'https://synterai.com/privacy')
@@ -102,10 +102,10 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': 'e88988640d232b94158fffbfa4fd58b28570deffa5f7e155621db028e088249d',
-            'claude-directory': '57a9f244fd3e74f2afbe06f48abaf5cd7c1d5a7fb09cd31da85d047853a7f9a3',
-            'openai': 'de72c10a09b57f5128fade50979672dca03f1e87e37862df06c8b2edac92d5ec',
-            'openai-new-draft': '4e61d4fc480e234fd5d23a16098b8303ad7ab07871187fdba749940061baff05',
+            'claude': 'ab39309643f33f5b8f4b29e55e1871b11afd866ac120b7cd7c068523ebac6229',
+            'claude-directory': 'a9f580f3daecc138cb562e6ff66f08d504fb3748968c1b03686bed77057e82d7',
+            'openai': '63e4aa8f53b103195063504a2078fee336296ceef18fb8ec2fd0691ab5389058',
+            'openai-new-draft': '53a41af245c29d6d9192b100b50623c50ba1b94320907ed3812f3bfb0a9e3045',
         }
         # Snapshot after the approved RSA/bidding correction across all hosts.
         # Update deliberately when reviewed package contents change.
@@ -130,7 +130,7 @@ class PackageTests(unittest.TestCase):
         self.assertFalse(any(name.startswith(('scripts/', '.claude-plugin/', '.git/', 'hooks/')) for name in files))
         self.assertNotIn('.env', files)
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
-        self.assertEqual(len([n for n in files if n.endswith('/SKILL.md')]), 30)
+        self.assertEqual(len([n for n in files if n.endswith('/SKILL.md')]), 27)
 
     def test_claude_identity_and_executable_present(self):
         _, files = mod.collect(mod.ROOT, 'claude')

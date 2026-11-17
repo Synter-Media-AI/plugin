@@ -7,7 +7,7 @@ const WRITE_TOOLS = new Set([
   'create_campaign_plan', 'upsert_plan_entity', 'approve_campaign_plan',
   'execute_campaign_plan', 'enable_campaign', 'pause_campaign',
   'update_campaign_budget', 'add_keywords', 'add_negative_keywords',
-  'create_ad_copy',
+  'create_ad_copy', 'action_card', 'synter_audience',
 ]);
 const CANONICAL = 'https://mcp.synterai.com';
 
@@ -95,7 +95,7 @@ function main() {
   }
 
   // Ban write-flavored skill names even if somehow allowlisted later
-  for (const banned of ['launch', 'optimize', 'replicate', 'campaign-preflight', 'ad-copy-generation']) {
+  for (const banned of ['launch', 'optimize', 'replicate', 'campaign-preflight', 'ad-copy-generation', 'outbound', 'outbound-research', 'outbound-replies']) {
     if (shippedSkills.includes(banned)) {
       errors.push(`skills/${banned}: write-flavored skill must not ship in read-only listing`);
     }
