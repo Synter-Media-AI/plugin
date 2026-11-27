@@ -22,7 +22,8 @@ When a user asks to find prospects, decision-makers, emails, phone numbers, or L
 Start every outbound campaign conversation with the real state:
 
 - `get_crm_contacts` — leads by stage, active campaigns, replies awaiting review, and pipeline metrics.
-- `render_card_preview` — recent human replies classified by intent and draft response status.
+- `prospector_get_campaigns` and `prospector_get_leads` — active outbound campaigns, lead statuses, and reply tracking.
+- `get_pending_approvals` — pending outbound drafts and replies awaiting review.
 
 Sending capacity is the fleet's, not one campaign's. Every campaign draws on shared sending domains and mailboxes, so one campaign's bounces damage all of them.
 
@@ -49,16 +50,15 @@ Cold email is outward-facing and irreversible. Confirm before every send, resume
 Two gates, both mandatory:
 
 1. **Qualification** — run the **outbound-research** skill. If you cannot name a checkable fact about a recipient, do not mail them. Matching an industry and a job title is not a fact.
-2. **Deliverability** — every address verified via `enrich_contacts`, duplicates removed, nobody on the suppression list (`get_crm_contacts` / `get_crm_contacts`), and merge tokens rendering cleanly.
+2. **Deliverability** — every address verified via `enrich_contacts`, duplicates removed, nobody on the suppression list (`get_crm_contacts`), and merge tokens rendering cleanly.
 
 ## 5. Launch, pause, and reply management
 
-- `action_card` — creates a drafted campaign sequence. Creating is not sending without explicit launch confirmation.
-- `action_card` — execute `approve`, `pause`, or `resume` on an outbound campaign card (`domain: "outbound"`, `action: "approve" | "pause" | "resume"`). Requires explicit user confirmation for launch or resume.
-- `render_card_preview` — inspect pending prospect replies and draft responses.
-- `action_card` — approve and send a drafted reply to a prospect. Ask first, every time.
+- `prospector_get_campaigns` and `prospector_get_leads` — inspect campaign performance, bounce rates, and prospect reply state.
+- `get_pending_approvals` — inspect pending outbound drafts, campaign actions, and prospect reply queues.
+- `update_pending_approval` — approve or reject a queued outbound campaign action or drafted reply (`approve` / `reject`). Creating or drafting is not sending; ask for explicit user confirmation before approving any launch, resume, or reply send.
 
-Pause immediately via `action_card` (`domain: "outbound"`, `action: "pause"`), without asking, if you see: bounce rate over 5%, a merge token printing literally in a sent email, or a lead who asked to be removed still receiving mail. Report it after.
+If you see bounce rate over 5%, a merge token printing literally in a sent email, or a lead who asked to be removed still receiving mail, reject any pending outbound send via `update_pending_approval` and pause the campaign immediately in Synter or the sending workspace before reporting it.
 
 ## 6. What not to do
 

@@ -6,7 +6,7 @@ set -euo pipefail
 TARGET=${1:?target required}
 TMP=$(mktemp)
 set +e
-npx -y @anthropic-ai/claude-code@2.1.263 plugin validate "$TARGET" --strict >"$TMP" 2>&1
+npx -y @anthropic-ai/claude-code@2.1.332 plugin validate "$TARGET" --strict >"$TMP" 2>&1
 STATUS=$?
 set -e
 cat "$TMP"

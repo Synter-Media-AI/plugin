@@ -33,7 +33,9 @@ const MANIFEST_PATHS = [
   '.mcp.json',
   'mcp.json',
   '.cursor-mcp.json',
+  'mcp_config.json',
   'plugin.json',
+  'config/openai-plugin.json',
 ];
 
 const manifests = {};
@@ -116,7 +118,7 @@ if (fs.existsSync(SKILLS_DIR)) {
 // (d) Client-specific HTTP syntax remains separate from the portable MCP schema.
 for (const [configPath, expectedUrl] of [
   ['.mcp.json', 'https://mcp.synterai.com/mcp/directory'],
-  ['.cursor-mcp.json', 'https://mcp.synterai.com'],
+  ['.cursor-mcp.json', 'https://mcp.synterai.com/mcp/directory'],
 ]) {
   const config = manifests[configPath];
   const servers = config && config.mcpServers;
@@ -128,6 +130,14 @@ for (const [configPath, expectedUrl] of [
   if (server && Object.keys(server).some(key => !['type', 'url', 'description'].includes(key))) {
     errors.push(`${configPath}: OAuth-only remote configuration permits only type, url, and description; no headers, env, commands, or credential fields`);
   }
+}
+const antigravityMcp = manifests['mcp_config.json'];
+const antigravityServers = antigravityMcp && antigravityMcp.mcpServers;
+const antigravityServer = antigravityServers && antigravityServers.synter;
+if (!antigravityServers || Object.keys(antigravityServers).length !== 1 || !antigravityServer ||
+    antigravityServer.url !== 'https://mcp.synterai.com/mcp/directory' ||
+    Object.keys(antigravityServer).some(key => key !== 'url')) {
+  errors.push('mcp_config.json: expected a single Synter MCP server at https://mcp.synterai.com/mcp/directory without credential fields');
 }
 for (const manifestPath of ['.claude-plugin/plugin.json', '.cursor-plugin/plugin.json']) {
   const manifest = manifests[manifestPath];
@@ -145,30 +155,75 @@ for (const manifestPath of ['.claude-plugin/plugin.json', '.cursor-plugin/plugin
 }
 
 // Portable Agent Plugins entry point and OpenAI directory requirements.
-const portable = manifests['plugin.json'];
+const portable = manifests['config/openai-plugin.json'];
 const portableMcp = manifests['mcp.json'];
 const allowedPortableKeys = ['$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions'];
 if (!portable || portable.$schema !== 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json' ||
     portable.name !== pluginJson?.name || portable.version !== pluginJson?.version ||
     Object.keys(portable).some(key => !allowedPortableKeys.includes(key))) {
-  errors.push('plugin.json: portable schema, identity, and version must match the canonical package');
+  errors.push('config/openai-plugin.json: portable schema, identity, and version must match the canonical package');
 }
 const openai = portable?.extensions?.['com.openai'];
 const listing = openai?.interface;
 for (const [key, limit] of [['displayName', 30], ['shortDescription', 30], ['longDescription', 4000], ['developerName', 80], ['category', 100]]) {
-  if (typeof listing?.[key] !== 'string' || !listing[key].trim() || listing[key].length > limit) errors.push(`plugin.json: invalid listing ${key}`);
+  if (typeof listing?.[key] !== 'string' || !listing[key].trim() || listing[key].length > limit) errors.push(`config/openai-plugin.json: invalid listing ${key}`);
 }
 for (const key of ['websiteURL', 'supportURL', 'privacyPolicyURL', 'termsOfServiceURL']) {
   try {
     const url = new URL(listing?.[key]);
     if (url.origin !== 'https://synterai.com' || url.username || url.password) throw new Error();
-  } catch { errors.push(`plugin.json: ${key} must use canonical Synter HTTPS URL`); }
+  } catch { errors.push(`config/openai-plugin.json: ${key} must use canonical Synter HTTPS URL`); }
 }
 for (const asset of ['logo', 'composerIcon']) {
   const value = listing?.[asset];
-  if (typeof value !== 'string' || !value.startsWith('./assets/') || value.includes('..') || !fs.existsSync(path.join(REPO_ROOT, value))) errors.push(`plugin.json: missing packaged ${asset}`);
+  if (typeof value !== 'string' || !value.startsWith('./assets/') || value.includes('..') || !fs.existsSync(path.join(REPO_ROOT, value))) errors.push(`config/openai-plugin.json: missing packaged ${asset}`);
 }
-if (openai?.hooks || openai?.apps || fs.existsSync(path.join(REPO_ROOT, '.app.json'))) errors.push('plugin.json: public OpenAI package cannot declare hooks or app references');
+if (openai?.hooks || openai?.apps || fs.existsSync(path.join(REPO_ROOT, '.app.json'))) errors.push('config/openai-plugin.json: public OpenAI package cannot declare hooks or app references');
+
+// Antigravity native root plugin.json, rules/AGENTS.md, and agents/*.md checks.
+const antigravity = manifests['plugin.json'];
+const allowedAntigravityKeys = ['name', 'displayName', 'version', 'description', 'logo', 'author', 'homepage', 'repository', 'suggestedPrompts', 'disabled'];
+if (!antigravity ||
+    antigravity.name !== pluginJson?.name ||
+    antigravity.version !== pluginJson?.version ||
+    Object.keys(antigravity).some(key => !allowedAntigravityKeys.includes(key))) {
+  errors.push('plugin.json: Antigravity schema, identity, and version must match the canonical package without unknown top-level fields');
+}
+if (typeof antigravity?.displayName !== 'string' || !antigravity.displayName.trim() ||
+    typeof antigravity?.description !== 'string' || !antigravity.description.trim()) {
+  errors.push('plugin.json: displayName and description are required');
+}
+if (typeof antigravity?.logo !== 'string' || !antigravity.logo.trim() ||
+    antigravity.logo.startsWith('/') || antigravity.logo.includes('..') ||
+    !/\.(png|svg|jpe?g|webp)$/i.test(antigravity.logo) ||
+    !fs.existsSync(path.join(REPO_ROOT, antigravity.logo))) {
+  errors.push('plugin.json: missing or invalid Antigravity logo asset');
+}
+if (!Array.isArray(antigravity?.suggestedPrompts) ||
+    antigravity.suggestedPrompts.length < 1 || antigravity.suggestedPrompts.length > 3 ||
+    antigravity.suggestedPrompts.some(p => typeof p !== 'string' || !p.trim())) {
+  errors.push('plugin.json: suggestedPrompts must contain 1 to 3 non-empty strings');
+}
+const agentsRulesPath = path.join(REPO_ROOT, 'rules/AGENTS.md');
+if (!fs.existsSync(agentsRulesPath)) {
+  errors.push('rules/AGENTS.md: missing');
+} else if (/^---\r?\n/.test(fs.readFileSync(agentsRulesPath, 'utf8'))) {
+  errors.push('rules/AGENTS.md: must be plain Markdown without YAML frontmatter');
+}
+const agentsDir = path.join(REPO_ROOT, 'agents');
+if (fs.existsSync(agentsDir)) {
+  for (const entry of fs.readdirSync(agentsDir)) {
+    if (!entry.endsWith('.md')) continue;
+    const agentPath = path.join('agents', entry);
+    const content = fs.readFileSync(path.join(REPO_ROOT, agentPath), 'utf8');
+    const fm = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    const modelMatch = fm && fm[1].match(/^model:\s*(.+)$/m);
+    if (!modelMatch || modelMatch[1].trim() !== 'inherit') {
+      errors.push(`${agentPath}: model must be "inherit" for Antigravity compatibility`);
+    }
+  }
+}
+
 const portableServer = portableMcp?.mcpServers?.synter;
 if (portableMcp?.$schema !== 'https://agent-plugins.org/schemas/1.0.0/mcp.schema.json' ||
     Object.keys(portableMcp?.mcpServers || {}).length !== 1 || portableServer?.type !== 'streamable-http' ||
@@ -176,7 +231,7 @@ if (portableMcp?.$schema !== 'https://agent-plugins.org/schemas/1.0.0/mcp.schema
     Object.keys(portableServer || {}).some(key => !['type', 'url'].includes(key))) {
   errors.push('mcp.json: expected portable HTTP transport and OAuth DCR without credentials');
 }
-for (const pathName of ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.cursor-plugin/plugin.json', '.cursor-plugin/marketplace.json', 'plugin.json']) {
+for (const pathName of ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.cursor-plugin/plugin.json', '.cursor-plugin/marketplace.json', 'plugin.json', 'config/openai-plugin.json', 'mcp_config.json']) {
   if (JSON.stringify(manifests[pathName]).includes('syntermedia.ai')) errors.push(`${pathName}: obsolete public domain`);
 }
 

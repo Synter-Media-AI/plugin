@@ -1,17 +1,23 @@
 # Synter
 
-Synter helps you review advertising performance, prepare campaign plans, write ad copy, and approve changes through its hosted MCP service. Start with the quickstart skill, sign in through the browser OAuth prompt, and verify the connected workspace and advertising account before using account data.
+Synter helps you review advertising performance, audit tracking and structure, forecast campaigns, and inspect existing plans and audiences through its hosted read-only MCP profile (`/mcp/directory`). Start with the quickstart skill, sign in through the browser OAuth prompt, and verify the connected workspace and advertising account before using account data.
 
-This directory package includes 56 Markdown skills, six agent instructions, an output style, and static [brand and safety guidance](context/brand-and-safety.md). Its only service connection is the remote HTTPS MCP server declared in `.mcp.json`. It contains no local lifecycle hooks, executable scripts, or SDK runner. Tool availability follows the bundled [tool directory](tools/directory-tools.json) and the live server schema.
+This directory package includes 27 Markdown skills, three agent instructions, and static [brand and safety guidance](context/brand-and-safety.md). Its only service connection is the remote HTTPS MCP server declared in `.mcp.json` (`https://mcp.synterai.com/mcp/directory`). It contains no local lifecycle hooks, executable scripts, or SDK runner. Tool availability follows the bundled [tool directory](tools/directory-tools.json) and the live server schema.
 
-Read-only account lookups and reports can run directly. Before any campaign creation, activation, pause, budget adjustment, or other spend-changing action, review the proposed account, scope, and amounts and give explicit approval. After execution, check the provider readback before treating a change as complete. Use the verified advertiser's brand and original assets; do not substitute Synter's branding for another advertiser.
+## Install
+
+```text
+/plugin install synter --marketplace Synter-Media-AI/plugin
+```
+
+All tools in this directory listing are strictly read-only: account lookups, reports, audits, forecasts, and plan inspections run directly. No campaign creation, activation, pause, budget adjustment, or spend-changing tools are exposed by this connector; apply approved changes in the full Synter product at [synterai.com](https://synterai.com) or the ad platform UI. Use the verified advertiser's brand and original assets; do not substitute Synter's branding for another advertiser.
 
 ```mermaid
 flowchart LR
-  User["Your request and approval"] --> Claude["Claude with Synter instructions"]
-  Claude --> MCP["Synter HTTPS MCP over OAuth"]
+  User["Your read or audit request"] --> Claude["Claude with Synter instructions"]
+  Claude --> MCP["Synter HTTPS MCP /mcp/directory over OAuth"]
   MCP --> Provider["Your connected advertising accounts"]
-  Provider --> Readback["Results and verification"]
+  Provider --> Readback["Observed metrics and diagnostics"]
   Readback --> Claude
 ```
 

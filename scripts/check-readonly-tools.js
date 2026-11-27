@@ -7,9 +7,14 @@ const WRITE_TOOLS = new Set([
   'create_campaign_plan', 'upsert_plan_entity', 'approve_campaign_plan',
   'execute_campaign_plan', 'enable_campaign', 'pause_campaign',
   'update_campaign_budget', 'add_keywords', 'add_negative_keywords',
-  'create_ad_copy', 'action_card', 'synter_audience',
+  'create_ad_copy', 'publish_plan_document', 'synter_audience',
+  'update_pending_approval', 'update_active_workspace', 'select_account',
+  'optimize_budget', 'enrich_contacts', 'growth_discover', 'growth_enrich',
+  'company_intel_search_people', 'company_intel_get_profile', 'company_intel_get_signals',
 ]);
-const CANONICAL = 'https://mcp.synterai.com';
+const PHANTOM_TOOLS = new Set(['render_card_preview', 'action_card']);
+const READONLY_MCP_URL = 'https://mcp.synterai.com/mcp/directory';
+const PORTABLE_MCP_URL = 'https://mcp.synterai.com';
 
 function loadJson(rel) {
   return JSON.parse(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
@@ -17,11 +22,18 @@ function loadJson(rel) {
 
 function loadReadonly() {
   const names = loadJson('tools/readonly-tools.json');
+  const directory = loadJson('tools/directory-tools.json');
   if (!Array.isArray(names) || names.length < 10) {
     throw new Error('tools/readonly-tools.json missing or too small');
   }
-  if (names.some((n) => WRITE_TOOLS.has(n))) {
-    throw new Error('readonly-tools.json contains write tools');
+  if (names.some((n) => WRITE_TOOLS.has(n) || PHANTOM_TOOLS.has(n))) {
+    throw new Error('readonly-tools.json contains write or phantom tools');
+  }
+  if (!Array.isArray(directory) || directory.some((n) => WRITE_TOOLS.has(n) || PHANTOM_TOOLS.has(n))) {
+    throw new Error('directory-tools.json contains write or phantom tools');
+  }
+  if ([...new Set(names)].sort().join() !== [...new Set(directory)].sort().join()) {
+    throw new Error('tools/readonly-tools.json must match tools/directory-tools.json');
   }
   return new Set(names);
 }
@@ -58,11 +70,16 @@ function main() {
   const agentAllow = loadAllowlist('tools/readonly-agents.json', 1);
   const errors = [];
 
-  for (const rel of ['.cursor-mcp.json', 'mcp.json']) {
+  for (const [rel, expectedUrl] of [
+    ['.cursor-mcp.json', READONLY_MCP_URL],
+    ['.mcp.json', READONLY_MCP_URL],
+    ['mcp_config.json', READONLY_MCP_URL],
+    ['mcp.json', PORTABLE_MCP_URL],
+  ]) {
     const json = loadJson(rel);
     for (const cfg of Object.values(json.mcpServers || {})) {
-      if (cfg.url !== CANONICAL) {
-        errors.push(`${rel}: url must be ${CANONICAL}, got ${cfg.url}`);
+      if (cfg.url !== expectedUrl) {
+        errors.push(`${rel}: url must be ${expectedUrl}, got ${cfg.url}`);
       }
       if (cfg.headers) {
         errors.push(`${rel}: must not set static credential headers`);
@@ -139,7 +156,7 @@ function main() {
     process.exit(1);
   }
   console.log(
-    `readonly-tools ok (${readonly.size} tools); skills ${skillAllow.size}; agents ${agentAllow.size}; Cursor MCP URL ${CANONICAL}`
+    `readonly-tools ok (${readonly.size} tools); skills ${skillAllow.size}; agents ${agentAllow.size}; Cursor MCP URL ${READONLY_MCP_URL}`
   );
 }
 

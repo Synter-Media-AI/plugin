@@ -27,4 +27,4 @@ Reallocate toward channels that drive incremental conversions, not the ones best
 
 - Never take one platform's self-reported ROAS as the whole truth. Reconcile first.
 - State the attribution window and model behind any number you give.
-- Report where platforms disagree and what you would move, then hand budget moves to the **optimize** skill for approval.
+- Report where platforms disagree and what budget shifts you recommend, for the user to apply in the full Synter product or platform UI.

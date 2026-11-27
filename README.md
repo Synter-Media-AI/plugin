@@ -14,7 +14,7 @@ The OpenAI package includes Synter skills and the hosted OAuth MCP connection.
 Its generated `mcp.json` declares OAuth with dynamic client registration under
 `mcpServers.synter.extensions.com.openai.auth`; discovery provides the endpoints.
 The portal displays these settings and does not provide an advanced OAuth editor.
-The existing-draft archive is `dist/synter-openai-plugin-1.2.1.zip`, for
+The existing-draft archive is `dist/synter-openai-plugin-1.3.2.zip`, for
 **Synter Ads MCP**. Its package identity remains
 `app-6a90dc5bbc3c819199b4f1e44028fcbf`. Uploading creates a draft; directory
 approval and publication are separate steps. This archive contains no lifecycle
@@ -25,14 +25,14 @@ MCP app before updating its plugin ZIP,” while its connection settings are
 unavailable. A valid archive does not resolve that portal state. Verify the saved
 MCP origin before updating: OpenAI does not allow an origin change between versions.
 `bash scripts/build-zip.sh --include-new-draft` also prepares
-`dist/synter-openai-new-draft-plugin-1.2.1.zip` with the canonical `synter` package
+`dist/synter-openai-new-draft-plugin-1.3.2.zip` with the canonical `synter` package
 name for a separately authorized new draft if the existing identity cannot be
 recovered. Building it does not upload, register, or publish anything.
 
 ### Claude Desktop and Cowork
 
 Build the archives with `bash scripts/build-zip.sh`, then use Claude Desktop's
-plugin upload to select `dist/synter-claude-plugin-1.2.1.zip`. The archive contains
+plugin upload to select `dist/synter-claude-plugin-1.3.2.zip`. The archive contains
 the `.claude-plugin` manifest, OAuth configuration, skills, agents, and static
 session primer. Start a new conversation after updating and complete browser
 OAuth when prompted. Uploading a ZIP does not enable automatic GitHub updates. You can also add
@@ -58,14 +58,15 @@ Both plugin configurations use remote HTTP MCP with browser OAuth. They contain 
 
 | Client | Configuration | Hosted MCP URL |
 | --- | --- | --- |
-| Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com` |
+| Cursor | `.cursor-mcp.json`, referenced by `.cursor-plugin/plugin.json` | `https://mcp.synterai.com/mcp/directory` |
 | Claude | `.mcp.json` / `packages/claude-directory` | `https://mcp.synterai.com/mcp/directory` |
+| Antigravity / Gemini | `mcp_config.json`, referenced with root `plugin.json` | `https://mcp.synterai.com/mcp/directory` |
 
 The portable base `mcp.json` uses the Agent Plugins schema and `streamable-http` transport. The OpenAI build adds its documented server authentication extension; the published portable 1.0.0 schema currently rejects that extension, so validate the base against that schema and the generated vendor settings against the documented contract separately. Claude and Cursor use their own HTTP configuration files. All generated packages connect to the canonical endpoint. Existing OpenAI connections on another origin require a new plugin or support-assisted recovery, not a blind endpoint replacement. For another remote MCP client, use its browser OAuth flow with the appropriate hosted URL. If sign-in fails, reconnect through the client’s settings or contact [support](https://synterai.com/contact).
 
 ## What this plugin runs
 
-The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; the checked-in [read-only tool allowlist](tools/readonly-tools.json) is the Cursor listing surface; [directory-tools.json](tools/directory-tools.json) remains the broader curated catalog reference.
+The plugin connects to the hosted Synter MCP server over OAuth. The advertising tools run on that server. Local Markdown skills, agents, and rules guide how the client uses them; both the checked-in [read-only tool allowlist](tools/readonly-tools.json) and [directory-tools.json](tools/directory-tools.json) list the 94 read-only MCP tools exposed on `/mcp/directory` (`mcp.json` connects OpenAI/ChatGPT to `https://mcp.synterai.com`).
 
 Claude also runs one `SessionStart` hook from [.claude-plugin/plugin.json](.claude-plugin/plugin.json). It invokes [scripts/session-context.sh](scripts/session-context.sh), a Bash script that uses `cat` to print static account-scope and approval guidance. It does not read credentials or make network requests. Cursor declares no hooks and uses [rules/synter-operator.mdc](rules/synter-operator.mdc).
 
@@ -100,7 +101,7 @@ node scripts/validate-manifests.js
 node scripts/check-directory-tools.js
 node --test scripts/*.test.js
 python3 -m unittest discover -s scripts -p 'test_*.py' -v
-npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+npx -y @anthropic-ai/claude-code@2.1.332 plugin validate . --strict
 bash scripts/build-zip.sh
 ```
 
@@ -147,8 +148,8 @@ and [Claude manifest reference](https://code.claude.com/docs/en/plugins-referenc
 
 This Marketplace build is free and read-only:
 
-- MCP URL (Cursor): `https://mcp.synterai.com` (canonical production OAuth host; unauthenticated calls return `401` with `WWW-Authenticate` and PRM at `/.well-known/oauth-protected-resource`).
-- Tool surface for this listing: `tools/readonly-tools.json` (26 read/observe tools). Write, launch, and spend tools are out of scope here.
-- Enforcement: plugin allowlist + CI guard + Cursor rule. Server tools remain classified with `@readonly_tool` / OAuth `tools:read`. A stricter server-side read-only profile is owned separately; when it ships on staging this listing can point at it without changing the canonical host.
-- Claude directory bundle (`packages/claude-directory`, marketplace source) is a slim free read-only skill/agent set with `privacyPolicyUrl` `https://synterai.com/privacy` and connector `https://mcp.synterai.com/mcp/directory`. The Claude connector already in review keeps `https://mcp.syntermedia.ai`.
+- MCP URL (Cursor): `https://mcp.synterai.com/mcp/directory` (canonical production OAuth host read-only profile; unauthenticated calls return `401` with `WWW-Authenticate` and PRM at `/.well-known/oauth-protected-resource`).
+- Tool surface for this listing: `tools/readonly-tools.json` and `tools/directory-tools.json` (94 read/observe tools matching `/mcp/directory`). Write, launch, and spend tools are out of scope here.
+- Enforcement: plugin allowlist + CI guard + Cursor/Antigravity rules + server-side `/mcp/directory` read-only profile (`@readonly_tool` / OAuth `tools:read`).
+- Claude directory bundle (`packages/claude-directory`, marketplace source) is a slim free read-only skill/agent set with `privacyPolicyUrl` `https://synterai.com/privacy`, `network.hosts` `["mcp.synterai.com"]`, and connector `https://mcp.synterai.com/mcp/directory`.
 

@@ -100,7 +100,7 @@ def collect(root, target):
         mcp['mcpServers']['synter']['extensions'] = {'com.openai': {'auth': OPENAI_AUTH}}
         validate_openai_mcp(mcp)
         files['mcp.json'] = encoded(mcp)
-        portable = json.loads((root / 'plugin.json').read_text())
+        portable = json.loads((root / 'config/openai-plugin.json').read_text())
         submission = json.loads((root / 'config/openai-submission.json').read_text())
         if not re.fullmatch(r'app-[a-z0-9]+', submission['packageName']):
             raise ValueError('Expected existing OpenAI package identity')
@@ -135,8 +135,10 @@ def validate_claude_directory(files):
     if manifest.get('privacyPolicyUrl') != 'https://synterai.com/privacy':
         raise ValueError('Directory manifest must declare Synter privacyPolicyUrl')
     if set(manifest) - {'$schema', 'name', 'displayName', 'description', 'version', 'license',
-                        'author', 'homepage', 'repository', 'keywords', 'privacyPolicyUrl'}:
+                        'author', 'homepage', 'repository', 'keywords', 'privacyPolicyUrl', 'network'}:
         raise ValueError('Unreviewed directory manifest capability')
+    if manifest.get('network') != {'hosts': ['mcp.synterai.com']}:
+        raise ValueError('Directory manifest network.hosts must declare only mcp.synterai.com')
     servers = json.loads(files['.mcp.json']).get('mcpServers', {})
     if (set(servers) != {'synter'} or set(servers['synter']) != {'type', 'url', 'description'}
             or servers['synter']['type'] != 'http'

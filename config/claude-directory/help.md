@@ -5,10 +5,10 @@ description: Explain the bundled skills, supported MCP tools, OAuth setup, and s
 
 # Synter help
 
-This plugin connects to Synter's hosted advertising service over OAuth. Use **quickstart** to sign in and **connect** to verify accounts.
+This plugin connects to Synter's hosted read-only MCP profile (`https://mcp.synterai.com/mcp/directory`) over OAuth. Use **quickstart** to sign in and **connect** to verify accounts.
 
-Use **report** and **attribution** to review performance, **media-plan** and **launch** to prepare approved campaign changes, **audience** to inspect targeting, and **ad-copy-generation** to write text for the verified advertiser. Read [brand and safety guidance](../../context/brand-and-safety.md) before writing copy or proposing spend.
+Use **report** and **attribution** to review performance, **media-plan** and **roas-calculator** to model plans and profitability, **audience-expansion-strategy** to inspect targeting, and **ugc-creative-brief** or **video-ad-scriptwriter** to prepare creative briefs for the verified advertiser. Read [brand and safety guidance](../../context/brand-and-safety.md) before drafting creative or proposing spend.
 
-This directory package uses static instructions and the declared remote MCP connection. Account operations run through Synter MCP tools. Use only tools in the bundled [tool directory](../../tools/directory-tools.json) and the live server schema; report unavailable capabilities plainly. Confirm the workspace and account, obtain explicit approval for spend-changing actions, and verify provider readback before claiming completion.
+This directory package uses static instructions and the declared remote read-only MCP connection. Account reads run through Synter MCP tools. Use only tools in the bundled [tool directory](../../tools/directory-tools.json) and the live server schema; report unavailable capabilities plainly. Confirm the workspace and account before reading data; apply any campaign creation or spend-changing actions in the full Synter product at https://synterai.com.
 
 [Privacy](https://synterai.com/privacy) · [Support](https://synterai.com/contact)

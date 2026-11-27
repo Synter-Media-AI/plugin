@@ -28,4 +28,4 @@ Use `research_campaign_opportunity` for available research. Ask for public ad-li
 
 - Inform strategy; never copy creative or claims. Copying inherits their weaknesses and risks trademark issues.
 - Separate what is proven (long-running, repeated) from what is a test.
-- Report the angles and gaps you found and the specific move you would make, then take it to the **ad-copy-generation** or **launch** skill.
+- Report the angles and gaps you found and the specific move you would make, then draft creative concepts (**ugc-creative-brief** or **video-ad-scriptwriter**) or fold them into a **media-plan**.

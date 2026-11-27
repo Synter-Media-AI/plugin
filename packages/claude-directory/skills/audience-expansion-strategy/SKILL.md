@@ -11,7 +11,7 @@ Confirm the account and inventory what exists: `list_connected_accounts`, `list_
 
 ## 1. Audit before expanding
 
-Find which audiences drive 80% of conversions, which run above target CPA, and which show fatigue: frequency climbing past ~3-4/week, CTR down 20%+ week over week, CPA up 25%+ week over week. Expansion fixes saturation; it does not fix a broken offer or tired creative (see **ad-copy-generation**).
+Find which audiences drive 80% of conversions, which run above target CPA, and which show fatigue: frequency climbing past ~3-4/week, CTR down 20%+ week over week, CPA up 25%+ week over week. Expansion fixes saturation; it does not fix a broken offer or tired creative (refresh creative with **ugc-creative-brief** or **video-ad-scriptwriter**).
 
 ## 2. Climb the expansion ladder
 
@@ -20,13 +20,13 @@ Find which audiences drive 80% of conversions, which run above target CPA, and w
 - **Tier 3, cool:** 3-5% lookalikes, in-market and interest targeting, competitor-interest audiences. ~1.2-1.8x.
 - **Tier 4, cold:** 5-10% lookalikes, broad/algorithmic targeting. ~1.5-2.5x.
 
-Add one tier at a time with its own budget and CPA ceiling; kill any rung that exceeds its ceiling with volume behind it (see **kill-scale-rules**).
+Add one tier at a time with its own budget and CPA ceiling; recommend cutting any rung that exceeds its ceiling once it has statistical volume (verify unit economics with **roas-calculator**).
 
 ## 3. Build lookalikes from quality seeds
 
 Seed quality decides lookalike quality. Ranked: top-20%-by-LTV customers, then all converters, then intent signals (cart, demo, offer page), then engagement signals. Practical minimums for good results are ~1,000 matched users on most platforms regardless of lower stated floors. Two improvements that consistently cut lookalike CPA: seed from top-value customers instead of all customers, and seed from recent (90-day) converters instead of all-time. Refresh seeds monthly.
 
-Review existing seeds with `list_audiences`. Ask the account owner to create any required expansion audiences in the platform UI, then compare them in a controlled test. Use returned audience IDs in supported campaign-plan fields; follow **launch** for approval.
+Review existing seeds with `list_audiences`. Ask the account owner to create any required expansion audiences in the platform UI, then compare them in a controlled test. Check planned targeting and readiness with `get_campaign_plan` and `run_launch_preflight`; apply campaign updates in the full Synter product or platform UI.
 
 ## 4. Layer for precision, exclude for hygiene
 
@@ -48,13 +48,13 @@ Meta Advantage+ audiences and Google Optimized Targeting treat your audiences as
 
 ## 6. Monitor and rebalance
 
-Weekly: the supported performance tools (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) per audience tier. Scale rungs beating target, refresh creative on fatiguing ones, and rebalance spend across tiers with `optimize_budget`. When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
+Weekly: pull performance per audience tier (`pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_ads_performance`, `pull_microsoft_ads_performance`, `pull_reddit_ads_performance`) and check `get_spend_reconciliation` and `forecast_campaign` to model budget shifts. Recommend scaling rungs beating target, refreshing creative on fatiguing ones, and rebalancing spend in Synter or the platform UI. When an expansion audience wins, feed its converters back into the seed pool — the ladder compounds.
 
 ## Rules
 
 - One new tier at a time, each with a pre-set CPA ceiling. Expansion without a ceiling is just spray.
-- Never expand to escape creative fatigue; rotate creative first (see **creative-testing**).
+- Never expand to escape creative fatigue; rotate creative first (check **creative-fatigue-detector**).
 - Suppression lists refresh weekly, everywhere. One stale platform re-buys your own customers.
 - Judge broad/algorithmic tiers on incremental performance, not platform-attributed CPA (see **attribution**).
 - Check overlap when adding audiences on the same platform. Two campaigns bidding on the same users compete against themselves.
-- Preflight every new audience campaign before enabling it (see **campaign-preflight**).
+- Preflight every new audience campaign with `run_launch_preflight` before enabling it in Synter or the platform UI.

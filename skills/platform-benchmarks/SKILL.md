@@ -22,7 +22,7 @@ Before quoting a range, pull what this account already does: the supported perfo
 
 ## Splitting budget
 
-Weight toward demand capture (search) for immediate conversions and demand generation (social) for growth, sized to the objective and the funnel. Show the split with a rationale and projected CPA per channel. Hand off to the **media-plan** skill to formalize it and **launch** to ship.
+Weight toward demand capture (search) for immediate conversions and demand generation (social) for growth, sized to the objective and the funnel. Show the split with a rationale and projected CPA per channel. Hand off to the **media-plan** skill to formalize it.
 
 ## Rules
 
@@ -30,4 +30,4 @@ Weight toward demand capture (search) for immediate conversions and demand gener
 - Prefer the account's own history over any external figure.
 - If you do not have a real number, say so; a plain true line beats an invented impressive one.
 
-Use only platform and entity types accepted by the live tool schema. Follow **launch** for plan review, preflight, approval, execution, and verification. If a setting or platform is unsupported, describe the manual handoff without claiming it was applied.
+Use only platform and entity types accepted by the live tool schema. Present proposed plans and changes for the user to apply in the full Synter product or the platform UI without claiming they were applied.

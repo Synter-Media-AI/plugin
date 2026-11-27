@@ -9,7 +9,7 @@ A video ad is won or lost in the first 3 seconds; write the hook first, fit the 
 
 ## 1. Define the brief
 
-Before writing a line, pin down: product, objective (awareness / consideration / conversion), audience, single key message, platform, format length, tone, and CTA. One message per video. If the concept needs two messages, that is two videos — test them with **creative-testing**.
+Before writing a line, pin down: product, objective (awareness / consideration / conversion), audience, single key message, platform, format length, tone, and CTA. One message per video. If the concept needs two messages, that is two videos to compare in a controlled creative test.
 
 Match hook type to objective: emotional or visual for awareness, problem/question for consideration ("Tired of X?"), offer/urgency for conversion, recognition for retargeting ("Still thinking about it?").
 
@@ -46,12 +46,12 @@ Keep text out of platform UI zones on 9:16: top 15% and bottom 25% of frame.
 
 Hook rate = viewers past 3 seconds. Rough health lines: under 25% on YouTube skippable or Reels is weak, 30%+ on TikTok is baseline, 50%+ is strong. Techniques, in impact order: movement in frame within 0.5s, a human face close-up, on-screen text at 0.0s (not delayed), voice starting immediately with no music intro, open loops that tease a payoff.
 
-Test hooks systematically: same body, 3-5 different first-3-second openings, identical targeting, kill the losers once each has enough impressions to judge, then iterate new hooks against the winner. **creative-testing** covers the mechanics; **kill-scale-rules** covers when a variant has earned a verdict.
+Test hooks systematically: same body, 3-5 different first-3-second openings, identical targeting, retire losing variants once each has enough impressions to judge, then iterate new hooks against the winner using **creative-fatigue-detector** and **roas-calculator** thresholds.
 
 ## 5. Produce and ship
 
 - Draft the written script and shot list in the conversation. Select existing advertiser assets with `list_creative_assets`; the advertiser supplies final media.
-- Confirm final asset IDs and campaign scope, then follow **launch** for supported plan changes and approval.
+- Confirm final asset IDs and campaign scope, then hand off the creative package to the user to launch in the full Synter product or platform UI.
 - Review CTR and CPA with supported platform performance tools. Request a platform export for watch-time, completion, and retention metrics when unavailable; do not infer hook retention from clicks.
 
 ## Rules
