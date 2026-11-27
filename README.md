@@ -14,7 +14,7 @@ The OpenAI package includes Synter skills and the hosted OAuth MCP connection.
 Its generated `mcp.json` declares OAuth with dynamic client registration under
 `mcpServers.synter.extensions.com.openai.auth`; discovery provides the endpoints.
 The portal displays these settings and does not provide an advanced OAuth editor.
-The existing-draft archive is `dist/synter-openai-plugin-1.2.1.zip`, for
+The existing-draft archive is `dist/synter-openai-plugin-1.3.2.zip`, for
 **Synter Ads MCP**. Its package identity remains
 `app-6a90dc5bbc3c819199b4f1e44028fcbf`. Uploading creates a draft; directory
 approval and publication are separate steps. This archive contains no lifecycle
@@ -25,14 +25,14 @@ MCP app before updating its plugin ZIP,” while its connection settings are
 unavailable. A valid archive does not resolve that portal state. Verify the saved
 MCP origin before updating: OpenAI does not allow an origin change between versions.
 `bash scripts/build-zip.sh --include-new-draft` also prepares
-`dist/synter-openai-new-draft-plugin-1.2.1.zip` with the canonical `synter` package
+`dist/synter-openai-new-draft-plugin-1.3.2.zip` with the canonical `synter` package
 name for a separately authorized new draft if the existing identity cannot be
 recovered. Building it does not upload, register, or publish anything.
 
 ### Claude Desktop and Cowork
 
 Build the archives with `bash scripts/build-zip.sh`, then use Claude Desktop's
-plugin upload to select `dist/synter-claude-plugin-1.2.1.zip`. The archive contains
+plugin upload to select `dist/synter-claude-plugin-1.3.2.zip`. The archive contains
 the `.claude-plugin` manifest, OAuth configuration, skills, agents, and static
 session primer. Start a new conversation after updating and complete browser
 OAuth when prompted. Uploading a ZIP does not enable automatic GitHub updates. You can also add

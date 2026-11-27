@@ -5,7 +5,7 @@ description: Checks ad creative and landing pages against platform advertising p
 
 # Ad Policy Compliance
 
-Pre-checks ad creative, copy, and landing pages against advertising policies for Google Ads, Meta Ads, LinkedIn Ads, TikTok Ads, and Reddit Ads. Covers restricted content categories, trademark rules, industry-specific requirements, Special Ad Categories, and common rejection reasons with fixes.
+Pre-checks ad creative, copy, and landing pages against Google, Meta, LinkedIn, TikTok, and Reddit ad policies, covering restricted content, trademarks, Special Ad Categories, industry rules, and rejection fixes.
 
 ## Capabilities
 
@@ -22,7 +22,7 @@ Pre-checks ad creative, copy, and landing pages against advertising policies for
 
 ### 1. Pre-Submission Policy Scan
 
-**Run this checklist before submitting ANY ad on ANY platform:**
+**Run before submitting any ad:**
 
 ```
 UNIVERSAL CHECKS (all platforms):
@@ -153,11 +153,11 @@ HOUSING:
     ❌ Cannot target by age, gender, or parental status
     ❌ Cannot use lookalike audiences
     ❌ Cannot exclude interests related to protected classes
-  
+
 EMPLOYMENT:
   Applies to: Job listings, hiring, employment opportunities
   Restrictions: Same as Housing
-  
+
 CREDIT:
   Applies to: Credit cards, loans, mortgages/financing, BNPL and other credit products
   Restrictions: Same as Housing
@@ -210,14 +210,14 @@ BEFORE/AFTER IMAGES:
   ❌ Cannot imply unrealistic results
   ❌ Cannot use before/after for weight loss
   ✅ CAN use for home renovation, cleaning products (non-body)
-  
+
 PERSONAL ATTRIBUTES:
   ❌ Cannot assert or imply personal attributes
   ❌ "Are you overweight?" → REJECTED
   ❌ "Struggling with debt?" → REJECTED
   ✅ "Many people manage their weight with..." → APPROVED
   ✅ "Tools to help manage finances" → APPROVED
-  
+
   Rule: Don't use "you" + negative attribute.
   Use third-person or positive framing instead.
 
@@ -300,7 +300,6 @@ PROHIBITED:
   ❌ Weapons and weapon accessories
   ❌ Political ads (global ban — TikTok doesn't allow political advertising)
   ❌ ICOs, token sales, payday loans, P2P lending, get-rich-quick and MLM/pyramid schemes
-  ❌ Payday loans
   ❌ Adult content or dating for minors
 
 RESTRICTED:
@@ -366,11 +365,11 @@ ALL PLATFORMS:
   ✅ Licensed/registered financial institution disclosure
   ✅ Risk warnings for investment products
   ✅ "Past performance is not indicative of future results"
-  
+
   ❌ No guaranteed returns claims
   ❌ No income claims without proof
   ❌ No targeting minors
-  
+
 GOOGLE ADS SPECIFIC:
   - Must comply with local financial regulations
   - Requires Google advertiser or product certification/approval for some financial products and markets
@@ -378,13 +377,12 @@ GOOGLE ADS SPECIFIC:
   - Crypto: Certain products may be allowed with or without certification in limited circumstances;
     exchanges, wallets and coin trusts generally require Google certification and local compliance
   - Credit repair ads are not allowed; debt services are allowed only in eligible locations with approval
-  
+
 META SPECIFIC:
   - Falls under CREDIT Special Ad Category (if credit-related)
   - Cannot target by ZIP code, age, or gender for credit products
   - Must include disclaimers in ad or landing page
-  - Crypto: Requires Meta prior written permission; eligibility depends on product, country,
-    authorization documentation and current Meta crypto policy
+  - Crypto: Requires Meta prior written permission; eligibility depends on product, country, and authorization docs
 ```
 
 #### Healthcare & Pharmaceuticals
@@ -395,29 +393,29 @@ ALL PLATFORMS:
   ✅ Must comply with HIPAA (US) / GDPR (EU) for data collection
   ✅ OTC products: Generally allowed with disclaimer
   ✅ Telehealth: Allowed with proper licensing disclosure
-  
-  ❌ Prescription drug promotion is platform-, country-, advertiser-authorization-, and audience-specific;
-     do not assume DTC prescription ads are allowed without live policy/legal verification
+
+  ❌ Prescription drug promotion is platform-, country-, authorization-, and audience-specific;
+     verify live policy/legal rules before assuming DTC ads are allowed
   ❌ No miracle cure claims
   ❌ No before/after weight loss imagery
   ❌ No patient testimonials implying guaranteed outcomes
-  
+
 GOOGLE ADS SPECIFIC:
   - Prescription drugs: Only certified pharmacies (LegitScript cert)
   - Addiction treatment: Requires LegitScript certification
   - Clinical trials: Requires Google approval
   - COVID-related: Enhanced review, fact-checking required
-  
+
 META SPECIFIC:
   - Cannot target by health condition ("diabetes" interest OK for awareness,
     but not for selling diabetes products)
   - Supplements: Must not make drug claims
   - Mental health: Allowed but no personal attribute assertions
-  
+
 TIKTOK SPECIFIC:
-  - Weight-management, aesthetic treatment, healthcare and pharmaceutical rules are highly market-specific
-  - No medical claims for supplements/beauty products unless the market policy allows and licensing is approved
-  - Prescription medication/pharmacies generally require market-specific permission/certification or are prohibited
+  - Weight-management, aesthetic, healthcare, and pharma rules are market-specific
+  - No medical claims for supplements/beauty unless market policy allows and licensed
+  - Prescription drugs/pharmacies require market-specific approval or are prohibited
 ```
 
 #### Alcohol
@@ -429,14 +427,14 @@ US RULES:
   ✅ Must not show excessive consumption
   ✅ Must not associate drinking with driving
   ✅ Must include "Drink Responsibly" or similar
-  
+
 PLATFORM STATUS:
   Google Ads: ✅ Allowed with restrictions (21+ targeting, no promotion of excessive drinking)
   Meta: ✅ Allowed with age-gating (varies by country)
   LinkedIn: ⚠️ Restricted; available only in certain countries and generally requires working with LinkedIn Ad Sales
   TikTok: ⚠️ Market-specific; often prohibited for branded content and restricted/approval-gated for paid ads
   Reddit: ✅ Allowed with age-gating
-  
+
 INTERNATIONAL:
   France: No alcohol advertising allowed (Loi Évin)
   Norway/Sweden/Finland: Heavily restricted
