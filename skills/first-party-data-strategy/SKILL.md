@@ -45,9 +45,9 @@ Uploaded lists only work as well as they match. Rough expectations: hashed email
 Collected data earns its keep in audiences:
 
 - Review available lists with `list_audiences`; the account owner handles synchronization and suppression updates in the platform UI.
-- Define a seed from the best customers and hand off its construction to the platform UI; see **audience**.
+- Define a seed from the best customers and hand off its construction to the platform UI; see **audience-expansion-strategy**.
 - Always maintain suppression lists — existing customers and recent converters excluded from acquisition. Refresh at least weekly.
-- Pass conversion value where you have it so value-based bidding has something to optimize toward (see **bid-optimization**).
+- Pass conversion value where you have it so value-based bidding has something to optimize toward.
 
 ## 7. Verify the pipeline end to end
 

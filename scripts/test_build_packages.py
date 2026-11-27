@@ -38,6 +38,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(sum(name.startswith('agents/') for name in files), 3)
         self.assertNotIn('hooks', json.loads(files['.claude-plugin/plugin.json']))
         self.assertEqual(json.loads(files['.claude-plugin/plugin.json'])['privacyPolicyUrl'], 'https://synterai.com/privacy')
+        self.assertEqual(json.loads(files['.claude-plugin/plugin.json'])['network'], {'hosts': ['mcp.synterai.com']})
         self.assertEqual(json.loads(files['.mcp.json'])['mcpServers']['synter']['url'], 'https://mcp.synterai.com/mcp/directory')
         self.assertEqual(files['assets/logo.png'], (mod.ROOT / 'assets/logo.png').read_bytes())
         self.assertNotIn(b'SessionStart shell hook', files['skills/help/SKILL.md'])
@@ -60,6 +61,12 @@ class PackageTests(unittest.TestCase):
         changed['.claude-plugin/plugin.json'] = mod.encoded(manifest)
         with self.assertRaises(ValueError):
             mod.validate_claude_directory(changed)
+        wrong_network = dict(files)
+        manifest_net = json.loads(files['.claude-plugin/plugin.json'])
+        manifest_net['network'] = {'hosts': ['other.example']}
+        wrong_network['.claude-plugin/plugin.json'] = mod.encoded(manifest_net)
+        with self.assertRaises(ValueError):
+            mod.validate_claude_directory(wrong_network)
         for server in [{'command': 'node'}, {'type': 'http', 'url': 'https://other.example', 'description': 'test'},
                        {'type': 'http', 'url': 'https://mcp.synterai.com', 'description': 'test', 'headers': {'x-key': 'fake'}}]:
             with self.subTest(server=server), self.assertRaises(ValueError):
@@ -102,10 +109,10 @@ class PackageTests(unittest.TestCase):
 
     def test_archives_match_reviewed_rsa_correction_bytes(self):
         expected = {
-            'claude': 'ab39309643f33f5b8f4b29e55e1871b11afd866ac120b7cd7c068523ebac6229',
-            'claude-directory': 'a9f580f3daecc138cb562e6ff66f08d504fb3748968c1b03686bed77057e82d7',
-            'openai': '63e4aa8f53b103195063504a2078fee336296ceef18fb8ec2fd0691ab5389058',
-            'openai-new-draft': '53a41af245c29d6d9192b100b50623c50ba1b94320907ed3812f3bfb0a9e3045',
+            'claude': '366f0395b8f5745310cdf786ceaa422ed16f632b2bdc3b78bc7252ca9f552286',
+            'claude-directory': '0923b19c3a3989073c9f73285f0da5bf2f44ff64050807a440241eb4f79e2c24',
+            'openai': '49945e6c206dbc945ce55be26023fd489f92c6f51ff6ab5082bbb0f120ef107c',
+            'openai-new-draft': '81faf7198ac772209c4d96eaeac440a28131a480e120a19b7d0393bab0c7c23d',
         }
         # Snapshot after the approved RSA/bidding correction across all hosts.
         # Update deliberately when reviewed package contents change.

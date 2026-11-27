@@ -6,7 +6,7 @@
 - Moved `outbound`, `outbound-research`, and `outbound-replies` out of the
   shipped `skills/` tree (now under `skills-write/`) so the Cursor Marketplace
   listing and Claude directory package match the 1.3.0/1.3.1 free read-only
-  submission. Those skills instruct write/send tools such as `action_card` and
+  submission. Those skills instruct non-read-only outbound/enrichment tools such as `update_pending_approval`, `enrich_contacts`, and
   `synter_audience`. Do not merge or publish until approved.
 
 ## [1.3.2] - 2026-11-13

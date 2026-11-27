@@ -27,10 +27,10 @@ Confirm the account: `list_connected_accounts`, then pull real figures with the 
 
 ## Report
 
-Show the inputs (spend, revenue, margin), the derived ROAS/CPA/break-even, and the profit. State the margin assumption plainly. Then translate into a decision: at target and profitable, scale with the **optimize** skill; below break-even with no fixable cause, see **kill-scale-rules**.
+Show the inputs (spend, revenue, margin), the derived ROAS/CPA/break-even, and the profit. State the margin assumption plainly. Then translate into a decision: at target and profitable, model scaling in **media-plan** or `forecast_campaign` for user execution in Synter or the platform UI; below break-even with no fixable cause, recommend cutting or pausing in the platform UI.
 
 ## Rules
 
 - Every ROAS needs its margin and attribution basis stated, or it is a half-number.
 - Use real figures from the tools; ask for margin or conversion value rather than guessing.
-- Break-even, not gross ROAS, is the line that decides profitability. Feed the numbers into the **mmm-budget-planner** skill for cross-platform reallocation.
+- Break-even, not gross ROAS, is the line that decides profitability. Feed the numbers into **media-plan** and `forecast_campaign` before proposing cross-platform budget shifts.

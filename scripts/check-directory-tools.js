@@ -51,9 +51,9 @@ function listFiles(dir) {
 
 function readAllowlist(root) {
   const names = JSON.parse(fs.readFileSync(path.join(root, 'tools/directory-tools.json'), 'utf8'));
-  if (!Array.isArray(names) || names.length !== 42 || new Set(names).size !== 42 ||
+  if (!Array.isArray(names) || names.length !== 94 || new Set(names).size !== 94 ||
       names.some(name => typeof name !== 'string' || !/^[a-z][a-z0-9_]+$/.test(name))) {
-    throw new Error('tools/directory-tools.json must contain 42 unique tool names.');
+    throw new Error('tools/directory-tools.json must contain 94 unique tool names.');
   }
   return new Set(names);
 }

@@ -33,12 +33,12 @@ An angry "where did you get my information?" is an opt-out and a targeting failu
 
 ## 3. Inspect queue, draft, then wait for approval
 
-Use `render_card_preview` to inspect pending replies and drafts, and `action_card` only after explicit user approval. A draft is not a send.
+Use `get_pending_approvals` (alongside `prospector_get_campaigns` and `prospector_get_leads` for campaign and lead context) to inspect pending replies and drafts, and `update_pending_approval` only after explicit user approval. A draft is not a send.
 
 Every reply to a real person needs explicit approval before it goes. Approval for one reply does not carry to the next message in the same thread.
 
 **Error recovery & feedback loops:**
-- **Rejected or edited draft:** If the user rejects a draft or asks for changes, revise the draft text (`action_card` with `domain: "outbound"`, `action: "edit"`), show the revised text, and wait for explicit approval before calling `action_card`. If the user decides not to reply at all, decline/skip the draft (`action_card` with `domain: "outbound"`, `action: "reject"`).
+- **Rejected or edited draft:** If the user rejects a draft or asks for changes, decline the stale approval item via `update_pending_approval`, present the revised reply text in chat, and wait for explicit approval before submitting or approving an updated draft via `update_pending_approval`. If the user decides not to reply at all, reject/skip the draft via `update_pending_approval`.
 - **Ambiguous classification:** If a reply is ambiguous (e.g., unclear whether it is a soft "not now", a referral, or an opt-out), do not guess or auto-draft a pitch. Show the verbatim message to the user and ask whether to answer, defer, or suppress.
 
 Voice rules, enforced by the copy gate:

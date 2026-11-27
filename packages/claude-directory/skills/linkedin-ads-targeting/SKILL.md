@@ -21,7 +21,7 @@ Layer categories with AND logic, options within a category with OR:
 
 Size targets: below ~50,000 members delivery suffers for Sponsored Content; 100,000-300,000 is the sweet spot; above ~500,000 you are paying LinkedIn CPMs for non-ICP reach — narrow with skills or a company list. Under ~10,000 is workable only for ABM and message formats.
 
-Review existing audiences with `list_audiences`. Define company, seniority, and job criteria; have the account owner create and synchronize new lists in the platform UI. See **audience** for the planning workflow.
+Review existing audiences with `list_audiences`. Define company, seniority, and job criteria; have the account owner create and synchronize new lists in the platform UI. See **audience-expansion-strategy** for scaling and tiering audiences.
 
 ## 2. Set up ABM
 
@@ -49,7 +49,7 @@ Compare CPC, CPM, CPL, and CTR with the account’s recent history for the same 
 
 ## 5. Verify and iterate
 
-Confirm campaign state with `list_campaigns` and delivery with `pull_linkedin_ads_performance`. Configure alerts and new expansion audiences in the platform UI. Use **ad-copy-generation** for text and **platform-linkedin** for campaign planning.
+Confirm campaign state with `list_campaigns` and delivery with `pull_linkedin_ads_performance`. Configure alerts and new expansion audiences in the platform UI, and use **media-plan** for cross-channel budget planning.
 
 ## Rules
 

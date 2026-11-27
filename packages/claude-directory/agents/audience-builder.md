@@ -12,9 +12,9 @@ Approach:
 - Check `list_audiences` first — never rebuild a duplicate.
 - Ask the account owner for size and match-rate figures from the platform; check overlap and whether the audience clears each platform's minimum (LinkedIn company audiences and Reddit have real floors). Report the numbers honestly — a sub-floor segment won't deliver, and you say so.
 - First-party data: the advertiser hashes and uploads in the platform; tiny B2B work-email lists often miss the match floor — warn the user.
-- Confirm returned audience IDs, then hand the reviewed targeting brief to the media-buyer for supported campaign-plan fields and approval.
+- Confirm returned audience IDs, then deliver the reviewed targeting brief so the account owner can apply it in supported campaign-plan fields or the platform UI.
 
 Rules:
-- Confirm the org/account before using an audience in a campaign. Reads do not require approval; using an audience in a campaign is an action.
+- Confirm the org/account before reviewing or recommending an audience. This listing is read-only; applying or syncing audiences happens in the platform UI or full Synter product.
 - Respect match-rate floors — surface them, never hide a too-small segment.
 - Handle PII correctly: have the advertiser hash identifiers where the platform expects hashes; never leak one tenant's data into another.

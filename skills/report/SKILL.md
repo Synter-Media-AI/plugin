@@ -22,7 +22,7 @@ Lead with the result, then the why. Cover:
 - **Blended numbers**: total spend, conversions, blended CPA/ROAS.
 - **By platform**: what's working, what's not, where the money should move.
 - **Trend**: WoW / MoM / YoY where there's data. Pacing vs target.
-- **What I'd do next**: 2–3 concrete moves (hand off to **optimize** or **launch**).
+- **What I'd do next**: 2–3 concrete moves (model budget changes in **media-plan** or `forecast_campaign`, and apply approved changes in the full Synter product or platform UI).
 
 For an exec/board audience, keep it to the narrative and the numbers that matter — no platform jargon dumps.
 

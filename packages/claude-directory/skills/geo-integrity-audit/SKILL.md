@@ -13,4 +13,4 @@ Use `pull_google_ads_performance`, `pull_meta_ads_performance`, `pull_linkedin_a
 
 Investigate spend outside the intended market, unusually cheap clicks with weak engagement, and traffic spikes. These are signals to investigate, not proof of fraud.
 
-Report per campaign: intended geography, verified settings, evidence period, out-of-market delivery where measurable, and missing evidence. Propose corrections through supported campaign-plan fields and the **launch** approval flow, or hand off unsupported settings to the platform UI. Re-read settings and delivery after the change.
+Report per campaign: intended geography, verified settings, evidence period, out-of-market delivery where measurable, and missing evidence. Propose corrections for the user to apply in the full Synter product or the platform UI, then re-read settings and delivery after the change.

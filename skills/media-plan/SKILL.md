@@ -5,7 +5,7 @@ description: Build a full media plan — objective, channel mix, budget split, p
 
 # Media Plan Builder
 
-Turn a goal and a budget into a defensible plan across platforms, with the math shown, before anything is built. Planning only; building and spending are the **launch** skill's job and wait for approval.
+Turn a goal and a budget into a defensible plan across platforms, with the math shown, before anything is built. Planning only; campaign creation and spending happen in the full Synter product or platform UI after user approval.
 
 Confirm what is available first: `list_connected_accounts`.
 
@@ -27,7 +27,7 @@ State which conversion, which tracking (see **conversion-tracking**), and how su
 
 ## Output
 
-Objective → audience → channel mix and budget split → projected CPA/ROAS per channel → creative direction → measurement → first-flight test. Lead with the recommendation, then the reasoning. Hand off to **launch** to build and ship on approval.
+Objective → audience → channel mix and budget split → projected CPA/ROAS per channel → creative direction → measurement → first-flight test. Lead with the recommendation, then the reasoning. Deliver the finalized plan for the user to execute in the full Synter product or platform UI.
 
 ## Rules
 
